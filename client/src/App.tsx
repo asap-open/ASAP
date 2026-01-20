@@ -1,12 +1,33 @@
-// Hello in TypeScript React
-import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import GetStarted from "./pages/GetStarted";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
-const App: React.FC = () => {
+function App() {
+  // Temporary: We will replace this with real auth logic later
+  const isAuthenticated = false;
+
   return (
-    // Styling the div with a heading with tailwind
-    <div >
-      <h1 className="text-3xl font-bold underline">Hello, World!</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/get-started" element={<GetStarted />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Default Route Logic */}
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <div>Home Dashboard (TODO)</div>
+            ) : (
+              <Navigate to="/get-started" replace />
+            )
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
-};
+}
+
 export default App;
