@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -9,31 +9,71 @@ import {
   ShieldCheck,
   Eye,
   EyeOff,
+  Dumbbell,
+  Loader2,
 } from "lucide-react";
 import HeroBackground from "../components/ui/HeroBackground";
+import { useAuth } from "../context/AuthContext";
+import { api } from "../utils/api";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = React.useState(false);
+  const { login } = useAuth();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const data = await api.post("/auth/signup", {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      login(data.token);
+      navigate("/"); // Redirect to dashboard
+    } catch (err: any) {
+      setError(err.message || "Failed to create account");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden font-display">
-      {/* Full Screen Background Wrapper */}
       <div className="absolute inset-0 w-full h-full">
         <HeroBackground />
       </div>
 
-      {/* Main Container - Split View on Desktop */}
       <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col md:flex-row h-screen md:h-auto md:min-h-[700px] md:max-h-[850px] md:rounded-3xl md:overflow-hidden md:shadow-2xl">
-        {/* Left Side (Desktop): Branding / Image Area */}
+        {/* Left Side ... (Keep as is) */}
         <div className="hidden md:flex flex-none basis-[35%] lg:basis-[40%] flex-col items-center justify-center bg-gradient-to-br from-white/60 to-white/30 backdrop-blur-xl border-r border-white/40 p-8 text-center">
-          {/* Removed inner card wrapper for cleaner look on the blurred background */}
           <div className="flex flex-col items-center max-w-xs">
-            <img
-              src="/logo.webp"
-              alt="FitTrack Logo"
-              className="w-16 h-16 md:w-16 md:h-16"
-            />
+            <div className="bg-primary p-3 rounded-xl shadow-lg shadow-primary/30 inline-flex mb-4">
+              <Dumbbell className="text-slate-900 w-8 h-8" />
+            </div>
             <h2 className="text-slate-900 text-3xl font-bold mb-2">
               Join FitTrack
             </h2>
@@ -44,9 +84,7 @@ export default function Signup() {
           </div>
         </div>
 
-        {/* Right Side: Signup Form Panel (Glassmorphism Style) */}
         <div className="relative flex-1 flex flex-col w-full h-full md:bg-white/90 md:backdrop-blur-xl bg-white/85 backdrop-blur-md overflow-y-auto">
-          {/* Back Button */}
           <div className="flex items-center p-6 pb-2 justify-start">
             <button
               onClick={() => navigate(-1)}
@@ -56,7 +94,6 @@ export default function Signup() {
             </button>
           </div>
 
-          {/* Header */}
           <div className="px-6 pt-2 pb-6 md:px-12 md:pt-4">
             <h1 className="text-slate-900 text-[34px] font-bold leading-tight tracking-tight">
               Create Account
@@ -66,9 +103,16 @@ export default function Signup() {
             </p>
           </div>
 
-          {/* Form */}
-          <div className="flex flex-col gap-4 px-6 md:px-12 mt-2">
-            {/* Full Name */}
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4 px-6 md:px-12 mt-2"
+          >
+            {error && (
+              <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+                {error}
+              </div>
+            )}
+
             <div>
               <label className="flex flex-col w-full">
                 <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
@@ -77,15 +121,18 @@ export default function Signup() {
                 <div className="relative flex items-center">
                   <User className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
                   <input
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
                     className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="John Doe"
                     type="text"
+                    required
                   />
                 </div>
               </label>
             </div>
 
-            {/* Email Address */}
             <div>
               <label className="flex flex-col w-full">
                 <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
@@ -94,15 +141,18 @@ export default function Signup() {
                 <div className="relative flex items-center">
                   <Mail className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
                   <input
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="name@example.com"
                     type="email"
+                    required
                   />
                 </div>
               </label>
             </div>
 
-            {/* Password */}
             <div>
               <label className="flex flex-col w-full">
                 <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
@@ -111,14 +161,18 @@ export default function Signup() {
                 <div className="relative flex items-center">
                   <Lock className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
                   <input
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="••••••••"
                     type={showPassword ? "text" : "password"}
+                    required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                    className="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer type-button"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -126,7 +180,6 @@ export default function Signup() {
               </label>
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label className="flex flex-col w-full">
                 <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
@@ -135,24 +188,36 @@ export default function Signup() {
                 <div className="relative flex items-center">
                   <ShieldCheck className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
                   <input
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
                     className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="••••••••"
                     type="password"
+                    required
                   />
                 </div>
               </label>
             </div>
-          </div>
 
-          {/* Action Button */}
-          <div className="px-6 py-8 md:px-12">
-            <button className="w-full h-16 bg-primary text-slate-900 text-lg font-bold rounded-xl shadow-lg shadow-primary/40 flex items-center justify-center gap-2 hover:bg-primary-hover active:scale-[0.98] transition-all cursor-pointer">
-              Sign Up
-              <ArrowRight size={20} strokeWidth={3} />
-            </button>
-          </div>
+            <div className="pt-4 pb-2">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-16 bg-primary text-slate-900 text-lg font-bold rounded-xl shadow-lg shadow-primary/40 flex items-center justify-center gap-2 hover:bg-primary-hover active:scale-[0.98] transition-all cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <>
+                    Sign Up
+                    <ArrowRight size={20} strokeWidth={3} />
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
 
-          {/* Footer */}
           <div className="mt-auto py-8 text-center pb-12">
             <p className="text-slate-600 font-normal">
               Already have an account?
@@ -165,7 +230,6 @@ export default function Signup() {
             </p>
           </div>
 
-          {/* Decorative Top Blur (Mobile Only) */}
           <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none md:hidden"></div>
         </div>
       </div>

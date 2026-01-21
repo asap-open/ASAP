@@ -1,12 +1,37 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import HeroBackground from "../components/ui/HeroBackground";
+import { useAuth } from "../context/AuthContext";
+import { api } from "../utils/api";
 
 export default function Login() {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  return (  
+  const [showPassword, setShowPassword] = useState(false);
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const data = await api.post("/auth/signin", { identifier, password });
+      login(data.token);
+      navigate("/"); // Redirect to dashboard
+    } catch (err: any) {
+      setError(err.message || "Failed to login");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
     <div className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden font-display">
       {/* Full Screen Background Wrapper */}
       <div className="absolute inset-0 w-full h-full">
@@ -58,17 +83,28 @@ export default function Login() {
             </p>
           </div>
 
-          <form className="space-y-6 max-w-md mx-auto w-full">
-            {/* Email Field */}
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 max-w-md mx-auto w-full"
+          >
+            {error && (
+              <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+                {error}
+              </div>
+            )}
+            {/* identifier Field */}
             <div className="flex flex-col gap-2">
               <label className="flex flex-col w-full">
                 <span className="text-text-main text-sm font-medium leading-normal pb-1 pl-1">
-                  Email Address
+                  Username or Email
                 </span>
                 <input
                   className="w-full rounded-xl text-text-main focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 bg-white h-14 placeholder:text-text-muted/60 p-[15px] text-base font-normal transition-all"
-                  placeholder="name@example.com"
-                  type="email"
+                  placeholder="Enter your username or email"
+                  type="identifier"
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  required
                 />
               </label>
             </div>
@@ -84,6 +120,9 @@ export default function Login() {
                     className="w-full rounded-xl text-text-main focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 bg-white h-14 placeholder:text-text-muted/60 p-[15px] pr-12 text-base font-normal transition-all"
                     placeholder="••••••••"
                     type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                   />
                   <button
                     type="button"
@@ -103,8 +142,12 @@ export default function Login() {
 
             {/* Submit Button */}
             <div className="pt-4">
-              <button className="w-full bg-primary hover:bg-primary-hover text-white font-bold text-lg h-14 rounded-xl shadow-md shadow-primary/30 active:scale-[0.98] transition-all cursor-pointer">
-                Login
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-primary hover:bg-primary-hover text-white font-bold text-lg h-14 rounded-xl shadow-md shadow-primary/30 active:scale-[0.98] transition-all cursor-pointer"
+              >
+                {isLoading ? <Loader2 className="animate-spin" /> : "Login"}
               </button>
             </div>
 

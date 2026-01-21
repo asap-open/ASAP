@@ -32,9 +32,9 @@ function AppRoutes() {
       <Route
         path="/"
         element={
-          // <ProtectedRoute>
-          <DashboardLayout />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
         }
       >
         <Route index element={<History />} />
