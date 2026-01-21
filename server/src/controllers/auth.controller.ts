@@ -41,7 +41,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
     // Generate Token
     const token = jwt.sign({ userId: newUser.id }, JWT_SECRET, {
-      expiresIn: TOKEN_EXP,
+      expiresIn: TOKEN_EXP as jwt.SignOptions["expiresIn"],
     });
 
     res.status(201).json({

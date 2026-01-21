@@ -28,7 +28,8 @@ export const createSession = async (
     }
 
     // Transaction to ensure all data is saved together
-    const newSession = await prisma.$transaction(async (tx) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const newSession = await prisma.$transaction(async (tx: any) => {
       // Create the main session record
       const session = await tx.workoutSession.create({
         data: {
@@ -56,6 +57,7 @@ export const createSession = async (
 
           // Create Sets for this exercise
           if (ex.sets && Array.isArray(ex.sets)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const setsData = ex.sets.map((s: any, index: number) => ({
               exerciseEntryId: entry.id,
               setIndex: index,
@@ -81,7 +83,7 @@ export const createSession = async (
         exercises: {
           include: {
             sets: true,
-            exercise: true, // Include global exercise details
+            exercise: { include: {} }, // Include global exercise details
           },
           orderBy: { order: "asc" },
         },
@@ -152,7 +154,7 @@ export const getSessionById = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const sessionId = parseInt(req.params.id);
+    const sessionId = parseInt(req.params.id as string);
 
     if (!userId) {
       res.status(401).json({ error: "Unauthorized" });
@@ -199,7 +201,7 @@ export const deleteSession = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const sessionId = parseInt(req.params.id);
+    const sessionId = parseInt(req.params.id as string);
 
     if (!userId) {
       res.status(401).json({ error: "Unauthorized" });
@@ -211,13 +213,13 @@ export const deleteSession = async (
       return;
     }
 
-    // Verify ownership before delete
+    // Verify ownership
     const session = await prisma.workoutSession.findFirst({
       where: { id: sessionId, userId },
     });
 
     if (!session) {
-      res.status(404).json({ error: "Session not found or access denied" });
+      res.status(404).json({ error: "Session not found or unauthorized" });
       return;
     }
 
