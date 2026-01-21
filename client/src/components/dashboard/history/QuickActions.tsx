@@ -5,7 +5,7 @@ interface QuickActionsProps {
   onClose: () => void;
 }
 
-export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
+export default function QuickActions({ isOpen }: QuickActionsProps) {
   if (!isOpen) return null;
 
   return (
