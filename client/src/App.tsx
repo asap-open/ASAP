@@ -9,7 +9,7 @@ import Signup from "./pages/Signup";
 
 // Protected Pages (Assuming these exist or will be created shortly)
 import History from "./pages/dashboard/History";
-import Workouts from "./pages/dashboard/Workouts";
+import Exercises from "./pages/dashboard/Exercises";
 // import Settings from "./pages/dashboard/Settings";
 import Progress from "./pages/dashboard/Progress";
 
@@ -38,7 +38,7 @@ function AppRoutes() {
         }
       >
         <Route index element={<History />} />
-        <Route path="workouts" element={<Workouts />} />
+        <Route path="exercises" element={<Exercises />} />
         <Route path="analytics" element={<Progress />} />
         {/* <Route path="settings" element={<Settings />} />  */}
       </Route>

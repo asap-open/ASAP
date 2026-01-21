@@ -1,5 +1,5 @@
-import WeekCalendar from "../../components/dashboard/WeekCalendar";
-import RecentHistory from "../../components/dashboard/RecentHistory";
+import WeekCalendar from "../../components/dashboard/history/WeekCalendar";
+import RecentHistory from "../../components/dashboard/history/RecentHistory";
 
 export default function History() {
   return (

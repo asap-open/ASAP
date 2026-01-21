@@ -11,7 +11,7 @@ import {
   User,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import QuickActions from "../components/dashboard/QuickActions";
+import QuickActions from "../components/dashboard/history/QuickActions";
 
 export default function DashboardLayout() {
   const { logout } = useAuth();
@@ -25,7 +25,7 @@ export default function DashboardLayout() {
 
   const desktopNavItems = [
     { to: "/", icon: LayoutDashboard, label: "History" },
-    { to: "/workouts", icon: Dumbbell, label: "Workouts" },
+    { to: "/exercises", icon: Dumbbell, label: "Exercises" },
     { to: "/settings", icon: Settings, label: "Settings" },
   ];
 
@@ -106,13 +106,13 @@ export default function DashboardLayout() {
           </NavLink>
 
           <NavLink
-            to="/workouts"
+            to="/exercises"
             className={({ isActive }) =>
               `flex flex-col items-center gap-1 ${isActive ? "text-primary" : "text-text-muted"}`
             }
           >
             <Dumbbell size={24} strokeWidth={2.5} />
-            <span className="text-[10px] font-medium">Workouts</span>
+            <span className="text-[10px] font-medium">Exercises</span>
           </NavLink>
 
           {/* Center FAB */}
