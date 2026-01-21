@@ -9,12 +9,12 @@ export default function WeekCalendar() {
   ];
 
   return (
-    <div className="flex overflow-x-auto gap-3 py-2 scrollbar-none px-1">
+    <div className="flex overflow-x-auto gap-3 py-2 no-scrollbar px-1">
       {days.map((item, index) => (
         <div
           key={index}
           className={`
-            flex flex-col items-center min-w-[54px] p-3 rounded-2xl border shadow-sm transition-colors cursor-pointer
+            flex flex-col items-center min-w-[54px] p-3 rounded-2xl border shadow-sm transition-colors cursor-pointer 
             ${
               item.active
                 ? "bg-primary text-slate-900 border-primary shadow-lg shadow-primary/30"
