@@ -1,39 +1,134 @@
-import { MoreVertical, Dumbbell, Activity, Target } from "lucide-react";
+import { useState, useEffect } from "react";
+import ExerciseItem from "../../ui/exercises/ExerciseItem";
+import CreateExerciseModal from "../../ui/exercises/modals/CreateExerciseModal";
+import ExerciseDetailsModal from "../../ui/exercises/modals/ExerciseDetailsModal";
+import ConfirmModal from "../../ui/exercises/modals/ConfirmDeleteModal";
 
-const exercises = [
-  { title: "Bench Press", muscles: "Chest, Triceps", icon: Dumbbell },
-  { title: "Deadlift", muscles: "Back, Legs, Core", icon: Activity },
-  { title: "Squat", muscles: "Legs, Glutes", icon: Target },
-  { title: "Pull-Ups", muscles: "Back, Biceps", icon: Dumbbell },
-  { title: "Overhead Press", muscles: "Shoulders, Triceps", icon: Dumbbell },
+// --- Types ---
+interface Exercise {
+  id?: string; // Should be in the real data
+  title: string;
+  muscles: string;
+  category?: string;
+  equipment?: string;
+  secondaryMuscles?: string[];
+  instructions?: string;
+}
+
+const exercisesMap: Exercise[] = [
+  {
+    id: "1",
+    title: "Bench Press",
+    muscles: "Chest, Triceps",
+    category: "Strength",
+    equipment: "Barbell",
+    instructions: "Lie on the bench...",
+  },
+  {
+    id: "2",
+    title: "Deadlift",
+    muscles: "Back, Legs, Core",
+    category: "Powerlifting",
+    equipment: "Barbell",
+  },
+  {
+    id: "3",
+    title: "Squat",
+    muscles: "Legs, Glutes",
+    category: "Powerlifting",
+    equipment: "Barbell",
+  },
+  {
+    id: "4",
+    title: "Pull-Ups",
+    muscles: "Back, Biceps",
+    category: "Strength",
+    equipment: "Bodyweight",
+  },
+  {
+    id: "5",
+    title: "Overhead Press",
+    muscles: "Shoulders, Triceps",
+    category: "Strength",
+    equipment: "Barbell",
+  },
 ];
 
 export default function ExerciseList() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  // Modal States
+  const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
+  const [viewingExercise, setViewingExercise] = useState<Exercise | null>(null);
+  const [deletingExercise, setDeletingExercise] = useState<Exercise | null>(
+    null,
+  );
+
+  // Close menu when clicking anywhere else on the page
+  useEffect(() => {
+    const handleClickOutside = () => setOpenIndex(null);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  const handleToggle = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  const menuCallbacks = (exercise: Exercise) => ({
+    onView: () => {
+      setViewingExercise(exercise);
+      setOpenIndex(null);
+    },
+    onEdit: () => {
+      setEditingExercise(exercise);
+      setOpenIndex(null);
+    },
+    onRemove: () => {
+      setDeletingExercise(exercise);
+      setOpenIndex(null);
+    },
+  });
+
   return (
     <div className="flex-1 px-6 py-6 pb-32 space-y-4">
-      {exercises.map((item, index) => (
-        <div
+      {exercisesMap.map((item, index) => (
+        <ExerciseItem
           key={index}
-          className="bg-white p-4 rounded-xl shadow-sm border border-slate-50 flex items-center justify-between group hover:shadow-md transition-shadow cursor-pointer"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary-hover">
-              <item.icon size={24} />
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-text-main">
-                {item.title}
-              </h3>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wider">
-                {item.muscles}
-              </p>
-            </div>
-          </div>
-          <button className="text-slate-400 hover:text-text-main p-2">
-            <MoreVertical size={20} />
-          </button>
-        </div>
+          exercise={item}
+          isOpen={openIndex === index}
+          onToggle={(e) => handleToggle(e, index)}
+          {...menuCallbacks(item)}
+        />
       ))}
+
+      {/* Modals */}
+      <CreateExerciseModal
+        isOpen={!!editingExercise}
+        onClose={() => setEditingExercise(null)}
+        initialData={editingExercise}
+        onSuccess={() => console.log("Refetch list")}
+      />
+
+      <ExerciseDetailsModal
+        isOpen={!!viewingExercise}
+        onClose={() => setViewingExercise(null)}
+        exercise={viewingExercise}
+      />
+
+      <ConfirmModal
+        isOpen={!!deletingExercise}
+        onClose={() => setDeletingExercise(null)}
+        onConfirm={() => {
+          console.log("Deleted", deletingExercise?.title);
+          // Call API delete here
+        }}
+        title="Delete Exercise"
+        description={`Are you sure you want to delete "${deletingExercise?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        isDestructive
+      />
     </div>
   );
 }

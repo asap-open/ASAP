@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Modal from "../../ui/Modal";
+import Modal from "../../Modal";
 import { ChevronDown } from "lucide-react";
-import { api } from "../../../utils/api";
+import { api } from "../../../../utils/api";
 
 interface CreateExerciseModalProps {
   isOpen: boolean;
@@ -67,7 +67,7 @@ export default function CreateExerciseModal({
     <Modal isOpen={isOpen} onClose={onClose} title="New Exercise">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Exercise Name */}
-        <div classNIn this ame="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <label className="flex flex-col w-full">
             <span className="text-text-main text-sm font-semibold pb-1.5 px-1">
               Exercise Name

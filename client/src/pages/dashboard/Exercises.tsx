@@ -1,9 +1,9 @@
-import { useState } from "react"; 
+import { useState } from "react";
 import ExerciseHeader from "../../components/dashboard/exercises/ExerciseHeader";
 import SearchBar from "../../components/dashboard/exercises/SearchBar";
 import CategoryFilter from "../../components/dashboard/exercises/CategoryFilter";
 import ExerciseList from "../../components/dashboard/exercises/ExerciseList";
-import CreateExerciseModal from "../../components/dashboard/exercises/CreateExerciseModal";
+import CreateExerciseModal from "../../components/ui/exercises/modals/CreateExerciseModal";
 
 export default function Exercises() {
   const [isModalOpen, setIsModalOpen] = useState(false);

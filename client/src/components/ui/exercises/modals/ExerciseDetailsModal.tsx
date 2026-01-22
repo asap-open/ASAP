@@ -1,0 +1,93 @@
+import Modal from "../../Modal";
+
+interface Exercise {
+  title: string;
+  muscles: string;
+  category?: string;
+  equipment?: string;
+  secondaryMuscles?: string[];
+  instructions?: string;
+}
+
+interface ExerciseDetailsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  exercise: Exercise | null;
+}
+
+export default function ExerciseDetailsModal({
+  isOpen,
+  onClose,
+  exercise,
+}: ExerciseDetailsModalProps) {
+  if (!exercise) return null;
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title={exercise.title}>
+      <div className="space-y-6">
+        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Category
+              </span>
+              <p className="text-text-main font-medium">
+                {exercise.category || "Strength"}
+              </p>
+            </div>
+            <div>
+              <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
+                Equipment
+              </span>
+              <p className="text-text-main font-medium">
+                {exercise.equipment || "Bodyweight"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <span className="text-sm font-semibold text-text-main block mb-2">
+            Target Muscles
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {exercise.muscles.split(",").map((m) => (
+              <span
+                key={m}
+                className="px-3 py-1 bg-primary/10 text-primary-hover text-sm font-medium rounded-full"
+              >
+                {m.trim()}
+              </span>
+            ))}
+            {exercise.secondaryMuscles?.map((m) => (
+              <span
+                key={m}
+                className="px-3 py-1 bg-slate-100 text-text-muted text-sm font-medium rounded-full"
+              >
+                {m.trim()}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {exercise.instructions && (
+          <div>
+            <span className="text-sm font-semibold text-text-main block mb-2">
+              Instructions
+            </span>
+            <p className="text-text-muted leading-relaxed whitespace-pre-wrap">
+              {exercise.instructions}
+            </p>
+          </div>
+        )}
+
+        <button
+          onClick={onClose}
+          className="w-full bg-slate-100 hover:bg-slate-200 text-text-main font-bold py-4 rounded-xl transition-all"
+        >
+          Close
+        </button>
+      </div>
+    </Modal>
+  );
+}
