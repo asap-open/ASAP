@@ -7,20 +7,26 @@ import CreateExerciseModal from "../../components/ui/exercises/modals/CreateExer
 
 export default function Exercises() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [refreshKey, setRefreshKey] = useState(0);
 
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto w-full md:max-w-4xl">
       <ExerciseHeader onAddClick={() => setIsModalOpen(true)} />
       <SearchBar />
-      <CategoryFilter />
-      <ExerciseList />
+      <CategoryFilter
+        selected={selectedCategory}
+        onSelect={setSelectedCategory}
+      />
+
+      {/* Passing refreshKey as a key forces remount and refetch */}
+      <ExerciseList key={refreshKey} selectedCategory={selectedCategory} />
 
       <CreateExerciseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={() => {
-          // TODO: Refresh List
-          console.log("Exercise added!");
+          setRefreshKey((prev) => prev + 1);
         }}
       />
     </div>

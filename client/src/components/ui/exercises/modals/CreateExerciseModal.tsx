@@ -1,20 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Modal from "../../Modal";
 import { ChevronDown } from "lucide-react";
 import { api } from "../../../../utils/api";
+import { AuthContext } from "../../../../context/AuthContext";
+
+interface ExerciseData {
+  id?: string;
+  title: string;
+  muscles: string;
+  category?: string;
+  equipment?: string;
+  secondaryMuscles?: string[];
+  instructions?: string;
+}
 
 interface CreateExerciseModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  initialData?: ExerciseData | null;
 }
 
 export default function CreateExerciseModal({
   isOpen,
   onClose,
   onSuccess,
+  initialData,
 }: CreateExerciseModalProps) {
+  const { token } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
+  const isEditing = !!initialData;
 
   // Schema Fields
   const [name, setName] = useState("");
@@ -24,12 +39,31 @@ export default function CreateExerciseModal({
   const [secondaryMuscles, setSecondaryMuscles] = useState("");
   const [instructions, setInstructions] = useState("");
 
+  // Populate form when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.title);
+      setCategory(initialData.category || "Strength");
+      setEquipment(initialData.equipment || "Bodyweight");
+      setPrimaryMuscles(initialData.muscles);
+      setSecondaryMuscles(initialData.secondaryMuscles?.join(", ") || "");
+      setInstructions(initialData.instructions || "");
+    } else {
+      // Reset for creating new
+      setName("");
+      setCategory("Strength");
+      setEquipment("Bodyweight");
+      setPrimaryMuscles("");
+      setSecondaryMuscles("");
+      setInstructions("");
+    }
+  }, [initialData, isOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Convert comma-separated strings to arrays for JSON fields
       const primary = primaryMuscles
         .split(",")
         .map((s) => s.trim())
@@ -39,32 +73,40 @@ export default function CreateExerciseModal({
         .map((s) => s.trim())
         .filter(Boolean);
 
-      await api.post("/exercises", {
+      const payload = {
         name,
         category,
         equipment,
         primaryMuscles: primary,
         secondaryMuscles: secondary.length > 0 ? secondary : undefined,
         instructions,
-        isCustom: true, // Always true for user-created
-      });
+        isCustom: true,
+      };
 
-      // Reset and close
-      setName("");
-      setInstructions("");
-      setPrimaryMuscles("");
+      if (!token) throw new Error("Not authenticated");
+
+      if (isEditing && initialData?.id) {
+        await api.put(`/exercises/${initialData.id}`, payload, token);
+      } else {
+        await api.post("/exercises", payload, token);
+      }
+
       onSuccess?.();
       onClose();
     } catch (error) {
-      console.error("Failed to create exercise", error);
-      alert("Failed to create exercise. Please try again.");
+      console.error("Failed to save exercise", error);
+      alert("Failed to save exercise. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="New Exercise">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={isEditing ? "Edit Exercise" : "New Exercise"}
+    >
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Exercise Name */}
         <div className="flex flex-col gap-2">
@@ -186,13 +228,13 @@ export default function CreateExerciseModal({
         </div>
 
         {/* Actions */}
-        <div className="pt-4 space-y-3 pb-30">
+        <div className="pt-4 space-y-3 pb-20">
           <button
             type="submit"
             disabled={isLoading}
             className="w-full bg-primary hover:bg-primary-hover text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Saving..." : "Add to Library"}
+            {isLoading ? "Saving..." : "Save Changes"}
           </button>
           <button
             type="button"
