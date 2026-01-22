@@ -67,7 +67,7 @@ export default function CreateExerciseModal({
     <Modal isOpen={isOpen} onClose={onClose} title="New Exercise">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Exercise Name */}
-        <div className="flex flex-col gap-2">
+        <div classNIn this ame="flex flex-col gap-2">
           <label className="flex flex-col w-full">
             <span className="text-text-main text-sm font-semibold pb-1.5 px-1">
               Exercise Name
@@ -186,7 +186,7 @@ export default function CreateExerciseModal({
         </div>
 
         {/* Actions */}
-        <div className="pt-4 space-y-3">
+        <div className="pt-4 space-y-3 pb-30">
           <button
             type="submit"
             disabled={isLoading}

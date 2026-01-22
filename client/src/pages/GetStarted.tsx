@@ -5,9 +5,9 @@ import HeroBackground from "../components/ui/HeroBackground";
 // Component: Brand Title and Slogan
 const BrandPresence = () => (
   <div className="flex flex-col items-center text-center px-8">
-    <h1 className="text-slate-900 text-5xl font-black leading-tight tracking-[-0.04em] mb-3">
+    {/* <h1 className="text-slate-900 text-5xl font-black leading-tight tracking-[-0.04em] mb-3">
       FitTrack
-    </h1>
+    </h1> */}
     <p className="text-slate-600 text-lg font-medium tracking-tight max-w-[240px]">
       Track your limits.
       <br />
@@ -37,9 +37,9 @@ export default function GetStarted() {
             <div className="flex justify-center pt-12 mt-10 md:mt-0 md:pt-0">
               {/* import image as a logo */}
               <img
-                src="/logo.webp"
+                src="/logo-2.png"
                 alt="FitTrack Logo"
-                className="w-16 h-16 md:w-16 md:h-16"
+                className="w-28 h-28 md:w-34 md:h-34"
               />
             </div>
 

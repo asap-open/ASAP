@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   Eye,
   EyeOff,
-  Dumbbell,
   Loader2,
 } from "lucide-react";
 import HeroBackground from "../components/ui/HeroBackground";
@@ -71,12 +70,14 @@ export default function Signup() {
         {/* Left Side ... (Keep as is) */}
         <div className="hidden md:flex flex-none basis-[35%] lg:basis-[40%] flex-col items-center justify-center bg-gradient-to-br from-white/60 to-white/30 backdrop-blur-xl border-r border-white/40 p-8 text-center">
           <div className="flex flex-col items-center max-w-xs">
-            <div className="bg-primary p-3 rounded-xl shadow-lg shadow-primary/30 inline-flex mb-4">
-              <Dumbbell className="text-slate-900 w-8 h-8" />
-            </div>
-            <h2 className="text-slate-900 text-3xl font-bold mb-2">
+            <img
+              src="/logo-2.png"
+              alt="FitTrack Logo"
+              className="w-28 h-28 md:w-34 md:h-34 mb-6"
+            />
+            {/* <h2 className="text-slate-900 text-3xl font-bold mb-2">
               Join FitTrack
-            </h2>
+            </h2> */}
             <p className="text-slate-700 text-lg font-medium">
               Start your transformation today. Track every rep, every set, and
               break your limits.
