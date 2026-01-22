@@ -5,6 +5,7 @@ import {
   getSessions,
   getSessionById,
   deleteSession,
+  updateSession,
 } from "../controllers/session.controller.js";
 
 const router = Router();
@@ -20,6 +21,9 @@ router.get("/:id", getSessionById);
 
 // POST /api/sessions -> Start/Log a new session
 router.post("/", createSession);
+
+// PUT /api/sessions/:id -> Update session (Sync workout)
+router.put("/:id", updateSession);
 
 // DELETE /api/sessions/:id -> Remove a session
 router.delete("/:id", deleteSession);

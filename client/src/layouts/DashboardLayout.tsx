@@ -34,13 +34,12 @@ export default function DashboardLayout() {
       {/* DESKTOP SIDEBAR (Hidden on Mobile) */}
       <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-slate-200 h-full p-6 justify-between">
         <div>
-          <div className="flex items-center gap-3 mb-10 px-2">
-            <div className="bg-primary p-2 rounded-lg">
-              <Dumbbell className="text-slate-900 w-6 h-6" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-slate-900">
-              FitTrack
-            </span>
+          <div className="flex items-center gap-3 mb-10 px-2 justify-center">
+            <img
+              src="/logo-2.png"
+              alt="FitTrack Logo"
+              className="w-12 h-12 md:w-18 md:h-18"
+            />
           </div>
 
           <nav className="space-y-2">

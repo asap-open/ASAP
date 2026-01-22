@@ -233,3 +233,108 @@ export const deleteSession = async (
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// 5. Update Session (Sync full workout state)
+export const updateSession = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    const sessionId = parseInt(req.params.id as string);
+
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    if (isNaN(sessionId)) {
+      res.status(400).json({ error: "Invalid session ID" });
+      return;
+    }
+
+    const {
+      sessionName,
+      endTime,
+      exercises, // Full array of current state
+    } = req.body;
+
+    // Verify ownership
+    const existingSession = await prisma.workoutSession.findUnique({
+      where: { id: sessionId },
+    });
+
+    if (!existingSession || existingSession.userId !== userId) {
+      res.status(404).json({ error: "Session not found or unauthorized" });
+      return;
+    }
+
+    // Transaction: Update Session Metadata & Replace Exercises
+    const updatedSession = await prisma.$transaction(async (tx: any) => {
+      // 1. Update basic info
+      await tx.workoutSession.update({
+        where: { id: sessionId },
+        data: {
+          sessionName,
+          endTime: endTime ? new Date(endTime) : undefined, // Only update if provided
+        },
+      });
+
+      // 2. If exercises provided, Replace All (Simplest Sync Strategy)
+      if (exercises && Array.isArray(exercises)) {
+        // A. Delete all existing entries for this session (cascade deletes sets)
+        await tx.exerciseEntry.deleteMany({
+          where: { sessionId },
+        });
+
+        // B. Re-create everything from current state
+        for (let i = 0; i < exercises.length; i++) {
+          const ex = exercises[i];
+
+          // Create Exercise Entry
+          const entry = await tx.exerciseEntry.create({
+            data: {
+              sessionId,
+              exerciseId: ex.exerciseId,
+              order: i,
+            },
+          });
+
+          // Create Sets
+          if (ex.sets && Array.isArray(ex.sets)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const setsData = ex.sets.map((s: any, index: number) => ({
+              exerciseEntryId: entry.id,
+              setIndex: index,
+              weight: s.weight || 0,
+              reps: s.reps || 0,
+              isHardSet: s.isHardSet !== undefined ? s.isHardSet : true,
+            }));
+
+            await tx.set.createMany({
+              data: setsData,
+            });
+          }
+        }
+      }
+
+      return await tx.workoutSession.findUnique({
+        where: { id: sessionId },
+        include: {
+          exercises: {
+            include: {
+              sets: true,
+              exercise: true,
+            },
+            orderBy: { order: "asc" },
+          },
+        },
+      });
+    });
+
+    res.status(200).json(updatedSession);
+  } catch (error) {
+    console.error("Update Session Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
