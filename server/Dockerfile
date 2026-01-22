@@ -12,6 +12,7 @@ RUN yarn install --frozen-lockfile
 COPY prisma ./prisma
 RUN npx prisma generate
 
+
 # Copy the source code
 COPY . .
 
@@ -22,5 +23,6 @@ ENV PORT=3000
 # Expose the port
 EXPOSE 3000
 
-# Run directly with tsx
+# Run directly with tsx 
+# Need to add the seeding command to invoke it during migrations
 CMD ["npx", "tsx", "src/index.ts"]
