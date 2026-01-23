@@ -1,7 +1,18 @@
+import { useState } from "react";
 import WeekCalendar from "../../components/dashboard/history/WeekCalendar";
 import RecentHistory from "../../components/dashboard/history/RecentHistory";
 
+type TimeFilter = "today" | "week" | "month";
+
 export default function History() {
+  const [activeFilter, setActiveFilter] = useState<TimeFilter>("today");
+
+  const filters: { label: string; value: TimeFilter }[] = [
+    { label: "Today", value: "today" },
+    { label: "1 Week", value: "week" },
+    { label: "1 Month", value: "month" },
+  ];
+
   return (
     <div className="max-w-md mx-auto w-full md:max-w-4xl md:px-6">
       {/* Header */}
@@ -19,15 +30,19 @@ export default function History() {
       {/* Time Filter Pills */}
       <div className="px-6 mb-8">
         <div className="flex gap-2">
-          <button className="px-5 py-2 rounded-full bg-primary text-slate-900 text-sm font-semibold shadow-sm shadow-primary/20">
-            Today
-          </button>
-          <button className="px-5 py-2 rounded-full bg-slate-200/60 text-text-muted text-sm font-semibold hover:bg-slate-200 transition-colors">
-            1 Week
-          </button>
-          <button className="px-5 py-2 rounded-full bg-slate-200/60 text-text-muted text-sm font-semibold hover:bg-slate-200 transition-colors">
-            1 Month
-          </button>
+          {filters.map((filter) => (
+            <button
+              key={filter.value}
+              onClick={() => setActiveFilter(filter.value)}
+              className={`px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition-all ${
+                activeFilter === filter.value
+                  ? "bg-primary text-slate-900 shadow-primary/20"
+                  : "bg-slate-200/60 text-text-muted hover:bg-slate-200"
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -39,7 +54,7 @@ export default function History() {
             See All
           </button>
         </div>
-        <RecentHistory />
+        <RecentHistory filter={activeFilter} />
       </div>
     </div>
   );
