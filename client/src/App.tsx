@@ -11,8 +11,8 @@ import Signup from "./pages/Signup";
 // Protected Pages (Assuming these exist or will be created shortly)
 import History from "./pages/dashboard/History";
 import Exercises from "./pages/dashboard/Exercises";
-// import Settings from "./pages/dashboard/Settings";
 import Progress from "./pages/dashboard/Progress";
+import CreateSession from "./pages/dashboard/CreateSession";
 
 // Route Guard Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -43,7 +43,14 @@ function AppRoutes() {
         <Route path="analytics" element={<Progress />} />
         {/* <Route path="settings" element={<Settings />} />  */}
       </Route>
-
+      <Route
+        path="/session/create"
+        element={
+          <ProtectedRoute>
+            <CreateSession />
+          </ProtectedRoute>
+        }
+      />
       {/* Catch all redirect */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

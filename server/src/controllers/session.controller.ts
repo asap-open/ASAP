@@ -97,7 +97,7 @@ export const createSession = async (
   }
 };
 
-// 2. View All Sessions (History) w/ Pagination
+// Modify existing getSessions to support time filtering
 export const getSessions = async (
   req: AuthRequest,
   res: Response,
@@ -109,13 +109,34 @@ export const getSessions = async (
       return;
     }
 
-    // Simple pagination
+    // Pagination
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
 
+    // Time filter
+    const filter = req.query.filter as string;
+    let dateFilter = {};
+
+    if (filter === "today") {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      dateFilter = { startTime: { gte: today } };
+    } else if (filter === "week") {
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      dateFilter = { startTime: { gte: weekAgo } };
+    } else if (filter === "month") {
+      const monthAgo = new Date();
+      monthAgo.setMonth(monthAgo.getMonth() - 1);
+      dateFilter = { startTime: { gte: monthAgo } };
+    }
+
     const sessions = await prisma.workoutSession.findMany({
-      where: { userId },
+      where: {
+        userId,
+        ...dateFilter,
+      },
       skip,
       take: limit,
       orderBy: { startTime: "desc" },
@@ -123,17 +144,51 @@ export const getSessions = async (
         exercises: {
           include: {
             sets: true,
-            exercise: { select: { name: true } },
+            exercise: { select: { name: true, category: true } },
           },
           orderBy: { order: "asc" },
         },
       },
     });
 
-    const total = await prisma.workoutSession.count({ where: { userId } });
+    // Calculate stats for each session
+    const sessionsWithStats = sessions.map((session) => {
+      const totalVolume = session.exercises.reduce((total, exercise) => {
+        return (
+          total +
+          exercise.sets.reduce((setTotal, set) => {
+            return setTotal + set.weight * set.reps;
+          }, 0)
+        );
+      }, 0);
+
+      const duration = session.endTime
+        ? (session.endTime.getTime() - session.startTime.getTime()) / 1000 / 60
+        : null;
+
+      return {
+        ...session,
+        stats: {
+          totalVolume,
+          duration,
+          exerciseCount: session.exercises.length,
+          totalSets: session.exercises.reduce(
+            (total, ex) => total + ex.sets.length,
+            0,
+          ),
+        },
+      };
+    });
+
+    const total = await prisma.workoutSession.count({
+      where: {
+        userId,
+        ...dateFilter,
+      },
+    });
 
     res.status(200).json({
-      data: sessions,
+      data: sessionsWithStats,
       pagination: {
         total,
         page,
@@ -335,6 +390,78 @@ export const updateSession = async (
     res.status(200).json(updatedSession);
   } catch (error) {
     console.error("Update Session Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// GET /api/sessions/stats/calendar
+export const getCalendarStats = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    // Get date range from query (default to last 30 days)
+    const days = parseInt(req.query.days as string) || 30;
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    const sessions = await prisma.workoutSession.findMany({
+      where: {
+        userId,
+        startTime: { gte: startDate },
+      },
+      include: {
+        exercises: {
+          include: {
+            sets: true,
+          },
+        },
+      },
+    });
+
+    // Group by date and calculate stats
+    const calendarData = sessions.reduce((acc: any, session) => {
+      const date = session.startTime.toISOString().split("T")[0];
+
+      const volume = session.exercises.reduce((total, exercise) => {
+        return (
+          total +
+          exercise.sets.reduce((setTotal, set) => {
+            return setTotal + set.weight * set.reps;
+          }, 0)
+        );
+      }, 0);
+
+      if (!acc[date]) {
+        acc[date] = {
+          date,
+          workouts: 0,
+          totalVolume: 0,
+          duration: 0,
+        };
+      }
+
+      acc[date].workouts += 1;
+      acc[date].totalVolume += volume;
+
+      if (session.endTime) {
+        const duration =
+          (session.endTime.getTime() - session.startTime.getTime()) / 1000 / 60;
+        acc[date].duration += duration;
+      }
+
+      return acc;
+    }, {});
+
+    res.status(200).json(Object.values(calendarData));
+  } catch (error) {
+    console.error("Get Calendar Stats Error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

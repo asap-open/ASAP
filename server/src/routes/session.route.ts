@@ -6,12 +6,16 @@ import {
   getSessionById,
   deleteSession,
   updateSession,
+  getCalendarStats,
 } from "../controllers/session.controller.js";
 
 const router = Router();
 
 // Apply auth middleware to all routes in this router
 router.use(authenticateToken);
+
+// GET /api/sessions/stats/calendar -> Calendar heatmap data
+router.get("/stats/calendar", getCalendarStats);
 
 // GET /api/sessions -> List history
 router.get("/", getSessions);
