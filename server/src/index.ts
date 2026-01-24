@@ -6,9 +6,28 @@ import weightRoutes from "./routes/weight.route.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
+const frontendDomain = process.env.FRONTEND_DOMAIN;
 
+// Logging middleware
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Allow frontend
+  const start = Date.now();
+  console.log(
+    `[${new Date().toISOString()}] Incoming: ${req.method} ${req.originalUrl}`,
+  );
+
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    console.log(
+      `[${new Date().toISOString()}] Resolved: ${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`,
+    );
+  });
+
+  next();
+});
+
+// CORS middleware
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", frontendDomain);
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",

@@ -18,10 +18,9 @@ interface Exercise {
   isCustom: boolean;
   createdBy?: string;
 }
-
-// Helper to map API data to UI props if needed, but ExerciseItem expects 'title' and 'muscles' string
-// We can adapt it inside the map or update the type. Let's adapt it.
-
+interface ExerciseListProps {
+  selectedCategory?: string;
+}
 export default function ExerciseList({ selectedCategory }: ExerciseListProps) {
   const { token } = useContext(AuthContext);
   const [exercises, setExercises] = useState<Exercise[]>([]);

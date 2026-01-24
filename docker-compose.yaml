@@ -1,20 +1,22 @@
 services:
   server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    image: tool-server
     ports:
       - "3000:3000"
     environment:
       - PORT=3000
-      - DATABASE_URL=postgresql://postgres:password@host.docker.internal:5432/workout_db?schema=public
-      - JWT_SECRET=dev_secret_key_change_me
+      - DATABASE_URL=postgresql://postgres:12345@host.docker.internal:5432/tool-main?schema=public
+      - DATABASE_TYPE=postgresql
+      - JWT_SECRET=your_jwt_secret_key
+      - TOKEN_EXP=7d
+      - PORT=3000
+      - FRONTEND_DOMAIN=http://localhost:5173
 
   client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+    image: tool-client
+    environment:
+      - BACKEND_SERVER_URL=http://server:3000
     ports:
-      - "8080:80"
+      - "5173:4173"
     depends_on:
       - server

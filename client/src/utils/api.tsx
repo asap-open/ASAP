@@ -1,5 +1,5 @@
 // Use the env var. If it's missing, fallback to "/api" (proxy)
-const ENV_URL = import.meta.env.VITE_API_BASE_URL; // e.g., "http://localhost:3000"
+const ENV_URL = import.meta.env.BACKEND_SERVER_URL; // e.g., "http://localhost:3000"
 const BASE_URL = ENV_URL ? `${ENV_URL}/api` : "/api";
 
 export const api = {

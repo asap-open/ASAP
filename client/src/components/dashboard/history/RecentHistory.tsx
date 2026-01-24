@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { ChevronRight, Dumbbell, Loader2 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { api } from "../../../utils/api";
-import { useNavigate } from "react-router-dom";
 
 interface SessionStats {
   totalVolume: number;
@@ -31,7 +30,6 @@ interface RecentHistoryProps {
 
 export default function RecentHistory({ filter }: RecentHistoryProps) {
   const { token } = useAuth();
-  const navigate = useNavigate();
   const [sessions, setSessions] = useState<WorkoutSession[]>([]);
   const [loading, setLoading] = useState(true);
 

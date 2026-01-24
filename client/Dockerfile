@@ -1,9 +1,10 @@
-# Stage 1: Build the React application
-FROM node:20-alpine AS builder
+# Use Node.js LTS alpine image
+FROM node:20-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Copy package files (using yarn.lock)
+# Copy package definition files
 COPY package.json yarn.lock ./
 
 # Install dependencies
@@ -15,14 +16,8 @@ COPY . .
 # Build the application
 RUN yarn build
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:alpine
+# Expose the port Vite preview runs on (default 4173)
+EXPOSE 4173
 
-# Copy the built files from the builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Run the preview server accessible from outside the container
+CMD ["yarn", "preview", "--host"]
