@@ -117,7 +117,7 @@ export default function Signup() {
             <div>
               <label className="flex flex-col w-full">
                 <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
-                  Full Name
+                  Username
                 </p>
                 <div className="relative flex items-center">
                   <User className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
