@@ -37,6 +37,8 @@ model UserProfile {
   heightCm        Float?  @map("height_cm")
   targetWeightKg  Float?  @map("target_weight_kg")
   unitPref        String  @default("kg") @map("unit_pref") // 'kg' or 'lbs'
+  dateOfBirth     DateTime? @map("date_of_birth")
+  gender          String?   // 'male', 'female', 'other', or null
 
   user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
