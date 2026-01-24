@@ -13,6 +13,18 @@ datasource db {
   provider = "postgresql"
 }
 
+// Enums
+enum UnitPreference {
+  kg
+  lbs
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
 // 1. User & Profile Management
 model User {
   id            String   @id @default(uuid())
@@ -32,13 +44,15 @@ model User {
 }
 
 model UserProfile {
-  id              Int     @id @default(autoincrement())
-  userId          String  @unique @map("user_id")
-  heightCm        Float?  @map("height_cm")
-  targetWeightKg  Float?  @map("target_weight_kg")
-  unitPref        String  @default("kg") @map("unit_pref") // 'kg' or 'lbs'
-  dateOfBirth     DateTime? @map("date_of_birth")
-  gender          String?   // 'male', 'female', 'other', or null
+  id              Int             @id @default(autoincrement())
+  userId          String          @unique @map("user_id")
+  fullName        String?         @map("full_name")
+  heightCm        Float?          @map("height_cm")
+  targetWeightKg  Float?          @map("target_weight_kg")
+  latestWeightKg  Float?          @map("latest_weight_kg")
+  unitPref        UnitPreference  @default(kg) @map("unit_pref")
+  dateOfBirth     DateTime?       @map("date_of_birth")
+  gender          Gender?
 
   user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 

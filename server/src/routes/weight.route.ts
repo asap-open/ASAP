@@ -9,6 +9,6 @@ const router = Router();
 router.use(authenticateToken);
 
 router.post("/", logWeight);
-router.get("/", getWeightHistory);
+router.get("/history", getWeightHistory);
 
 export default router;

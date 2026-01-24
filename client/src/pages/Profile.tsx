@@ -15,6 +15,8 @@ interface UserProfile {
   heightCm: number | null;
   targetWeightKg: number | null;
   unitPref: string;
+  dateOfBirth: string | null;
+  gender: string | null;
 }
 
 interface WeightLog {
@@ -54,7 +56,7 @@ export default function Profile() {
       }
 
       // Fetch weight history
-      const weightHistory = await api.get("/weight/history", token);
+      const weightHistory = await api.get("/weights/history", token);
       if (weightHistory && weightHistory.length > 0) {
         setLatestWeight(weightHistory[0]);
         if (weightHistory.length > 1) {
@@ -110,6 +112,21 @@ export default function Profile() {
       month: "short",
       year: "numeric",
     });
+  };
+
+  const formatDateOfBirth = (dateString: string | null) => {
+    if (!dateString) return "—";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
+  const formatGender = (gender: string | null) => {
+    if (!gender) return "—";
+    return gender.charAt(0).toUpperCase() + gender.slice(1);
   };
 
   const bmi = calculateBMI();
@@ -169,17 +186,23 @@ export default function Profile() {
               <div className="flex flex-col items-center px-2">
                 <span className="text-lg font-bold">
                   {profile?.heightCm || "—"}{" "}
-                  <span className="text-xs text-slate-400 font-normal">cm</span>
+                  {profile?.heightCm && (
+                    <span className="text-xs text-slate-400 font-normal">
+                      cm
+                    </span>
+                  )}
                 </span>
                 <span className="text-[11px] text-text-muted mt-1">Height</span>
               </div>
               <div className="flex flex-col items-center px-2">
-                <span className="text-lg font-bold">Male</span>
+                <span className="text-lg font-bold">
+                  {formatGender(profile?.gender || null)}
+                </span>
                 <span className="text-[11px] text-text-muted mt-1">Gender</span>
               </div>
               <div className="flex flex-col items-center px-2 text-center">
                 <span className="text-sm font-bold leading-tight">
-                  May 12, 1994
+                  {formatDateOfBirth(profile?.dateOfBirth || null)}
                 </span>
                 <span className="text-[11px] text-text-muted mt-1">
                   Birthdate
@@ -267,7 +290,9 @@ export default function Profile() {
             <div>
               <p className="text-2xl font-bold">
                 {latestWeight?.weightKg?.toFixed(1) || "—"}{" "}
-                <span className="text-sm font-normal text-slate-400">kg</span>
+                {latestWeight && (
+                  <span className="text-sm font-normal text-slate-400">kg</span>
+                )}
               </p>
               {weightChange && (
                 <div className="flex items-center gap-1 mt-1">

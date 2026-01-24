@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key-change-this";
 const TOKEN_EXP = process.env.TOKEN_EXP || "7d";
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username, email, password } = req.body;
+    const { fullName, username, email, password } = req.body;
 
     if (!username || !email || !password) {
       res.status(400).json({ error: "All fields are required" });
@@ -38,6 +38,16 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         passwordHash,
       },
     });
+
+    // Create user profile with full name if provided
+    if (fullName) {
+      await prisma.userProfile.create({
+        data: {
+          userId: newUser.id,
+          fullName,
+        },
+      });
+    }
 
     // Generate Token
     const token = jwt.sign({ userId: newUser.id }, JWT_SECRET, {

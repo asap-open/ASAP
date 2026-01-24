@@ -21,6 +21,7 @@ export default function Signup() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    fullName: "",
     username: "",
     email: "",
     password: "",
@@ -46,6 +47,7 @@ export default function Signup() {
 
     try {
       const data = await api.post("/auth/signup", {
+        fullName: formData.fullName,
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -117,6 +119,26 @@ export default function Signup() {
             <div>
               <label className="flex flex-col w-full">
                 <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
+                  Full Name
+                </p>
+                <div className="relative flex items-center">
+                  <User className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
+                  <input
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
+                    placeholder="John Doe"
+                    type="text"
+                    required
+                  />
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <label className="flex flex-col w-full">
+                <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
                   Username
                 </p>
                 <div className="relative flex items-center">
@@ -126,7 +148,7 @@ export default function Signup() {
                     value={formData.username}
                     onChange={handleChange}
                     className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
-                    placeholder="John Doe"
+                    placeholder="johndoe"
                     type="text"
                     required
                   />

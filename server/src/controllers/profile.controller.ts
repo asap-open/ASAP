@@ -27,6 +27,8 @@ export const getProfile = async (
             heightCm: true,
             targetWeightKg: true,
             unitPref: true,
+            dateOfBirth: true,
+            gender: true,
           },
         },
       },
@@ -56,7 +58,8 @@ export const updateProfile = async (
       return;
     }
 
-    const { heightCm, targetWeightKg, unitPref } = req.body;
+    const { heightCm, targetWeightKg, unitPref, dateOfBirth, gender } =
+      req.body;
 
     // Check if profile exists
     const existingProfile = await prisma.userProfile.findUnique({
@@ -74,6 +77,10 @@ export const updateProfile = async (
             targetWeightKg: parseFloat(targetWeightKg),
           }),
           ...(unitPref && { unitPref }),
+          ...(dateOfBirth !== undefined && {
+            dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+          }),
+          ...(gender !== undefined && { gender }),
         },
       });
     } else {
@@ -84,6 +91,8 @@ export const updateProfile = async (
           heightCm: heightCm ? parseFloat(heightCm) : null,
           targetWeightKg: targetWeightKg ? parseFloat(targetWeightKg) : null,
           unitPref: unitPref || "kg",
+          dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+          gender: gender || null,
         },
       });
     }
