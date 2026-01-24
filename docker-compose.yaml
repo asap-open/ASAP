@@ -16,6 +16,7 @@ services:
     image: tool-client
     environment:
       - BACKEND_SERVER_URL=http://server:3000
+      - DOMAIN_NAME=domain.com
     ports:
       - "5173:4173"
     depends_on:
