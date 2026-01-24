@@ -24,8 +24,10 @@ export const getProfile = async (
         createdAt: true,
         profile: {
           select: {
+            fullName: true,
             heightCm: true,
             targetWeightKg: true,
+            latestWeightKg: true,
             unitPref: true,
             dateOfBirth: true,
             gender: true,
@@ -58,8 +60,31 @@ export const updateProfile = async (
       return;
     }
 
-    const { heightCm, targetWeightKg, unitPref, dateOfBirth, gender } =
-      req.body;
+    const {
+      fullName,
+      heightCm,
+      targetWeightKg,
+      unitPref,
+      dateOfBirth,
+      gender,
+    } = req.body;
+
+    // Validate enum values if provided
+    if (unitPref && !["kg", "lbs"].includes(unitPref)) {
+      res
+        .status(400)
+        .json({ error: "Invalid unit preference. Must be 'kg' or 'lbs'" });
+      return;
+    }
+
+    if (gender && !["male", "female", "other"].includes(gender)) {
+      res
+        .status(400)
+        .json({
+          error: "Invalid gender. Must be 'male', 'female', or 'other'",
+        });
+      return;
+    }
 
     // Check if profile exists
     const existingProfile = await prisma.userProfile.findUnique({
@@ -72,6 +97,7 @@ export const updateProfile = async (
       profile = await prisma.userProfile.update({
         where: { userId },
         data: {
+          ...(fullName !== undefined && { fullName }),
           ...(heightCm !== undefined && { heightCm: parseFloat(heightCm) }),
           ...(targetWeightKg !== undefined && {
             targetWeightKg: parseFloat(targetWeightKg),
@@ -88,6 +114,7 @@ export const updateProfile = async (
       profile = await prisma.userProfile.create({
         data: {
           userId,
+          fullName: fullName || null,
           heightCm: heightCm ? parseFloat(heightCm) : null,
           targetWeightKg: targetWeightKg ? parseFloat(targetWeightKg) : null,
           unitPref: unitPref || "kg",

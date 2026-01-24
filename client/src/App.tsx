@@ -7,7 +7,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import GetStarted from "./pages/GetStarted";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Profile from "./pages/Profile";
+import Profile from "./pages/dashboard/Profile";
 
 // Protected Pages (Assuming these exist or will be created shortly)
 import History from "./pages/dashboard/History";
