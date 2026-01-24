@@ -1,39 +1,44 @@
-# Stage 1: Build & Prune
-FROM node:20-bookworm AS builder
+# Stage 1: Install dependencies and generate Prisma
+FROM node:20-alpine AS builder
 WORKDIR /app
 
+RUN apk add --no-cache openssl-dev
+
 COPY package.json yarn.lock ./
-# Install ALL dependencies (needed for build)
 RUN yarn install --frozen-lockfile
+
 COPY prisma.config.ts ./prisma.config.js
 COPY prisma ./prisma
 RUN npx prisma generate
 
-COPY . .
+# Stage 2: Production dependencies only
+FROM node:20-alpine AS deps
+WORKDIR /app
 
-# Remove devDependencies to shrink node_modules for the next stage
-RUN yarn install --frozen-lockfile --production --ignore-scripts --prefer-offline
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --production --ignore-optional
 
-# ---
-
-# Stage 2: Final Production Image
-FROM node:20-bookworm-slim AS runner
+# Stage 3: Final Production Image
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-RUN npm install -g tsx prisma
-RUN apt-get update -y && apt-get install -y openssl libssl-dev
+
+# Install only runtime essentials
+RUN apk add --no-cache libssl3 libstdc++ && \
+    npm install -g tsx prisma
+
 # Copy production dependencies and generated Prisma client
-COPY --from=builder --chown=node:node /app/node_modules ./node_modules
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
 COPY --from=builder --chown=node:node /app/generated ./generated
 COPY --from=builder --chown=node:node /app/prisma ./prisma
-COPY --chown=node:node ./data ./data
-# Copy source code and config files
-COPY --chown=node:node src ./src
-COPY --chown=node:node package.json ./package.json
-COPY --chown=node:node tsconfig.json ./tsconfig.json
-COPY --chown=node:node entrypoint.sh ./entrypoint.sh
 COPY --from=builder --chown=node:node /app/prisma.config.js ./prisma.config.js
+
+# Copy application source and data
+COPY --chown=node:node src ./src
+COPY --chown=node:node data ./data
+COPY --chown=node:node package.json ./package.json
+COPY --chown=node:node entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh
 
