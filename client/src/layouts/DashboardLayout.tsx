@@ -27,6 +27,7 @@ export default function DashboardLayout() {
     { to: "/", icon: LayoutDashboard, label: "History" },
     { to: "/exercises", icon: Dumbbell, label: "Exercises" },
     { to: "/settings", icon: Settings, label: "Settings" },
+    { to: "/profile", icon: User, label: "Profile" },
   ];
 
   return (
@@ -143,7 +144,7 @@ export default function DashboardLayout() {
           </NavLink>
 
           <NavLink
-            to="/settings"
+            to="/profile"
             className={({ isActive }) =>
               `flex flex-col items-center gap-1 ${isActive ? "text-primary" : "text-text-muted"}`
             }

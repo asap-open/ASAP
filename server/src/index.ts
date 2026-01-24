@@ -3,6 +3,7 @@ import authRoutes from "./routes/auth.route.js";
 import sessionRoutes from "./routes/session.route.js";
 import exerciseRoutes from "./routes/exercise.route.js";
 import weightRoutes from "./routes/weight.route.js";
+import profileRoutes from "./routes/profile.route.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -47,11 +48,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/exercises", exerciseRoutes);
 app.use("/api/weights", weightRoutes);
+app.use("/api/profile", profileRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Hello, World!");
+  res.send("ASAP API Server Running");
 });
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
