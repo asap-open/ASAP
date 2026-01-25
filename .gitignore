@@ -23,11 +23,17 @@ dist-ssr
 *.sln
 *.sw?
 
-*.md
-
+*cache*
+*cache/*
 
 node_modules
 # Keep environment variables out of version control
 .env
 
 server/generated/*
+
+
+# Custom ignores
+Feature&Flow.md
+Requirement.md
+Schema.md
