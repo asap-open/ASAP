@@ -1,15 +1,35 @@
 import { Response } from "express";
-import { prisma } from "../utils/prisma.js";
 import { AuthRequest } from "../middleware/auth.middleware.js";
+import { exerciseService } from "../services/exercise.services.js";
 
-// Helper to create a URL-friendly slug
-const createSlug = (name: string): string => {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "");
+// 1. Search Exercises (NEW - Main search endpoint)
+export const searchExercises = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    const { q, muscle, category, equipment, limit, offset } = req.query;
+
+    const result = await exerciseService.searchExercises({
+      q: q as string,
+      muscle: muscle as string | string[],
+      category: category as string,
+      equipment: equipment as string,
+
+      userId,
+      limit: limit ? parseInt(limit as string) : undefined,
+      offset: offset ? parseInt(offset as string) : undefined,
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Search Exercises Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
-// 1. Get Exercises (Searchable, Paginated, & Filterable)
+
+// 2. Get Exercises (Keep for backward compatibility, but simplified)
 export const getExercises = async (
   req: AuthRequest,
   res: Response,
@@ -17,63 +37,26 @@ export const getExercises = async (
   try {
     const userId = req.user?.userId;
     const search = req.query.search as string;
-    const muscleParam = req.query.muscle;
-
-    // Pagination Params
+    const muscle = req.query.muscle;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
-    const skip = (page - 1) * limit;
+    const offset = (page - 1) * limit;
 
-    // Build filter: Show Global exercises OR Custom exercises created by this user
-    const where: any = {
-      OR: [
-        { isCustom: false }, // System exercises
-        { createdBy: userId }, // User's custom exercises
-      ],
-    };
-
-    // Add search filter if provided
-    if (search) {
-      where.AND = [
-        ...(where.AND || []),
-        { name: { contains: search, mode: "insensitive" } },
-      ];
-    }
-
-    // Add muscle filter
-    if (muscleParam) {
-      const muscles = Array.isArray(muscleParam)
-        ? (muscleParam as string[])
-        : [muscleParam as string];
-
-      // Filter: Exercise must have at least one of the selected muscles
-      // We use array_contains: [m] which works for JSONB arrays in Postgres
-      const muscleFilters = muscles.map((m) => ({
-        primaryMuscles: {
-          array_contains: [m],
-        },
-      }));
-
-      where.AND = [...(where.AND || []), { OR: muscleFilters }];
-    }
-
-    const [exercises, total] = await Promise.all([
-      prisma.globalExercise.findMany({
-        where,
-        orderBy: { name: "asc" },
-        take: limit,
-        skip: skip,
-      }),
-      prisma.globalExercise.count({ where }),
-    ]);
+    const result = await exerciseService.searchExercises({
+      q: search,
+      muscle: muscle as string | string[],
+      userId,
+      limit,
+      offset,
+    });
 
     res.status(200).json({
-      data: exercises,
+      data: result.data,
       meta: {
         page,
         limit,
-        total,
-        totalPages: Math.ceil(total / limit),
+        total: result.meta.total,
+        totalPages: Math.ceil(result.meta.total / limit),
       },
     });
   } catch (error) {
@@ -82,7 +65,99 @@ export const getExercises = async (
   }
 };
 
-// 2. Create Custom Exercise
+// 3. Get Exercises by Muscle (NEW)
+export const getExercisesByMuscle = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    const { muscle } = req.params;
+
+    const exercises = await exerciseService.getExercisesByMuscle(
+      muscle,
+      userId,
+    );
+
+    res.status(200).json({
+      data: exercises,
+      muscle,
+      total: exercises.length,
+    });
+  } catch (error) {
+    console.error("Get Exercises by Muscle Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// 4. Get Exercises by Category (NEW)
+export const getExercisesByCategory = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    const { category } = req.params;
+
+    const exercises = await exerciseService.getExercisesByCategory(
+      category,
+      userId,
+    );
+
+    res.status(200).json({
+      data: exercises,
+      category,
+      total: exercises.length,
+    });
+  } catch (error) {
+    console.error("Get Exercises by Category Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// 5. Get All Muscle Groups (NEW)
+export const getAllMuscleGroups = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const muscles = await exerciseService.getAllMuscleGroups();
+    res.status(200).json({ data: muscles });
+  } catch (error) {
+    console.error("Get Muscle Groups Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// 6. Get All Categories (NEW)
+export const getAllCategories = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const categories = await exerciseService.getAllCategories();
+    res.status(200).json({ data: categories });
+  } catch (error) {
+    console.error("Get Categories Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// 7. Get All Equipment (NEW)
+export const getAllEquipment = async (
+  req: AuthRequest,
+  res: Response,
+): Promise<void> => {
+  try {
+    const equipment = await exerciseService.getAllEquipment();
+    res.status(200).json({ data: equipment });
+  } catch (error) {
+    console.error("Get Equipment Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// 8. Create Custom Exercise
 export const createCustomExercise = async (
   req: AuthRequest,
   res: Response,
@@ -108,24 +183,17 @@ export const createCustomExercise = async (
       return;
     }
 
-    // Generate a unique ID (slug)
-    let slug = createSlug(name);
-    // Append timestamp to ensure uniqueness for custom exercises
-    slug = `${slug}-${Date.now()}`;
-
-    const newExercise = await prisma.globalExercise.create({
-      data: {
-        id: slug,
+    const newExercise = await exerciseService.createCustomExercise(
+      {
         name,
         category,
-        equipment: equipment || "Bodyweight",
-        primaryMuscles: primaryMuscles || [],
-        secondaryMuscles: secondaryMuscles || [],
-        isCustom: true,
-        createdBy: userId,
+        equipment,
+        primaryMuscles,
+        secondaryMuscles,
         instructions,
       },
-    });
+      userId,
+    );
 
     res.status(201).json(newExercise);
   } catch (error) {
@@ -134,13 +202,18 @@ export const createCustomExercise = async (
   }
 };
 
-// 3. Update Custom Exercise
+// 9. Update Custom Exercise
 export const updateExercise = async (
   req: AuthRequest,
   res: Response,
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
     const { id } = req.params;
     const {
       name,
@@ -151,31 +224,9 @@ export const updateExercise = async (
       instructions,
     } = req.body;
 
-    if (!userId) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    // Verify ownership
-    const exercise = await prisma.globalExercise.findUnique({
-      where: { id },
-    });
-
-    if (!exercise) {
-      res.status(404).json({ error: "Exercise not found" });
-      return;
-    }
-
-    if (!exercise.isCustom || exercise.createdBy !== userId) {
-      res
-        .status(403)
-        .json({ error: "You can only edit your own custom exercises" });
-      return;
-    }
-
-    const updated = await prisma.globalExercise.update({
-      where: { id },
-      data: {
+    const updated = await exerciseService.updateCustomExercise(
+      id,
+      {
         name,
         category,
         equipment,
@@ -183,53 +234,47 @@ export const updateExercise = async (
         secondaryMuscles,
         instructions,
       },
-    });
+      userId,
+    );
 
     res.status(200).json(updated);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Update Exercise Error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    if (error.message === "Exercise not found") {
+      res.status(404).json({ error: error.message });
+    } else if (error.message.includes("only edit your own")) {
+      res.status(403).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 };
 
-// 4. Delete Custom Exercise
+// 10. Delete Custom Exercise
 export const deleteExercise = async (
   req: AuthRequest,
   res: Response,
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const { id } = req.params;
-
     if (!userId) {
       res.status(401).json({ error: "Unauthorized" });
       return;
     }
 
-    // Verify ownership
-    const exercise = await prisma.globalExercise.findUnique({
-      where: { id },
-    });
+    const { id } = req.params;
 
-    if (!exercise) {
-      res.status(404).json({ error: "Exercise not found" });
-      return;
-    }
-
-    if (!exercise.isCustom || exercise.createdBy !== userId) {
-      res
-        .status(403)
-        .json({ error: "You can only delete your own custom exercises" });
-      return;
-    }
-
-    await prisma.globalExercise.delete({
-      where: { id },
-    });
+    await exerciseService.deleteCustomExercise(id, userId);
 
     res.status(200).json({ message: "Exercise deleted successfully" });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Delete Exercise Error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    if (error.message === "Exercise not found") {
+      res.status(404).json({ error: error.message });
+    } else if (error.message.includes("only delete your own")) {
+      res.status(403).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 };
