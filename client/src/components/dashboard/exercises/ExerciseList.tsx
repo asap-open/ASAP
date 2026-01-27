@@ -1,15 +1,14 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { api } from "../../../utils/api";
+import { AuthContext } from "../../../context/AuthContext";
 import ExerciseItem from "../../ui/exercises/ExerciseItem";
 import CreateExerciseModal from "../../ui/exercises/modals/CreateExerciseModal";
 import ExerciseDetailsModal from "../../ui/exercises/modals/ExerciseDetailsModal";
 import ConfirmModal from "../../ui/exercises/modals/ConfirmDeleteModal";
-import { api } from "../../../utils/api";
-import { AuthContext } from "../../../context/AuthContext";
-
 // --- Types ---
 interface Exercise {
   id: string;
-  name: string; // API returns 'name'
+  name: string;
   category: string;
   equipment: string;
   primaryMuscles: string[];
@@ -18,16 +17,24 @@ interface Exercise {
   isCustom: boolean;
   createdBy?: string;
 }
+
 interface ExerciseListProps {
-  selectedCategory?: string;
+  filters?: {
+    muscle?: string;
+    category?: string;
+    equipment?: string;
+  };
+  search?: string;
 }
-export default function ExerciseList({ selectedCategory }: ExerciseListProps) {
+
+export default function ExerciseList({
+  filters = {},
+  search = "",
+}: ExerciseListProps) {
   const { token } = useContext(AuthContext);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  // Modal States
   const [editingExercise, setEditingExercise] = useState<Exercise | null>(null);
   const [viewingExercise, setViewingExercise] = useState<Exercise | null>(null);
   const [deletingExercise, setDeletingExercise] = useState<Exercise | null>(
@@ -38,14 +45,19 @@ export default function ExerciseList({ selectedCategory }: ExerciseListProps) {
   const fetchExercises = async () => {
     setIsLoading(true);
     try {
-      let endpoint = "/exercises?limit=50";
-      if (selectedCategory && selectedCategory !== "All") {
-        // Convert to lowercase to match typical backend/DB conventions
-        endpoint += `&muscle=${selectedCategory.toLowerCase()}`;
-      }
+      let endpoint = "/exercises/search?limit=50";
+      const params = [];
+      if (filters.muscle)
+        params.push(`muscle=${encodeURIComponent(filters.muscle)}`);
+      if (filters.category)
+        params.push(`category=${encodeURIComponent(filters.category)}`);
+      if (filters.equipment)
+        params.push(`equipment=${encodeURIComponent(filters.equipment)}`);
+      if (search) params.push(`q=${encodeURIComponent(search)}`);
+      if (params.length > 0) endpoint += `&${params.join("&")}`;
 
       const response = await api.get(endpoint, token);
-      setExercises(response.data);
+      setExercises(response.data?.data || response.data || []);
     } catch (error) {
       console.error("Failed to fetch exercises:", error);
     } finally {
@@ -57,7 +69,8 @@ export default function ExerciseList({ selectedCategory }: ExerciseListProps) {
     if (token) {
       fetchExercises();
     }
-  }, [token, selectedCategory]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, filters.muscle, filters.category, filters.equipment, search]);
 
   // Close menu when clicking anywhere else on the page
   useEffect(() => {

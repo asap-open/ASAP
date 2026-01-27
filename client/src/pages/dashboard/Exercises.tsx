@@ -1,27 +1,46 @@
 import { useState } from "react";
 import ExerciseHeader from "../../components/dashboard/exercises/ExerciseHeader";
 import SearchBar from "../../components/dashboard/exercises/SearchBar";
-import CategoryFilter from "../../components/dashboard/exercises/CategoryFilter";
+import ExerciseFilters from "../../components/dashboard/exercises/ExerciseFilters";
+import ExerciseFiltersModal from "../../components/dashboard/exercises/ExerciseFiltersModal";
 import ExerciseList from "../../components/dashboard/exercises/ExerciseList";
 import CreateExerciseModal from "../../components/ui/exercises/modals/CreateExerciseModal";
 
 export default function Exercises() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    muscle: "",
+    category: "",
+    equipment: "",
+  });
+  const [search, setSearch] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
 
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto w-full md:max-w-4xl">
       <ExerciseHeader onAddClick={() => setIsModalOpen(true)} />
-      <SearchBar />
-      <CategoryFilter
-        selected={selectedCategory}
-        onSelect={setSelectedCategory}
+      <div className="flex flex-col md:flex-row md:items-center md:gap-4 px-6 pt-4">
+        <div className="flex-1">
+          <SearchBar value={search} onChange={setSearch} />
+        </div>
+        <button
+          className="md:hidden mt-2 bg-primary/10 text-primary px-4 py-2 rounded-lg"
+          onClick={() => setIsFiltersModalOpen(true)}
+        >
+          Filters
+        </button>
+      </div>
+      <div className="hidden md:block">
+        <ExerciseFilters filters={filters} onChange={setFilters} />
+      </div>
+      <ExerciseFiltersModal
+        isOpen={isFiltersModalOpen}
+        filters={filters}
+        onChange={setFilters}
+        onClose={() => setIsFiltersModalOpen(false)}
       />
-
-      {/* Passing refreshKey as a key forces remount and refetch */}
-      <ExerciseList key={refreshKey} selectedCategory={selectedCategory} />
-
+      <ExerciseList key={refreshKey} filters={filters} search={search} />
       <CreateExerciseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
