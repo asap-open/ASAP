@@ -32,12 +32,25 @@ export default function Exercises() {
         </button>
       </div>
       <div className="hidden md:block">
-        <ExerciseFilters filters={filters} onChange={setFilters} />
+        <ExerciseFilters
+          filters={filters}
+          onChange={(newFilters) =>
+            setFilters((prev) => ({
+              ...prev,
+              ...newFilters,
+            }))
+          }
+        />
       </div>
       <ExerciseFiltersModal
         isOpen={isFiltersModalOpen}
         filters={filters}
-        onChange={setFilters}
+        onChange={(newFilters) =>
+          setFilters((prev) => ({
+            ...prev,
+            ...newFilters,
+          }))
+        }
         onClose={() => setIsFiltersModalOpen(false)}
       />
       <ExerciseList key={refreshKey} filters={filters} search={search} />
