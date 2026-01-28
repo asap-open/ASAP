@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { X, Search } from "lucide-react";
+import { X } from "lucide-react";
 import { api } from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import SearchBar from "../dashboard/exercises/SearchBar";
 
 interface Exercise {
   id: string;
@@ -24,54 +25,54 @@ export default function AddExerciseModal({
 }: AddExerciseModalProps) {
   const { token } = useAuth();
   const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [categories, setCategories] = useState<string[]>(["all"]);
 
+  // Fetch categories once when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      fetchCategories();
+    }
+  }, [isOpen]);
+
+  // Fetch exercises when modal opens or search/category changes
   useEffect(() => {
     if (isOpen) {
       fetchExercises();
     }
-  }, [isOpen]);
+    // eslint-disable-next-line
+  }, [isOpen, searchQuery, selectedCategory]);
 
-  useEffect(() => {
-    filterExercises();
-  }, [searchQuery, selectedCategory, exercises]);
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get("/exercises/categories", token);
+      setCategories(["all", ...(response.data || response)]);
+    } catch (error) {
+      setCategories(["all"]);
+    }
+  };
 
   const fetchExercises = async () => {
     try {
       setLoading(true);
-      const response = await api.get("/exercises", token);
+      const params = new URLSearchParams();
+      if (searchQuery) params.append("q", searchQuery);
+      if (selectedCategory && selectedCategory !== "all")
+        params.append("category", selectedCategory);
+
+      const response = await api.get(
+        `/exercises/search?${params.toString()}`,
+        token,
+      );
       setExercises(response.data || response);
-      setFilteredExercises(response.data || response);
     } catch (error) {
-      console.error("Failed to fetch exercises:", error);
+      setExercises([]);
     } finally {
       setLoading(false);
     }
   };
-
-  const filterExercises = () => {
-    let filtered = exercises;
-
-    if (selectedCategory !== "all") {
-      filtered = filtered.filter((ex) => ex.category === selectedCategory);
-    }
-
-    if (searchQuery) {
-      filtered = filtered.filter((ex) =>
-        ex.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-    }
-
-    setFilteredExercises(filtered);
-  };
-
-  const categories = [
-    "all",
-    ...Array.from(new Set(exercises.map((e) => e.category))),
-  ];
 
   const handleAddExercise = (exercise: Exercise) => {
     onAddExercise(exercise);
@@ -105,20 +106,7 @@ export default function AddExerciseModal({
 
         {/* Search Bar */}
         <div className="p-4 border-b border-slate-200">
-          <div className="relative">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
-              size={20}
-            />
-            <input
-              type="text"
-              placeholder="Search exercises..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-            />
-          </div>
-
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
           {/* Category Filter */}
           <div className="flex gap-2 mt-3 overflow-x-auto pb-2">
             {categories.map((category) => (
@@ -143,13 +131,13 @@ export default function AddExerciseModal({
             <div className="text-center py-8 text-text-muted">
               Loading exercises...
             </div>
-          ) : filteredExercises.length === 0 ? (
+          ) : exercises.length === 0 ? (
             <div className="text-center py-8 text-text-muted">
               No exercises found
             </div>
           ) : (
             <div className="space-y-2">
-              {filteredExercises.map((exercise) => (
+              {exercises.map((exercise) => (
                 <button
                   key={exercise.id}
                   onClick={() => handleAddExercise(exercise)}

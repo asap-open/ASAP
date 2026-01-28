@@ -15,12 +15,12 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
   if (!isOpen) return null;
 
   const handleStartFresh = () => {
-    onClose();
     setShowNameModal(true);
   };
 
   const handleConfirmSession = (sessionName: string) => {
     setShowNameModal(false);
+    onClose();
     navigate("/session/create", { state: { sessionName } });
   };
 
@@ -33,7 +33,7 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
   return (
     <>
       <div className="fixed bottom-[100px] left-1/2 -translate-x-1/2 w-full max-w-md px-6 z-50 pointer-events-none md:hidden">
-        <div className="flex flex-col items-center gap-3 w-full pointer-events-auto">
+        <div className="flex flex-col items-center gap-3 w-full pointer-events-auto pb-8">
           {/* Select Template */}
           <button
             onClick={handleSelectTemplate}
@@ -64,7 +64,10 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
 
       <SessionNameModal
         isOpen={showNameModal}
-        onClose={() => setShowNameModal(false)}
+        onClose={() => {
+          setShowNameModal(false);
+          onClose();
+        }}
         onConfirm={handleConfirmSession}
       />
     </>

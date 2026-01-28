@@ -1,4 +1,3 @@
-// client/src/pages/dashboard/CreateSession.tsx
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Plus, Save, X } from "lucide-react";
