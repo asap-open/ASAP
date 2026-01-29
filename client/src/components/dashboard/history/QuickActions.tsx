@@ -2,6 +2,8 @@ import { Timer, LayoutTemplate } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SessionNameModal from "../../ui/modals/SessionNameModal";
+import { api } from "../../../utils/api";
+import { useAuth } from "../../../context/AuthContext";
 
 interface QuickActionsProps {
   isOpen: boolean;
@@ -10,6 +12,7 @@ interface QuickActionsProps {
 
 export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
   const navigate = useNavigate();
+  const { token } = useAuth();
   const [showNameModal, setShowNameModal] = useState(false);
 
   if (!isOpen) return null;
@@ -18,15 +21,24 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
     setShowNameModal(true);
   };
 
-  const handleConfirmSession = (sessionName: string) => {
+  const handleConfirmSession = async (sessionName: string) => {
+    setShowNameModal(false);
+    try {
+      const response = await api.post("/sessions", { sessionName }, token);
+      const sessionId = response.data?.id || response.id;
+      onClose();
+      navigate("/session/create", { state: { sessionName, sessionId } });
+    } catch (error) {
+      alert("Failed to create session.");
+    }
+  };
+
+  const handleCancelSession = () => {
     setShowNameModal(false);
     onClose();
-    navigate("/session/create", { state: { sessionName } });
   };
 
   const handleSelectTemplate = () => {
-    // TODO: Implement template selection
-    console.log("Select template");
     onClose();
   };
 
@@ -64,10 +76,7 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
 
       <SessionNameModal
         isOpen={showNameModal}
-        onClose={() => {
-          setShowNameModal(false);
-          onClose();
-        }}
+        onClose={handleCancelSession}
         onConfirm={handleConfirmSession}
       />
     </>

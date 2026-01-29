@@ -28,16 +28,20 @@ export default function CreateSession() {
     location.state?.sessionName || "Workout Session",
   );
   const [exercises, setExercises] = useState<SessionExercise[]>([]);
-  const [sessionId, setSessionId] = useState<number | null>(null);
+  const [sessionId, setSessionId] = useState<number | null>(
+    location.state?.sessionId || null,
+  );
   const [showAddExercise, setShowAddExercise] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  // Create session on mount
+  // If sessionId is not provided, create one (fallback, but should not happen in this flow)
   useEffect(() => {
-    createInitialSession();
-  }, []);
+    if (!sessionId) {
+      createInitialSession();
+    }
+  }, [sessionId]);
 
   // Auto-save every 10 seconds if there are changes
   useEffect(() => {
