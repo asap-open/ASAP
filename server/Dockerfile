@@ -1,47 +1,58 @@
-# Stage 1: Install dependencies and generate Prisma
+# --- Stage 1: Base & Dependencies ---
+FROM node:20-alpine AS deps
+WORKDIR /app    
+# Required for Prisma and bcryptjs (native builds)
+RUN apk add --no-cache openssl-dev python3 make g++
+COPY package.json yarn.lock ./
+COPY prisma ./prisma
+# Install all dependencies including devDependencies for the build
+RUN yarn install --frozen-lockfile
+
+# --- Stage 2: Builder ---
 FROM node:20-alpine AS builder
 WORKDIR /app
+RUN apk add --no-cache openssl-dev
 
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# 1. Generate Prisma Client
+RUN npx prisma generate
+
+# 2. Build the TypeScript code to /dist
+RUN yarn build
+
+# --- Stage 3: Production Dependencies ---
+FROM node:20-alpine AS prod-deps
+WORKDIR /app
 RUN apk add --no-cache openssl-dev
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY prisma ./prisma 
 
-COPY prisma.config.ts ./prisma.config.js
-COPY prisma ./prisma
-RUN npx prisma generate
-
-# Stage 2: Production dependencies only
-FROM node:20-alpine AS deps
-WORKDIR /app
-
-COPY package.json yarn.lock ./
+# Now yarn install will find the schema for the postinstall script
 RUN yarn install --frozen-lockfile --production --ignore-optional
 
-# Stage 3: Final Production Image
+# --- Stage 4: Runtime Image ---
 FROM node:20-alpine AS runner
 WORKDIR /app
-
 ENV NODE_ENV=production
 
-# Install only runtime essentials
-RUN apk add --no-cache libssl3 libstdc++ && \
-    npm install -g tsx prisma
+# Install runtime-only essentials
+RUN apk add --no-cache libssl3 libstdc++
 
-# Copy production dependencies and generated Prisma client
-COPY --from=deps --chown=node:node /app/node_modules ./node_modules
-COPY --from=builder --chown=node:node /app/generated ./generated
-COPY --from=builder --chown=node:node /app/prisma ./prisma
-COPY --from=builder --chown=node:node /app/prisma.config.js ./prisma.config.js
-
-# Copy application source and data
-COPY --chown=node:node src ./src
-COPY --chown=node:node data ./data
-COPY --chown=node:node package.json ./package.json
-COPY --chown=node:node entrypoint.sh ./entrypoint.sh
+# Copy everything needed to run the app
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/generated ./generated
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/data ./data
+COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh
 
+# Use the non-root node user for security
 USER node
 EXPOSE 3000
 
