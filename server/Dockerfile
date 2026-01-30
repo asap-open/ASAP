@@ -15,7 +15,7 @@ RUN apk add --no-cache openssl-dev
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 # Generate the client again to ensure it matches the source code
 RUN npx prisma generate
 # Build the TS code. Since rootDir is ./src, output will be directly in ./dist
@@ -43,7 +43,9 @@ COPY --from=builder /app/dist/prisma ./prisma
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/data ./data
 COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
-
+COPY ./prisma.config.ts prisma.config.ts
+COPY ./prisma/schema.prisma ./prisma/schema.prisma
+COPY ./prisma/migrations ./prisma/migrations
 RUN chmod +x ./entrypoint.sh
 USER node
 EXPOSE 3000
