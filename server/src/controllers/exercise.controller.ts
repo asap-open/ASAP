@@ -11,6 +11,9 @@ export const searchExercises = async (
     const userId = req.user?.userId;
     const { q, muscle, category, equipment, limit, offset } = req.query;
 
+    const limitStr = Array.isArray(limit) ? limit[0] : limit;
+    const offsetStr = Array.isArray(offset) ? offset[0] : offset;
+
     const result = await exerciseService.searchExercises({
       q: q as string,
       muscle: muscle as string | string[],
@@ -18,8 +21,8 @@ export const searchExercises = async (
       equipment: equipment as string,
 
       userId,
-      limit: limit ? parseInt(limit as string) : undefined,
-      offset: offset ? parseInt(offset as string) : undefined,
+      limit: limitStr ? parseInt(String(limitStr), 10) : undefined,
+      offset: offsetStr ? parseInt(String(offsetStr), 10) : undefined,
     });
 
     res.status(200).json(result);
@@ -38,8 +41,12 @@ export const getExercises = async (
     const userId = req.user?.userId;
     const search = req.query.search as string;
     const muscle = req.query.muscle;
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 20;
+    const pageRaw = req.query.page;
+    const limitRaw = req.query.limit;
+    const pageStr = Array.isArray(pageRaw) ? pageRaw[0] : pageRaw;
+    const limitStr = Array.isArray(limitRaw) ? limitRaw[0] : limitRaw;
+    const page = pageStr ? parseInt(String(pageStr), 10) : 1;
+    const limit = limitStr ? parseInt(String(limitStr), 10) : 20;
     const offset = (page - 1) * limit;
 
     const result = await exerciseService.searchExercises({
@@ -72,7 +79,9 @@ export const getExercisesByMuscle = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const { muscle } = req.params;
+
+    let { muscle } = req.params;
+    if (Array.isArray(muscle)) muscle = muscle[0];
 
     const exercises = await exerciseService.getExercisesByMuscle(
       muscle,
@@ -97,7 +106,9 @@ export const getExercisesByCategory = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const { category } = req.params;
+
+    let { category } = req.params;
+    if (Array.isArray(category)) category = category[0];
 
     const exercises = await exerciseService.getExercisesByCategory(
       category,
@@ -225,7 +236,7 @@ export const updateExercise = async (
     } = req.body;
 
     const updated = await exerciseService.updateCustomExercise(
-      id,
+      id as string,
       {
         name,
         category,
@@ -264,7 +275,7 @@ export const deleteExercise = async (
 
     const { id } = req.params;
 
-    await exerciseService.deleteCustomExercise(id, userId);
+    await exerciseService.deleteCustomExercise(id as string, userId);
 
     res.status(200).json({ message: "Exercise deleted successfully" });
   } catch (error: any) {

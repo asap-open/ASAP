@@ -1,11 +1,11 @@
 import { prisma } from "../utils/prisma.js";
-
+type JsonValue = any;
 export interface SearchParams {
   q?: string;
   muscle?: string | string[];
   category?: string;
   equipment?: string;
-  userId?: number;
+  userId?: string;
   limit?: number;
   offset?: number;
 }
@@ -15,11 +15,11 @@ export interface Exercise {
   name: string;
   category: string;
   equipment: string;
-  primaryMuscles: any;
-  secondaryMuscles: any;
-  instructions?: string | null;
+  primaryMuscles: JsonValue;
+  secondaryMuscles: JsonValue | null;
+  instructions: string | null;
   isCustom: boolean;
-  createdBy?: number | null;
+  createdBy: string | null;
 }
 
 export interface SearchResult {
@@ -149,10 +149,10 @@ export class ExerciseService {
     const category = exercise.category.toLowerCase();
     const equipment = exercise.equipment.toLowerCase();
     const primaryMuscles = Array.isArray(exercise.primaryMuscles)
-      ? exercise.primaryMuscles.map((m) => m.toLowerCase())
+      ? exercise.primaryMuscles.map((m) => (m as string).toLowerCase())
       : [];
     const secondaryMuscles = Array.isArray(exercise.secondaryMuscles)
-      ? exercise.secondaryMuscles.map((m) => m.toLowerCase())
+      ? exercise.secondaryMuscles.map((m) => (m as string).toLowerCase())
       : [];
 
     // Exact name match - highest priority
@@ -204,7 +204,7 @@ export class ExerciseService {
    */
   async getExercisesByMuscle(
     muscle: string,
-    userId?: number,
+    userId?: string,
   ): Promise<Exercise[]> {
     const result = await this.searchExercises({
       muscle,
@@ -219,7 +219,7 @@ export class ExerciseService {
    */
   async getExercisesByCategory(
     category: string,
-    userId?: number,
+    userId?: string,
   ): Promise<Exercise[]> {
     const result = await this.searchExercises({
       category,
@@ -234,7 +234,7 @@ export class ExerciseService {
    */
   async getExercisesByEquipment(
     equipment: string,
-    userId?: number,
+    userId?: string,
   ): Promise<Exercise[]> {
     const result = await this.searchExercises({
       equipment,
@@ -258,10 +258,10 @@ export class ExerciseService {
     const muscles = new Set<string>();
     exercises.forEach((ex) => {
       if (Array.isArray(ex.primaryMuscles)) {
-        ex.primaryMuscles.forEach((m) => muscles.add(m));
+        ex.primaryMuscles.forEach((m) => muscles.add(m as string));
       }
       if (Array.isArray(ex.secondaryMuscles)) {
-        ex.secondaryMuscles.forEach((m) => muscles.add(m));
+        ex.secondaryMuscles.forEach((m) => muscles.add(m as string));
       }
     });
 
@@ -308,7 +308,7 @@ export class ExerciseService {
       secondaryMuscles?: string[];
       instructions?: string;
     },
-    userId: number,
+    userId: string,
   ): Promise<Exercise> {
     const slug = this.createSlug(data.name);
     const uniqueSlug = `${slug}-${Date.now()}`;
@@ -341,7 +341,7 @@ export class ExerciseService {
       secondaryMuscles?: string[];
       instructions?: string;
     },
-    userId: number,
+    userId: string,
   ): Promise<Exercise> {
     // Verify ownership
     const exercise = await prisma.globalExercise.findUnique({
@@ -365,7 +365,7 @@ export class ExerciseService {
   /**
    * Delete custom exercise
    */
-  async deleteCustomExercise(id: string, userId: number): Promise<void> {
+  async deleteCustomExercise(id: string, userId: string): Promise<void> {
     // Verify ownership
     const exercise = await prisma.globalExercise.findUnique({
       where: { id },

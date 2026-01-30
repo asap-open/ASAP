@@ -1,23 +1,16 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src", "generated"],
+    "rootDir": "./src",
     "outDir": "./dist",
     "module": "nodenext",
     "target": "ES2023",
     "moduleResolution": "nodenext",
     "baseUrl": ".",
     "paths": {
-      "@prisma/client": ["./generated/prisma/client.js"]
+      "@prisma/client": ["./prisma/generated/client.js"]
     },
-    "strict": false,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "noUncheckedIndexedAccess": false,
-    "exactOptionalPropertyTypes": false,
-
-    "sourceMap": true,
-    "declaration": true
+    "skipLibCheck": true
   },
-  "include": ["src", "generated"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "prisma/generated"],
+  "exclude": ["node_modules", "dist", "prisma/migrations"] // Exclude migrations
 }

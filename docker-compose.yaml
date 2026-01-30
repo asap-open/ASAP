@@ -1,6 +1,7 @@
 services:
   server:
     image: tool-server
+    container_name: server
     ports:
       - "3000:3000"
     environment:
@@ -11,9 +12,12 @@ services:
       - TOKEN_EXP=7d
       - PORT=3000
       - FRONTEND_DOMAIN=http://localhost:5173
-
+      - NODE_ENV=production
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   client:
     image: tool-client
+    container_name: client
     environment:
       - BACKEND_SERVER_URL=http://server:3000
       - DOMAIN_NAME=domain.com
