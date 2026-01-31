@@ -24,7 +24,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [token]);
 
   const login = (newToken: string) => setToken(newToken);
-  const logout = () => setToken(null);
+  const logout = () => {
+    localStorage.clear();
+    setToken(null);
+  };
 
   const isAuthenticated = !!token;
 

@@ -38,7 +38,20 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchUserData();
+    const localUser = localStorage.getItem("user");
+    const localProfile = localStorage.getItem("profile");
+    const localPreviousWeight = localStorage.getItem("previousWeight");
+
+    if (localUser && localProfile) {
+      setUser(JSON.parse(localUser));
+      setProfile(JSON.parse(localProfile));
+      setPreviousWeight(
+        localPreviousWeight ? JSON.parse(localPreviousWeight) : null,
+      );
+      setIsLoading(false);
+    } else {
+      fetchUserData();
+    }
   }, []);
 
   const fetchUserData = async () => {
@@ -46,12 +59,13 @@ export default function Profile() {
       setIsLoading(true);
 
       const profileData = await api.get("/profile", token);
-      setUser({
+      const userObj = {
         id: profileData.id,
         username: profileData.username,
         email: profileData.email,
         createdAt: profileData.createdAt,
-      });
+      };
+      setUser(userObj);
 
       if (profileData.profile) {
         setProfile(profileData.profile);
@@ -61,7 +75,19 @@ export default function Profile() {
       const weightHistory = await api.get("/weights/history", token);
       if (weightHistory && weightHistory.length > 1) {
         setPreviousWeight(weightHistory[1].weightKg);
+        localStorage.setItem(
+          "previousWeight",
+          JSON.stringify(weightHistory[1].weightKg),
+        );
+      } else {
+        setPreviousWeight(null);
+        localStorage.removeItem("previousWeight");
       }
+      localStorage.setItem("user", JSON.stringify(userObj));
+      localStorage.setItem(
+        "profile",
+        JSON.stringify(profileData.profile || {}),
+      );
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
