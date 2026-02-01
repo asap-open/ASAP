@@ -10,7 +10,7 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/dashboard/Profile";
 
 // Protected Pages (Assuming these exist or will be created shortly)
-import History from "./pages/dashboard/History";
+import Home from "./pages/dashboard/Home";
 import Exercises from "./pages/dashboard/Exercises";
 import Progress from "./pages/dashboard/Progress";
 import CreateSession from "./pages/dashboard/CreateSession";
@@ -40,7 +40,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<History />} />
+        <Route index element={<Home />} />
         <Route path="exercises" element={<Exercises />} />
         <Route path="analytics" element={<Progress />} />
         {/* <Route path="settings" element={<Settings />} />  */}

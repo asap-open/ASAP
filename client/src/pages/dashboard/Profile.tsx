@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Settings } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { api } from "../../utils/api";
 import EditProfileModal from "../../components/profile/EditProfileModal";
 import ProfileHeader from "../../components/profile/ProfileHeader";
 import PhysicalAttributes from "../../components/profile/PhysicalAttributes";
@@ -10,23 +9,9 @@ import WeightCard from "../../components/profile/WeightCard";
 import BMICard from "../../components/profile/BMICard";
 import UserManagement from "../../components/profile/UserManagement";
 import ActionButtons from "../../components/profile/ActionButtons";
-
-interface UserData {
-  id: string;
-  username: string;
-  email: string;
-  createdAt: string;
-}
-
-interface UserProfile {
-  fullName: string | null;
-  heightCm: number | null;
-  targetWeightKg: number | null;
-  latestWeightKg: number | null;
-  unitPref: string;
-  dateOfBirth: string | null;
-  gender: string | null;
-}
+import { fetchFullUserProfile, loadUserFromStorage } from "../../utils/profile";
+import type { UserData, UserProfile } from "../../utils/profile";
+import LoadingScreen from "../../components/ui/Loading";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -37,63 +22,32 @@ export default function Profile() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const localUser = localStorage.getItem("user");
-    const localProfile = localStorage.getItem("profile");
-    const localPreviousWeight = localStorage.getItem("previousWeight");
-
-    if (localUser && localProfile) {
-      setUser(JSON.parse(localUser));
-      setProfile(JSON.parse(localProfile));
-      setPreviousWeight(
-        localPreviousWeight ? JSON.parse(localPreviousWeight) : null,
-      );
-      setIsLoading(false);
-    } else {
-      fetchUserData();
-    }
-  }, []);
-
-  const fetchUserData = async () => {
+  const loadData = async () => {
     try {
       setIsLoading(true);
-
-      const profileData = await api.get("/profile", token);
-      const userObj = {
-        id: profileData.id,
-        username: profileData.username,
-        email: profileData.email,
-        createdAt: profileData.createdAt,
-      };
-      setUser(userObj);
-
-      if (profileData.profile) {
-        setProfile(profileData.profile);
-      }
-
-      // Fetch weight history only for comparison
-      const weightHistory = await api.get("/weights/history", token);
-      if (weightHistory && weightHistory.length > 1) {
-        setPreviousWeight(weightHistory[1].weightKg);
-        localStorage.setItem(
-          "previousWeight",
-          JSON.stringify(weightHistory[1].weightKg),
-        );
-      } else {
-        setPreviousWeight(null);
-        localStorage.removeItem("previousWeight");
-      }
-      localStorage.setItem("user", JSON.stringify(userObj));
-      localStorage.setItem(
-        "profile",
-        JSON.stringify(profileData.profile || {}),
-      );
+      const data = await fetchFullUserProfile(token);
+      setUser(data.user);
+      setProfile(data.profile);
+      setPreviousWeight(data.previousWeight);
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.error("Error loading user profile:", error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Try to load from local storage first
+    const localData = loadUserFromStorage();
+    if (localData) {
+      setUser(localData.user);
+      setProfile(localData.profile);
+      setPreviousWeight(localData.previousWeight || null);
+      setIsLoading(false);
+    } else {
+      loadData();
+    }
+  }, [token]);
 
   const handleLogout = () => {
     logout();
@@ -120,11 +74,7 @@ export default function Profile() {
   const weightChange = calculateWeightChange();
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-text-muted">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!user) {
@@ -186,7 +136,7 @@ export default function Profile() {
       <EditProfileModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        onSuccess={fetchUserData}
+        onSuccess={loadData}
         token={token}
         currentProfile={profile}
       />

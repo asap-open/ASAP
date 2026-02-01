@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard,
+  House,
   Dumbbell,
   Settings,
   BarChart2,
   Plus,
   LogOut,
-  CalendarDays,
   User,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import QuickActions from "../components/dashboard/history/QuickActions";
+import QuickActions from "../components/dashboard/home/QuickActions";
 
 export default function DashboardLayout() {
   const { logout } = useAuth();
@@ -24,7 +23,7 @@ export default function DashboardLayout() {
   };
 
   const desktopNavItems = [
-    { to: "/", icon: LayoutDashboard, label: "History" },
+    { to: "/", icon: House, label: "Home" },
     { to: "/exercises", icon: Dumbbell, label: "Exercises" },
     { to: "/settings", icon: Settings, label: "Settings" },
     { to: "/profile", icon: User, label: "Profile" },
@@ -101,8 +100,8 @@ export default function DashboardLayout() {
               `flex flex-col items-center gap-1 ${isActive ? "text-primary" : "text-text-muted"}`
             }
           >
-            <CalendarDays size={24} strokeWidth={2.5} />
-            <span className="text-[10px] font-medium">History</span>
+            <House size={24} strokeWidth={2.5} />
+            <span className="text-[10px] font-medium">Home</span>
           </NavLink>
 
           <NavLink
