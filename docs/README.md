@@ -55,7 +55,7 @@ The documentation uses a custom VitePress theme matching the ASAP app design:
 
 - **Primary Color**: `#13ecd6` (cyan/teal)
 - **Font**: Epilogue
-- **Logo**: `/public/logo-2.png`
+- **Logo**: `/public/logo-2.webp`
 
 Theme files:
 

@@ -36,8 +36,8 @@ export default function DashboardLayout() {
         <div>
           <div className="flex items-center gap-3 mb-10 px-2 justify-center">
             <img
-              src="/logo-2.png"
-              alt="FitTrack Logo"
+              src="/logo-2.webp"
+              alt="ASAP Logo"
               className="w-12 h-12 md:w-18 md:h-18"
             />
           </div>

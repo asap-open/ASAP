@@ -1,6 +1,6 @@
 services:
   server:
-    image: tool-server
+    image: sarthakg0yal/asap-server:0.3.4-test
     container_name: server
     ports:
       - "3000:3000"
@@ -16,7 +16,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   client:
-    image: tool-client
+    image: sarthakg0yal/asap-client:0.2.5-test
     container_name: client
     environment:
       - BACKEND_SERVER_URL=http://server:3000

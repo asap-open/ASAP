@@ -23,7 +23,7 @@ cd asap
 
 ### Step 2: Environment Configuration
 
-/workout_tool/tool-main/docs/public/logo-2.png
+/workout_tool/tool-main/docs/public/logo-2.webp
 Create a `.env` file in the `server` directory:
 
 ```bash

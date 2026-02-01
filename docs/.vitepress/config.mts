@@ -6,7 +6,7 @@ export default defineConfig({
   description:
     "Applied Strength & Advancement Platform - A data-driven workout management and analytics system",
   head: [
-    ["link", { rel: "icon", type: "image/png", href: "/logo-2.png" }],
+    ["link", { rel: "icon", type: "image/webp", href: "/logo-2.webp" }],
     ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
     [
       "link",
@@ -21,7 +21,7 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
-    logo: "/logo-2.png",
+    logo: "/logo-2.webp",
     siteTitle: "ASAP",
 
     nav: [

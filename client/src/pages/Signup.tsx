@@ -73,13 +73,11 @@ export default function Signup() {
         <div className="hidden md:flex flex-none basis-[35%] lg:basis-[40%] flex-col items-center justify-center bg-gradient-to-br from-white/60 to-white/30 backdrop-blur-xl border-r border-white/40 p-8 text-center">
           <div className="flex flex-col items-center max-w-xs">
             <img
-              src="/logo-2.png"
-              alt="FitTrack Logo"
+              src="/logo-2.webp"
+              alt="ASAP Logo"
               className="w-28 h-28 md:w-34 md:h-34 mb-6"
             />
-            {/* <h2 className="text-slate-900 text-3xl font-bold mb-2">
-              Join FitTrack
-            </h2> */}
+
             <p className="text-slate-700 text-lg font-medium">
               Start your transformation today. Track every rep, every set, and
               break your limits.

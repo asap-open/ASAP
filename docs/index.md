@@ -6,7 +6,7 @@ hero:
   text: "Applied Strength & Advancement Platform"
   tagline: Data-driven workout management and analytics for measurable improvement
   image:
-    src: /logo-2.png
+    src: /logo-2.webp
     alt: ASAP Platform
   actions:
     - theme: brand

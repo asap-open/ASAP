@@ -2,7 +2,7 @@
 
 A data-driven workout management and analytics system for serious lifters who want to track, analyze, and optimize their training.
 
-![ASAP Platform](docs/public/logo-2.png)
+![ASAP Platform](docs/public/logo-2.webp)
 
 ## Features
 

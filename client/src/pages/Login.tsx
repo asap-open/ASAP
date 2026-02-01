@@ -46,15 +46,12 @@ export default function Login() {
           {/* Logo Circle */}
 
           <img
-            src="/logo-2.png"
-            alt="FitTrack Logo"
+            src="/logo-2.webp"
+            alt="ASAP Logo"
             className="w-28 h-28 md:w-34 md:h-34"
           />
 
-          {/* Brand Text */}
-          {/* <h2 className="text-white text-2xl font-bold leading-tight tracking-[-0.015em] md:text-slate-900 md:text-4xl">
-            FitTrack
-          </h2> */}
+          
 
           {/* Desktop Slogan (Hidden on Mobile) */}
           <p className="text-white/80 md:text-slate-700 text-lg mt-4 text-center hidden md:block max-w-xs font-medium">
