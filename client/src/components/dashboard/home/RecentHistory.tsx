@@ -1,29 +1,10 @@
 import { useState, useEffect } from "react";
-import { ChevronRight, Dumbbell, Loader2 } from "lucide-react";
+import { ChevronRight, Dumbbell } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
-import { api } from "../../../utils/api";
-
-interface SessionStats {
-  totalVolume: number;
-  duration: number | null;
-  exerciseCount: number;
-  totalSets: number;
-}
-
-interface WorkoutSession {
-  id: number;
-  sessionName: string;
-  startTime: string;
-  endTime: string | null;
-  stats: SessionStats;
-  exercises: Array<{
-    exercise: {
-      name: string;
-      category: string;
-    };
-  }>;
-}
-
+import { sessionService } from "../../../services/sessionService";
+import type { WorkoutSession } from "../../../services/sessionService";
+import SessionDetailsModal from "./SessionDetailsModel";
+import LoadingScreen from "../../ui/Loading";
 interface RecentHistoryProps {
   filter?: "today" | "week" | "month";
 }
@@ -32,24 +13,31 @@ export default function RecentHistory({ filter }: RecentHistoryProps) {
   const { token } = useAuth();
   const [sessions, setSessions] = useState<WorkoutSession[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSession, setSelectedSession] = useState<WorkoutSession | null>(
+    null,
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchSessions();
-  }, [filter]);
+  }, [filter, token]);
 
   const fetchSessions = async () => {
+    if (!token) return;
     try {
       setLoading(true);
-      const filterQuery = filter ? `?filter=${filter}&limit=10` : "?limit=10";
-      const response = await api.get(`/sessions${filterQuery}`, token);
-      setSessions(response.data || []);
+      const data = await sessionService.getSessions(token, filter, 10);
+      setSessions(data);
     } catch (error) {
-      console.error("Failed to fetch sessions:", error);
+      console.error("Error fetching sessions:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  const handleSessionClick = (session: WorkoutSession) => {
+    setSelectedSession(session);
+    setIsModalOpen(true);
+  };
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
     const today = new Date();
@@ -98,17 +86,8 @@ export default function RecentHistory({ filter }: RecentHistoryProps) {
     return colors[key] || "bg-slate-100 text-slate-600";
   };
 
-  const handleSessionClick = (sessionId: number) => {
-    // TODO: Navigate to session detail page
-    console.log("View session:", sessionId);
-  };
-
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="animate-spin text-primary" size={32} />
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (sessions.length === 0) {
@@ -124,38 +103,46 @@ export default function RecentHistory({ filter }: RecentHistoryProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      {sessions.map((session) => {
-        const primaryCategory = session.exercises[0]?.exercise?.category;
-        const colorClass = getCategoryColor(primaryCategory);
+    <>
+      <div className="flex flex-col gap-4">
+        {sessions.map((session) => {
+          const primaryCategory = session.exercises[0]?.exercise?.category;
+          const colorClass = getCategoryColor(primaryCategory);
 
-        return (
-          <div
-            key={session.id}
-            onClick={() => handleSessionClick(session.id)}
-            className="bg-surface p-4 rounded-[24px] shadow-sm border border-slate-50 flex items-center gap-4 cursor-pointer hover:bg-slate-50 transition-colors active:scale-[0.98]"
-          >
+          return (
             <div
-              className={`h-12 w-12 rounded-2xl flex items-center justify-center ${colorClass}`}
+              key={session.id}
+              onClick={() => handleSessionClick(session)}
+              className="bg-surface p-4 rounded-[24px] shadow-sm border border-slate-50 flex items-center gap-4 cursor-pointer hover:bg-slate-50 transition-colors active:scale-[0.98]"
             >
-              <Dumbbell size={24} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-base leading-tight text-text-main truncate">
-                {session.sessionName}
-              </h3>
-              <div className="flex items-center gap-2 text-text-muted text-xs font-medium mt-1">
-                <span>{formatTime(session.startTime)}</span>
-                <span className="opacity-30">•</span>
-                <span>{formatDuration(session.stats.duration)}</span>
-                <span className="opacity-30">•</span>
-                <span>{session.stats.exerciseCount} exercises</span>
+              <div
+                className={`h-12 w-12 rounded-2xl flex items-center justify-center ${colorClass}`}
+              >
+                <Dumbbell size={24} />
               </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-bold text-base leading-tight text-text-main truncate">
+                  {session.sessionName}
+                </h3>
+                <div className="flex items-center gap-2 text-text-muted text-xs font-medium mt-1">
+                  <span>{formatTime(session.startTime)}</span>
+                  <span className="opacity-30">•</span>
+                  <span>{formatDuration(session.stats.duration)}</span>
+                  <span className="opacity-30">•</span>
+                  <span>{session.stats.exerciseCount} exercises</span>
+                </div>
+              </div>
+              <ChevronRight className="text-gray-300 flex-shrink-0" size={24} />
             </div>
-            <ChevronRight className="text-gray-300 flex-shrink-0" size={24} />
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </div>
+
+      <SessionDetailsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        session={selectedSession}
+      />
+    </>
   );
 }

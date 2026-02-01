@@ -41,10 +41,7 @@ export default function LogWeightModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Log Today's Weight">
-      <form
-        onSubmit={handleSubmit}
-        className="px-6 py-4 flex flex-col gap-6 pb-30"
-      >
+      <form onSubmit={handleSubmit} className="px-6 py-4 flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <label
             htmlFor="weight-input"

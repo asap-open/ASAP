@@ -36,7 +36,7 @@ export default function Modal({
       ></div>
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-in slide-in-from-bottom-10 fade-in duration-300">
+      <div className="relative w-full max-w-md bg-white rounded-t-xl sm:rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-in slide-in-from-bottom-10 fade-in duration-300 pb-24">
         {/* Mobile Handle */}
         <div className="flex justify-center pt-3 sm:hidden" onClick={onClose}>
           <div className="w-10 h-1.5 bg-slate-200 rounded-full"></div>
