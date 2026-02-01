@@ -294,7 +294,7 @@ export default function CreateSession() {
             Session Volume
           </span>
           <span className="text-lg font-black">
-            {calculateTotalVolume().toLocaleString()} lbs
+            {calculateTotalVolume().toLocaleString()} Kgs
           </span>
         </div>
 

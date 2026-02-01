@@ -85,7 +85,7 @@ export default function ExerciseCard({
       {/* Sets Table Header */}
       <div className="grid grid-cols-12 gap-2 text-[10px] font-bold text-text-muted uppercase tracking-widest mb-2 px-2">
         <div className="col-span-1 text-center">Set</div>
-        <div className="col-span-4 text-center">lbs</div>
+        <div className="col-span-4 text-center">Kgs</div>
         <div className="col-span-4 text-center">Reps</div>
         <div className="col-span-3 text-center">Done</div>
       </div>

@@ -21,15 +21,25 @@ export const logWeight = async (
       return;
     }
 
-    const log = await prisma.weightLog.create({
-      data: {
-        userId,
-        weightKg: parseFloat(weightKg),
-        recordedAt: recordedAt ? new Date(recordedAt) : new Date(),
-      },
+    const result = await prisma.$transaction(async (tx) => {
+      const log = await tx.weightLog.create({
+        data: {
+          userId,
+          weightKg: parseFloat(weightKg),
+          recordedAt: recordedAt ? new Date(recordedAt) : new Date(),
+        },
+      });
+
+      await tx.userProfile.update({
+        where: { userId },
+        data: {
+          latestWeightKg: parseFloat(weightKg),
+        },
+      });
+      return log;
     });
 
-    res.status(201).json(log);
+    res.status(201).json(result);
   } catch (error) {
     console.error("Log Weight Error:", error);
     res.status(500).json({ error: "Internal server error" });
