@@ -77,6 +77,11 @@ export const getWeightHistory = async (
       date.setMonth(date.getMonth() - 3);
       dateFilter = { recordedAt: { gte: date } };
       limit = 1000;
+    } else if (range === "6M") {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 6);
+      dateFilter = { recordedAt: { gte: date } };
+      limit = 1000;
     } else if (range === "1Y") {
       const date = new Date();
       date.setFullYear(date.getFullYear() - 1);

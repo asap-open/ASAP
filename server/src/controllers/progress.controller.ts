@@ -19,6 +19,10 @@ const getDateFilter = (range: string) => {
     const date = new Date();
     date.setMonth(date.getMonth() - 3);
     filter.startTime = { gte: date };
+  } else if (range === "6M") {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 6);
+    filter.startTime = { gte: date };
   } else if (range === "1Y") {
     const date = new Date();
     date.setFullYear(date.getFullYear() - 1);

@@ -1,39 +1,65 @@
-import { Dumbbell, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { api } from "../../../utils/api";
+import { useAuth } from "../../../context/AuthContext";
+import { Trophy } from "lucide-react";
 
 export default function PersonalBests() {
-  return (
-    <>
-      <div className="pt-4 flex items-center justify-between">
-        <h3 className="text-lg font-bold text-text-main">Personal Bests</h3>
-        <button className="text-primary-hover text-sm font-bold cursor-pointer hover:underline">
-          View All
-        </button>
-      </div>
+  const { token } = useAuth();
+  const [pbs, setPbs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-      <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide">
-        <div className="min-w-[160px] bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex flex-col gap-3">
-          <div className="size-10 rounded-lg bg-primary/20 flex items-center justify-center">
-            <Dumbbell className="text-primary-hover" size={24} />
-          </div>
-          <div>
-            <p className="text-xs text-text-muted font-bold uppercase">
-              Deadlift
-            </p>
-            <p className="text-xl font-bold text-text-main">140 kg</p>
-          </div>
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get("progress/pbs", token);
+        setPbs(res);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [token]);
+
+  return (
+    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-text-muted mb-4 flex items-center gap-2">
+        <Trophy size={16} className="text-yellow-500" />
+        Personal Bests
+      </h3>
+
+      {loading ? (
+        <div className="text-center py-4 text-xs text-text-muted">
+          Loading...
         </div>
-        <div className="min-w-[160px] bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex flex-col gap-3">
-          <div className="size-10 rounded-lg bg-orange-100 flex items-center justify-center">
-            <Zap className="text-orange-500" size={24} />
-          </div>
-          <div>
-            <p className="text-xs text-text-muted font-bold uppercase">
-              Bench Press
+      ) : (
+        <div className="space-y-3">
+          {pbs.length === 0 ? (
+            <p className="text-sm text-text-muted">
+              No personal bests recorded yet.
             </p>
-            <p className="text-xl font-bold text-text-main">105 kg</p>
-          </div>
+          ) : (
+            pbs.map((pb, i) => (
+              <div
+                key={i}
+                className="flex justify-between items-center py-2 border-b border-slate-50 last:border-0"
+              >
+                <div>
+                  <p className="font-medium text-text-primary text-sm">
+                    {pb.exercise}
+                  </p>
+                  <p className="text-xs text-text-muted">
+                    {new Date(pb.date).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="font-bold text-primary">{pb.weight} kg</div>
+              </div>
+            ))
+          )}
         </div>
-      </div>
-    </>
+      )}
+    </section>
   );
 }

@@ -1,50 +1,98 @@
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import CalendarView from "./CalendarView";
+import { useEffect, useState } from "react";
+import { api } from "../../../utils/api";
+import { useAuth } from "../../../context/AuthContext";
+import { ChevronDown } from "lucide-react";
 
-export default function ConsistencyHeatmap() {
-  const [isExpanded, setIsExpanded] = useState(false);
+interface ConsistencyHeatmapProps {
+  range: string;
+}
 
-  // Mock data for heatmap squares (opacity levels: 0.1, 0.4, 0.7, 1.0)
-  const squares = Array.from({ length: 30 }, () => Math.random());
+export default function ConsistencyHeatmap({ range }: ConsistencyHeatmapProps) {
+  const { token } = useAuth();
+  const [data, setData] = useState<{ day: string; value: number }[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get(`progress/consistency?range=${range}`, token);
+        setData(res);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [range, token]);
+
+  // Transform data into simple array of opacity levels for valid visual
+  // Just show last N entries depending on range or just fill a grid
+  // The mockup shows a horizontal grid of bars.
+  // Let's create something representing recent activity intensity.
+
+  // Create an array of 30 items max for display, ending today
+  const chartItems = Array.from({ length: 45 }).map((_, i) => {
+    // Logic to find date and value would go here if strict mapping required
+    // For visual "vibe", we check if we have data.
+    return { value: 0 }; // placeholder
+  });
+
+  // Real mapping
+  // We need a map of date->value
+  const valMap = new Map<string, number>();
+  data.forEach((d) => valMap.set(d.day, d.value));
+
+  const today = new Date();
+  const displayBars = [];
+  for (let i = 39; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(today.getDate() - i);
+    const dStr = d.toISOString().split("T")[0];
+    const count = valMap.get(dStr) || 0;
+
+    // opacity classes based on count
+    let opacityClass = "bg-primary/10";
+    if (count === 1) opacityClass = "bg-primary/40";
+    if (count > 1) opacityClass = "bg-primary/80";
+    if (count > 2) opacityClass = "bg-primary";
+
+    displayBars.push({ date: dStr, opacityClass });
+  }
 
   return (
-    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 transition-all duration-300 ease-in-out">
+    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-text-muted">
-          {isExpanded ? "History" : "Workout Consistency"}
+          Recent Activity
         </h3>
-        {!isExpanded && (
-          <span className="text-xs font-medium text-primary-hover">
-            Last 30 Days
-          </span>
-        )}
+        <span className="text-xs font-medium text-primary">Last 40 Days</span>
       </div>
 
-      {isExpanded ? (
-        <CalendarView />
+      {loading ? (
+        <div className="h-4 flex items-center justify-center text-xs text-text-muted">
+          Loading...
+        </div>
       ) : (
-        <div className="flex gap-1 mb-4 overflow-hidden h-10 items-center">
-          {squares.map((val, i) => (
+        <div className="flex gap-1 mb-4 overflow-hidden h-4">
+          {displayBars.map((bar) => (
             <div
-              key={i}
-              className="flex-1 rounded-sm bg-primary h-full hover:scale-y-110 transition-transform duration-200"
-              style={{
-                opacity: Math.max(0.1, val),
-                height: `${Math.max(30, val * 100)}%`,
-              }}
+              key={bar.date}
+              className={`flex-1 rounded-sm ${bar.opacityClass}`}
+              title={bar.date}
             ></div>
           ))}
         </div>
       )}
 
-      <div
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center justify-center gap-2 text-primary-hover text-sm font-medium cursor-pointer hover:underline mt-4 pt-2 border-t border-slate-50"
-      >
-        <span>{isExpanded ? "Collapse view" : "Tap to expand calendar"}</span>
-        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+      {/* Optional expander */}
+      {/* 
+      <div className="flex items-center justify-center gap-1 text-primary text-sm font-medium cursor-pointer">
+        <span>Detailed View</span>
+        <ChevronDown size={16} />
       </div>
+      */}
     </section>
   );
 }
