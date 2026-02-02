@@ -58,10 +58,41 @@ export const getWeightHistory = async (
       return;
     }
 
+    const { range } = req.query;
+    let dateFilter = {};
+    let limit = 100;
+
+    if (range === "1W") {
+      const date = new Date();
+      date.setDate(date.getDate() - 7);
+      dateFilter = { recordedAt: { gte: date } };
+      limit = 1000;
+    } else if (range === "1M") {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 1);
+      dateFilter = { recordedAt: { gte: date } };
+      limit = 1000;
+    } else if (range === "3M") {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 3);
+      dateFilter = { recordedAt: { gte: date } };
+      limit = 1000;
+    } else if (range === "1Y") {
+      const date = new Date();
+      date.setFullYear(date.getFullYear() - 1);
+      dateFilter = { recordedAt: { gte: date } };
+      limit = 1000;
+    } else if (range === "ALL") {
+      limit = 5000;
+    }
+
     const history = await prisma.weightLog.findMany({
-      where: { userId },
-      orderBy: { recordedAt: "desc" },
-      take: 100, // Limit history for graph
+      where: {
+        userId,
+        ...dateFilter,
+      },
+      orderBy: { recordedAt: "asc" }, // Graph usually wants ASC order
+      take: limit,
     });
 
     res.status(200).json(history);
