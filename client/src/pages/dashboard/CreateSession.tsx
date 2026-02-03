@@ -2,7 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Plus, Save, X } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { api } from "../../utils/api";
+import {
+  createSession,
+  updateSession,
+  deleteSession,
+} from "../../utils/session";
 import ExerciseCard from "../../components/session/ExerciseCard";
 import AddExerciseModal from "../../components/session/AddExerciseModal";
 
@@ -56,15 +60,11 @@ export default function CreateSession() {
 
   const createInitialSession = async () => {
     try {
-      const response = await api.post(
-        "/sessions",
-        {
-          sessionName,
-          startTime: new Date().toISOString(),
-          exercises: [],
-        },
-        token,
-      );
+      const response = await createSession(token, {
+        sessionName,
+        startTime: new Date().toISOString(),
+        exercises: [],
+      });
       setSessionId(response.id);
       setLastSyncTime(new Date());
     } catch (error) {
@@ -94,7 +94,7 @@ export default function CreateSession() {
         })),
       };
 
-      await api.put(`/sessions/${sessionId}`, payload, token);
+      await updateSession(token, sessionId, payload);
       setLastSyncTime(new Date());
       setHasUnsavedChanges(false);
     } catch (error) {
@@ -181,26 +181,26 @@ export default function CreateSession() {
   const handleSaveAndExit = async () => {
     await syncSession();
 
+    if (!sessionId) return;
+
     // Mark session as ended
     try {
-      await api.put(
-        `/sessions/${sessionId}`,
-        {
-          sessionName,
-          endTime: new Date().toISOString(),
-          exercises: exercises.map((ex) => ({
-            exerciseId: ex.id,
-            sets: ex.sets
-              .filter((set) => set.weight && set.reps)
-              .map((set) => ({
-                weight: parseFloat(set.weight) || 0,
-                reps: parseInt(set.reps) || 0,
-                isHardSet: set.done,
-              })),
-          })),
-        },
-        token,
-      );
+      const payload = {
+        sessionName,
+        endTime: new Date().toISOString(),
+        exercises: exercises.map((ex) => ({
+          exerciseId: ex.id,
+          sets: ex.sets
+            .filter((set) => set.weight && set.reps)
+            .map((set) => ({
+              weight: parseFloat(set.weight) || 0,
+              reps: parseInt(set.reps) || 0,
+              isHardSet: set.done,
+            })),
+        })),
+      };
+
+      await updateSession(token, sessionId, payload);
       navigate("/");
     } catch (error) {
       console.error("Failed to save session:", error);
@@ -216,7 +216,7 @@ export default function CreateSession() {
       )
     ) {
       try {
-        await api.delete(`/sessions/${sessionId}`, token);
+        await deleteSession(token, sessionId);
         navigate("/");
       } catch (error) {
         console.error("Failed to delete session:", error);

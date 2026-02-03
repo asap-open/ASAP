@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
-import { api } from "../../../utils/api";
+import { fetchSessionCalendarStats } from "../../../utils/session";
 
 interface DayData {
   day: string;
@@ -14,11 +14,6 @@ export default function WeekCalendar() {
   const { token } = useAuth();
   const [days, setDays] = useState<DayData[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
-
-  useEffect(() => {
-    generateWeekDays();
-    fetchCalendarData();
-  }, []);
 
   const generateWeekDays = () => {
     const today = new Date();
@@ -57,8 +52,7 @@ export default function WeekCalendar() {
 
   const fetchCalendarData = async () => {
     try {
-      const response = await api.get("/sessions/stats/calendar?days=7", token);
-      const calendarData = response.data || response;
+      const calendarData = await fetchSessionCalendarStats(token, 7);
 
       // Map workout data to days
       setDays((prevDays) =>
@@ -77,6 +71,11 @@ export default function WeekCalendar() {
       console.error("Failed to fetch calendar data:", error);
     }
   };
+
+  useEffect(() => {
+    generateWeekDays();
+    fetchCalendarData();
+  }, []);
 
   return (
     <div className="flex overflow-x-auto gap-3 py-2 no-scrollbar px-1">
