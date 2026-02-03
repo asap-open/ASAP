@@ -7,7 +7,7 @@ import { fetchFullUserProfile, loadUserFromStorage } from "../../utils/profile";
 
 export default function Home() {
   const { token } = useAuth();
-  const [userName, setUserName] = useState<string>("");
+  const [fullName, setFullName] = useState<string>("");
   const [isLogWeightModalOpen, setIsLogWeightModalOpen] = useState(false);
 
   useEffect(() => {
@@ -15,13 +15,13 @@ export default function Home() {
       // Try to load from local storage first
       const localData = loadUserFromStorage();
       if (localData) {
-        setUserName(localData.user.username);
+        setFullName(localData.profile.fullName);
         return;
       }
       if (token) {
         try {
           const data = await fetchFullUserProfile(token);
-          setUserName(data.user.username);
+          setFullName(data.profile.fullName);
         } catch (error) {
           console.error("Error fetching user profile:", error);
         }
@@ -45,7 +45,7 @@ export default function Home() {
           <h1 className="text-2xl font-extrabold tracking-tight text-text-main">
             {getGreeting()},{" "}
             <span className="text-primary capitalize">
-              {userName || "User"}
+              {fullName || "User"}
             </span>
           </h1>
         </div>
