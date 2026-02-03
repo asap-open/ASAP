@@ -31,7 +31,7 @@ export default function ExerciseDetailsModal({
       initialHeight={500}
       maxHeight={600}
     >
-      <div className="space-y-6 overflow-y-auto pb-25">
+      <div className="space-y-6 overflow-y-auto pb-30">
         <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
           <div className="grid grid-cols-2 gap-4">
             <div>

@@ -106,8 +106,11 @@ export default function CreateExerciseModal({
       isOpen={isOpen}
       onClose={onClose}
       title={isEditing ? "Edit Exercise" : "New Exercise"}
+      minHeight={100}
+      initialHeight={600}
+      maxHeight={700}
     >
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6 pb-10">
         {/* Exercise Name */}
         <div className="flex flex-col gap-2">
           <label className="flex flex-col w-full">

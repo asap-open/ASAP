@@ -136,16 +136,22 @@ export default function ExerciseList({
         </div>
       ) : (
         exercises.map((item, index) => (
-          <ExerciseItem
+          <div
             key={item.id}
-            exercise={{
-              title: item.name,
-              muscles: item.primaryMuscles.join(", "),
-            }}
-            isOpen={openIndex === index}
-            onToggle={(e) => handleToggle(e, index)}
-            {...menuCallbacks(item)}
-          />
+            onClick={() => setViewingExercise(item)}
+            className="cursor-pointer"
+          >
+            <ExerciseItem
+              key={item.id}
+              exercise={{
+                title: item.name,
+                muscles: item.primaryMuscles.join(", "),
+              }}
+              isOpen={openIndex === index}
+              onToggle={(e) => handleToggle(e, index)}
+              {...menuCallbacks(item)}
+            />
+          </div>
         ))
       )}
 
