@@ -34,18 +34,21 @@ export default function SessionDetailsModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Session Details">
-      <div className="p-6 max-h-[80vh] overflow-y-auto">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={session.sessionName}
+      minHeight={100}
+      maxHeight={700}
+      initialHeight={500}
+    >
+      <div className="p-6 pb-35">
         {/* Header Stats */}
         <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
-          <h2 className="text-xl font-bold text-text-main mb-1">
-            {session.sessionName}
-          </h2>
           <div className="text-text-muted text-sm flex items-center gap-2 mb-4">
             <Calendar className="w-4 h-4" />
             {formatDate(session.startTime)}
           </div>
-
           <div className="grid grid-cols-3 gap-4 border-t border-slate-200 pt-4">
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 text-text-muted text-xs mb-1 uppercase font-semibold">
@@ -73,7 +76,6 @@ export default function SessionDetailsModal({
             </div>
           </div>
         </div>
-
         {/* Exercises List */}
         <div className="space-y-6">
           {session.exercises.map((item, index) => (
@@ -87,7 +89,6 @@ export default function SessionDetailsModal({
                 </span>
                 {item.exercise.name}
               </h3>
-
               <div className="bg-slate-50 rounded-lg overflow-hidden border border-slate-100">
                 <table className="w-full text-sm">
                   <thead className="bg-slate-100 text-text-muted text-xs uppercase font-semibold">

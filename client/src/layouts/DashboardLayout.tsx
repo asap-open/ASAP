@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import {
-  House,
-  Dumbbell,
-  Settings,
-  BarChart2,
-  Plus,
-  LogOut,
-  User,
-} from "lucide-react";
+import { House, Dumbbell, BarChart2, Plus, LogOut, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import QuickActions from "../components/dashboard/home/QuickActions";
 
@@ -25,7 +17,7 @@ export default function DashboardLayout() {
   const desktopNavItems = [
     { to: "/", icon: House, label: "Home" },
     { to: "/exercises", icon: Dumbbell, label: "Exercises" },
-    { to: "/settings", icon: Settings, label: "Settings" },
+    { to: "/analytics", icon: BarChart2, label: "Analytics" },
     { to: "/profile", icon: User, label: "Profile" },
   ];
 

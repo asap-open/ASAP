@@ -23,8 +23,15 @@ export default function ExerciseDetailsModal({
   if (!exercise) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={exercise.title}>
-      <div className="space-y-6">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={exercise.title}
+      minHeight={100}
+      initialHeight={500}
+      maxHeight={600}
+    >
+      <div className="space-y-6 overflow-y-auto pb-25">
         <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -80,13 +87,6 @@ export default function ExerciseDetailsModal({
             </p>
           </div>
         )}
-
-        <button
-          onClick={onClose}
-          className="w-full bg-slate-100 hover:bg-slate-200 text-text-main font-bold py-4 rounded-xl transition-all"
-        >
-          Close
-        </button>
       </div>
     </Modal>
   );
