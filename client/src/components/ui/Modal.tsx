@@ -121,8 +121,8 @@ export default function Modal({
           <div className="w-10 h-1.5 rounded-full bg-slate-300" />
         </div>
         {/* Header */}
-        <div className="flex items-center px-4 py-4 border-b border-slate-100">
-          <h2 className="text-text-main text-lg font-bold leading-tight flex-1 text-center pr-10">
+        <div className="flex items-center justify-center px-4 py-4 border-b border-slate-100">
+          <h2 className="text-text-main text-lg font-bold leading-tight text-center">
             {title}
           </h2>
         </div>

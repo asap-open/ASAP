@@ -103,7 +103,7 @@ export default function ExerciseCard({
             <div className="col-span-4">
               <input
                 className="w-full text-center bg-transparent border-none p-0 focus:ring-0 placeholder:text-slate-400"
-                placeholder="135"
+                placeholder="60"
                 type="number"
                 value={set.weight}
                 onChange={(e) =>

@@ -51,8 +51,6 @@ export default function Login() {
             className="w-28 h-28 md:w-34 md:h-34"
           />
 
-          
-
           {/* Desktop Slogan (Hidden on Mobile) */}
           <p className="text-white/80 md:text-slate-700 text-lg mt-4 text-center hidden md:block max-w-xs font-medium">
             Welcome back! Ready to push your limits again?
@@ -142,7 +140,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-primary hover:bg-primary-hover text-white font-bold text-lg h-14 rounded-xl shadow-md shadow-primary/30 active:scale-[0.98] transition-all cursor-pointer"
+                className="w-full bg-primary hover:bg-primary-hover text-white font-bold text-lg h-14 rounded-xl shadow-md shadow-primary/30 active:scale-[0.98] transition-all cursor-pointer flex justify-center items-center"
               >
                 {isLoading ? <Loader2 className="animate-spin" /> : "Login"}
               </button>
