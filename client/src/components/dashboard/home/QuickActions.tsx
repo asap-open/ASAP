@@ -2,8 +2,10 @@ import { Timer, LayoutTemplate } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SessionNameModal from "../../ui/modals/SessionNameModal";
+import SelectRoutineModal from "./SelectRoutineModal";
 import { api } from "../../../utils/api";
 import { useAuth } from "../../../context/AuthContext";
+import type { Routine } from "../../../services/routineService";
 
 interface QuickActionsProps {
   isOpen: boolean;
@@ -14,6 +16,7 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
   const navigate = useNavigate();
   const { token } = useAuth();
   const [showNameModal, setShowNameModal] = useState(false);
+  const [showRoutineModal, setShowRoutineModal] = useState(false);
 
   if (!isOpen) return null;
 
@@ -29,7 +32,7 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
       onClose();
       navigate("/session/create", { state: { sessionName, sessionId } });
     } catch (error) {
-      alert("Failed to create session.");
+      alert("Failed to create session." + (error as Error).message);
     }
   };
 
@@ -39,7 +42,43 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
   };
 
   const handleSelectTemplate = () => {
+    setShowRoutineModal(true);
+  };
+
+  const handleRoutineSelected = async (routine: Routine) => {
+    setShowRoutineModal(false);
     onClose();
+
+    try {
+      const sessionPayload = {
+        sessionName: routine.name,
+        labels: routine.labels,
+        exercises: routine.exercises.map((ex) => ({
+          exerciseId: ex.exercise.id, // Or ex.exerciseId depending on what API returns
+          sets: ex.sets.map((s) => ({
+            weight: s.weight || 0,
+            reps: s.reps || 0,
+            isHardSet: s.isHardSet,
+          })),
+        })),
+      };
+
+      // Create the session immediately
+      const response = await api.post("/sessions", sessionPayload, token);
+      const sessionId = response.data?.id || response.id; // Adjust based on your API response structure
+
+      // Navigate to the session editor with the NEW session ID
+      navigate("/session/create", {
+        state: {
+          sessionId: sessionId,
+          sessionName: routine.name,
+          labels: routine.labels,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to start routine:", error);
+      alert("Failed to start routine.");
+    }
   };
 
   return (
@@ -78,6 +117,11 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
         isOpen={showNameModal}
         onClose={handleCancelSession}
         onConfirm={handleConfirmSession}
+      />
+      <SelectRoutineModal
+        isOpen={showRoutineModal}
+        onClose={() => setShowRoutineModal(false)}
+        onSelectRoutine={handleRoutineSelected}
       />
     </>
   );
