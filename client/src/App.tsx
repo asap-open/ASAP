@@ -14,6 +14,7 @@ import Home from "./pages/dashboard/Home";
 import Exercises from "./pages/dashboard/Exercises";
 import Progress from "./pages/dashboard/Progress";
 import CreateSession from "./pages/dashboard/CreateSession";
+import Settings from "./pages/dashboard/Settings";
 
 // Route Guard Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -43,8 +44,15 @@ function AppRoutes() {
         <Route index element={<Home />} />
         <Route path="exercises" element={<Exercises />} />
         <Route path="analytics" element={<Progress />} />
-        {/* <Route path="settings" element={<Settings />} />  */}
       </Route>
+      <Route
+        path="/dashboard/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/session/create"
         element={

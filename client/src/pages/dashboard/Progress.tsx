@@ -12,29 +12,28 @@ export default function Progress() {
   const [range, setRange] = useState("1M");
 
   return (
-    <div className="min-h-screen pb-32">
+    <div className="min-h-screen flex flex-col max-w-md mx-auto w-full md:max-w-4xl">
       <ProgressHeader />
-      <main className="max-w-7xl mx-auto px-6 space-y-6">
-        <div className="max-w-md mx-auto lg:max-w-none">
+      <div className="flex flex-col md:flex-row md:items-center md:gap-4 px-6 pt-4">
+        <div className="flex-1">
           <TimeFrameFilter selected={range} onSelect={setRange} />
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 auto-rows-min">
-          <div className="lg:col-span-2">
-            {/* Desktop View */}
-            <div className="hidden lg:block">
-              <ConsistencyHeatmap range={range} />
-            </div>
-            {/* Mobile View */}
-            <div className="lg:hidden">
-              <MobileConsistency range={range} />
-            </div>
+      </div>
+      <main className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-min px-6 pt-4 w-full">
+        <div className="md:col-span-2">
+          {/* Desktop View */}
+          <div className="hidden md:block">
+            <ConsistencyHeatmap range={range} />
           </div>
-          <BodyWeightChart range={range} />
-          <VolumeStats range={range} />
-          <MuscleDistribution range={range} />
-          <PersonalBests />
+          {/* Mobile View */}
+          <div className="md:hidden">
+            <MobileConsistency range={range} />
+          </div>
         </div>
+        <BodyWeightChart range={range} />
+        <VolumeStats range={range} />
+        <MuscleDistribution range={range} />
+        <PersonalBests />
       </main>
     </div>
   );

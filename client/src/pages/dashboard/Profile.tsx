@@ -99,7 +99,10 @@ export default function Profile() {
         </div>
         <h1 className="text-lg font-bold">Profile</h1>
         <div className="w-10 h-10 flex items-center justify-end">
-          <button className="flex items-center justify-center p-1 rounded-full active:bg-slate-200/50 transition-colors">
+          <button
+            onClick={() => navigate("/dashboard/settings")}
+            className="flex items-center justify-center p-1 rounded-full active:bg-slate-200/50 transition-colors"
+          >
             <Settings size={24} className="text-text-main" strokeWidth={2} />
           </button>
         </div>

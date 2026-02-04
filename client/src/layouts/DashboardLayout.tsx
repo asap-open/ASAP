@@ -17,7 +17,7 @@ export default function DashboardLayout() {
   const desktopNavItems = [
     { to: "/", icon: House, label: "Home" },
     { to: "/exercises", icon: Dumbbell, label: "Exercises" },
-    { to: "/analytics", icon: BarChart2, label: "Analytics" },
+    { to: "/analytics", icon: BarChart2, label: "Progress" },
     { to: "/profile", icon: User, label: "Profile" },
   ];
 

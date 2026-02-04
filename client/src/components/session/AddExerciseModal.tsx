@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
 import { api } from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import SearchBar from "../dashboard/exercises/SearchBar";
+import Modal from "../ui/Modal";
 
 interface Exercise {
   id: string;
@@ -81,34 +81,20 @@ export default function AddExerciseModal({
     setSelectedCategory("all");
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div className="relative bg-white rounded-t-3xl md:rounded-2xl shadow-xl max-w-2xl w-full max-h-[80vh] flex flex-col animate-in slide-in-from-bottom md:slide-in-from-bottom-0 md:fade-in duration-200">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-200">
-          <h2 className="text-2xl font-bold text-text-main">Add Exercise</h2>
-          <button
-            onClick={onClose}
-            className="text-text-muted hover:text-text-main transition-colors"
-          >
-            <X size={24} />
-          </button>
-        </div>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Add Exercise"
+      className="md:max-w-2xl md:w-full"
+      initialHeight={600}
+    >
+      <div className="flex flex-col h-full">
         {/* Search Bar */}
-        <div className="p-4 border-b border-slate-200">
+        <div className="py-2 border-b border-slate-200">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
           {/* Category Filter */}
-          <div className="flex gap-2 mt-3 overflow-x-auto pb-2">
+          <div className="flex gap-2 mt-3 overflow-x-auto pb-2 no-scrollbar">
             {categories.map((category) => (
               <button
                 key={category}
@@ -126,7 +112,7 @@ export default function AddExerciseModal({
         </div>
 
         {/* Exercise List */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto py-2">
           {loading ? (
             <div className="text-center py-8 text-text-muted">
               Loading exercises...
@@ -136,7 +122,7 @@ export default function AddExerciseModal({
               No exercises found
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 pb-4">
               {exercises.map((exercise) => (
                 <button
                   key={exercise.id}
@@ -161,6 +147,6 @@ export default function AddExerciseModal({
           )}
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

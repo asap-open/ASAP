@@ -260,7 +260,7 @@ export const getPersonalBests = async (
 
     const pbMap = new Map<
       string,
-      { exercise: string; weight: number; date: Date }
+      { exerciseId: string; exercise: string; weight: number; date: Date }
     >();
 
     entries.forEach((entry) => {
@@ -273,6 +273,7 @@ export const getPersonalBests = async (
       const currentPB = pbMap.get(entry.exerciseId);
       if (!currentPB || maxWeightInEntry > currentPB.weight) {
         pbMap.set(entry.exerciseId, {
+          exerciseId: entry.exerciseId,
           exercise: entry.exercise.name,
           weight: maxWeightInEntry,
           date: entry.session.startTime,
