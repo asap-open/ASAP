@@ -224,24 +224,30 @@ export const getPersonalBests = async (
       res.status(401).json({ error: "Unauthorized" });
       return;
     }
+    const { exerciseIds } = req.query;
+    if (!exerciseIds) {
+      res.status(400).json({ error: "Please provide exerciseIds to monitor" });
+      return;
+    }
+    const whereClause: any = {
+      session: { userId },
+    };
+    if (exerciseIds) {
+      const ids =
+        typeof exerciseIds === "string"
+          ? exerciseIds.split(",")
+          : (exerciseIds as string[]);
 
-    // This is computationally expensive if scanning EVERYTHING.
-    // Ideally we have a dedicated table or do this per exercise.
-    // For "Global" PBs, we look for max weight per exercise type.
+      if (ids.length > 0) {
+        whereClause.exerciseId = { in: ids };
+      } else {
+        res.json([]);
+        return;
+      }
+    }
 
-    // 1. Get all ExerciseEntries for user
-    // 2. Group by exerciseId
-    // 3. Find max weight in sets
-
-    // More efficient: specific Prisma groupBy if possible, but sets are nested deeper.
-    // Let's fetch all relevant sets. To allow scaling, we might want to restrict this or cache it.
-    // For now, simple fetch.
-
-    // Get all entries for this user
     const entries = await prisma.exerciseEntry.findMany({
-      where: {
-        session: { userId },
-      },
+      where: whereClause,
       select: {
         exerciseId: true,
         exercise: { select: { name: true } },
