@@ -1,6 +1,6 @@
 import Modal from "../../ui/Modal";
 import type { WorkoutSession } from "../../../services/sessionService";
-import { Clock, Dumbbell, Calendar, Layers } from "lucide-react";
+import { Clock, Dumbbell, Calendar, Layers, Tag } from "lucide-react";
 
 interface SessionDetailsModalProps {
   isOpen: boolean;
@@ -43,6 +43,21 @@ export default function SessionDetailsModal({
       initialHeight={500}
     >
       <div className="p-6 pb-35">
+        {/* Labels Section */}
+        {session.labels && session.labels.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {session.labels.map((label, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold"
+              >
+                <Tag size={12} />
+                {label === "FullBody" ? "Full Body" : label}
+              </span>
+            ))}
+          </div>
+        )}
+
         {/* Header Stats */}
         <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
           <div className="text-text-muted text-sm flex items-center gap-2 mb-4">

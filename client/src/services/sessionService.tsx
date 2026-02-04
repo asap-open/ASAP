@@ -12,6 +12,7 @@ export interface WorkoutSession {
   sessionName: string;
   startTime: string;
   endTime: string | null;
+  labels?: string[];
   stats: SessionStats;
   exercises: Array<{
     sets: Array<{
