@@ -74,7 +74,7 @@ export default function ExerciseCard({
                   className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                 >
                   <Trash2 size={16} />
-                  Remove Exercise
+                  Remove
                 </button>
               </div>
             </>
