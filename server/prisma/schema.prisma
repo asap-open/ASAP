@@ -99,7 +99,8 @@ model Routine {
   userId      String   @map("user_id")
   name        String
   description String?  @db.Text
-
+  labels      SessionLabel[]
+  
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   exercises   RoutineExercise[]
 
@@ -114,8 +115,26 @@ model RoutineExercise {
 
   routine     Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
   exercise    GlobalExercise @relation(fields: [exerciseId], references: [id])
-
+  sets        RoutineSet[]
   @@map("routine_exercises")
+
+}
+
+model RoutineSet {
+  id                Int     @id @default(autoincrement())
+  routineExerciseId Int     @map("routine_exercise_id")
+  setIndex          Int     @map("set_index")
+  
+  // Targets (Optional because it's a template)
+  weight            Float?  
+  reps              Int?    
+  distance          Float?  
+  durationSec       Int?    @map("duration_sec")
+  isHardSet         Boolean @default(true) @map("is_hard_set")
+
+  routineExercise   RoutineExercise @relation(fields: [routineExerciseId], references: [id], onDelete: Cascade)
+
+  @@map("routine_sets")
 }
 
 // 4. Workout Sessions (Active Logs)
