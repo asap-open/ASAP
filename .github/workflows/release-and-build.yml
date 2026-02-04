@@ -9,6 +9,11 @@ jobs:
   release:
     name: Semantic Release & Versioning
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
     outputs:
       new_release_published: ${{ steps.semantic.outputs.new_release_published }}
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
@@ -34,9 +39,9 @@ jobs:
       matrix:
         include:
           - context: ./client
-            image_name: your-docker-user/client-app
+            image_name: sarthakg0yal/asap-client
           - context: ./server
-            image_name: your-docker-user/server-api
+            image_name: sarthakg0yal/asap-server
 
     steps:
       - name: Checkout
