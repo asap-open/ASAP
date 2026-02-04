@@ -20,6 +20,7 @@ export const createSession = async (
       startTime,
       endTime,
       exercises, // Array of { exerciseId, sets: [{ weight, reps, ... }] }
+      labels,
     } = req.body;
 
     if (!sessionName) {
@@ -36,6 +37,7 @@ export const createSession = async (
           userId,
           routineId: routineId || null,
           sessionName,
+          labels: labels || [],
           startTime: startTime ? new Date(startTime) : new Date(),
           endTime: endTime ? new Date(endTime) : null,
         },
@@ -312,6 +314,7 @@ export const updateSession = async (
       sessionName,
       endTime,
       exercises, // Full array of current state
+      labels,
     } = req.body;
 
     // Verify ownership
@@ -331,6 +334,7 @@ export const updateSession = async (
         where: { id: sessionId },
         data: {
           sessionName,
+          labels: labels,
           endTime: endTime ? new Date(endTime) : undefined, // Only update if provided
         },
       });

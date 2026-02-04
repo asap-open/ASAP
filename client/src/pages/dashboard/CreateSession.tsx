@@ -28,6 +28,20 @@ export default function CreateSession() {
   const location = useLocation();
   const { token } = useAuth();
 
+  const AVAILABLE_LABELS = [
+    "Chest",
+    "Back",
+    "Shoulders",
+    "Arms",
+    "Core",
+    "Legs",
+    "Glutes",
+    "FullBody",
+    "Cardio",
+    "Mobility",
+    "Stretching",
+  ];
+
   const [sessionName, setSessionName] = useState(
     location.state?.sessionName || "Workout Session",
   );
@@ -39,7 +53,9 @@ export default function CreateSession() {
   const [isSaving, setIsSaving] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
+  const [selectedLabels, setSelectedLabels] = useState<string[]>(
+    location.state?.labels || [],
+  );
   // If sessionId is not provided, create one (fallback, but should not happen in this flow)
   useEffect(() => {
     if (!sessionId) {
@@ -82,6 +98,7 @@ export default function CreateSession() {
 
       const payload = {
         sessionName,
+        labels: selectedLabels,
         exercises: exercises.map((ex) => ({
           exerciseId: ex.id,
           sets: ex.sets
@@ -188,6 +205,7 @@ export default function CreateSession() {
       const payload = {
         sessionName,
         endTime: new Date().toISOString(),
+        labels: selectedLabels,
         exercises: exercises.map((ex) => ({
           exerciseId: ex.id,
           sets: ex.sets
@@ -224,7 +242,15 @@ export default function CreateSession() {
       }
     }
   };
-
+  const toggleLabel = (label: string) => {
+    setSelectedLabels((prev) => {
+      const newLabels = prev.includes(label)
+        ? prev.filter((l) => l !== label)
+        : [...prev, label];
+      setHasUnsavedChanges(true);
+      return newLabels;
+    });
+  };
   return (
     <div className="relative flex min-h-screen w-full flex-col font-display pb-40 bg-background">
       {/* Header */}
@@ -260,6 +286,28 @@ export default function CreateSession() {
 
       {/* Main Content */}
       <main className="p-4 space-y-6 max-w-2xl mx-auto w-full">
+        {/* Label Selector */}
+        <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm space-y-2">
+          <label className="text-sm font-semibold text-text-muted uppercase tracking-wider block mb-2">
+            Session Focus
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {AVAILABLE_LABELS.map((label) => (
+              <button
+                key={label}
+                onClick={() => toggleLabel(label)}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                  selectedLabels.includes(label)
+                    ? "bg-primary text-white border-primary"
+                    : "bg-slate-50 text-text-muted border-slate-200 hover:border-primary/50"
+                }`}
+              >
+                {label === "FullBody" ? "Full Body" : label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Exercises */}
         <div className="space-y-4">
           {exercises.map((exercise, exerciseIndex) => (

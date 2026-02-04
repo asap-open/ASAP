@@ -25,6 +25,20 @@ enum Gender {
   other
 }
 
+enum SessionLabel {
+  Chest
+  Back
+  Shoulders
+  Arms
+  Core
+  Legs
+  Glutes
+  FullBody
+  Cardio
+  Mobility
+  Stretching
+}
+
 // 1. User & Profile Management
 model User {
   id            String   @id @default(uuid())
@@ -110,6 +124,7 @@ model WorkoutSession {
   userId      String   @map("user_id")
   routineId   Int?     @map("routine_id") // Optional link to the template used
   sessionName String   @map("session_name")
+  labels      SessionLabel[]
   startTime   DateTime @default(now()) @map("start_time")
   endTime     DateTime? @map("end_time")
 
