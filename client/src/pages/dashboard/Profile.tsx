@@ -37,7 +37,6 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    // Try to load from local storage first
     const localData = loadUserFromStorage();
     if (localData) {
       setUser(localData.user);
