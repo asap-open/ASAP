@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Settings } from "lucide-react";
+import { ArrowLeft, Settings, Bell } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import EditProfileModal from "../../components/profile/EditProfileModal";
-import ProfileHeader from "../../components/profile/ProfileHeader";
-import PhysicalAttributes from "../../components/profile/PhysicalAttributes";
-import WeightCard from "../../components/profile/WeightCard";
-import BMICard from "../../components/profile/BMICard";
-import UserManagement from "../../components/profile/UserManagement";
-import ActionButtons from "../../components/profile/ActionButtons";
+import EditProfileModal from "../../components/profile/modals/EditProfileModal";
+import ProfileHeader from "../../components/profile/info/ProfileHeader";
+import PhysicalAttributes from "../../components/profile/info/PhysicalAttributes";
+import WeightCard from "../../components/profile/stats/WeightCard";
+import BMICard from "../../components/profile/stats/BMICard";
+import ActionButtons from "../../components/profile/actions/ActionButtons";
 import { fetchFullUserProfile, loadUserFromStorage } from "../../utils/profile";
 import type { UserData, UserProfile } from "../../utils/profile";
 import LoadingScreen from "../../components/ui/Loading";
@@ -87,7 +86,7 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl px-6 py-4 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl px-4 py-4 flex items-center justify-between">
         <div className="w-10 h-10 flex items-center justify-start">
           <button
             onClick={() => navigate(-1)}
@@ -96,18 +95,29 @@ export default function Profile() {
             <ArrowLeft size={20} className="text-text-muted" />
           </button>
         </div>
+
         <h1 className="text-lg font-bold">Profile</h1>
-        <div className="w-10 h-10 flex items-center justify-end">
+
+        <div className="flex items-center gap-2">
+          {/* Notification Bell */}
+          <button
+            onClick={() => alert("Notifications coming soon!")} // Placeholder
+            className="p-2 rounded-full hover:bg-slate-100 transition-colors text-text-muted"
+          >
+            <Bell size={20} />
+          </button>
+
+          {/* Settings Button */}
           <button
             onClick={() => navigate("/dashboard/settings")}
-            className="flex items-center justify-center p-1 rounded-full active:bg-slate-200/50 transition-colors"
+            className="p-2 rounded-full hover:bg-slate-100 transition-colors text-text-muted"
           >
-            <Settings size={24} className="text-text-main" strokeWidth={2} />
+            <Settings size={20} />
           </button>
         </div>
       </header>
 
-      <main className="max-w-md mx-auto pb-32">
+      <main className="max-w-md mx-auto pb-32 space-y-6">
         <ProfileHeader
           fullName={profile?.fullName || null}
           username={user.username}
@@ -121,10 +131,8 @@ export default function Profile() {
           dateOfBirth={profile?.dateOfBirth || null}
         />
 
-        <UserManagement />
-
         {/* Weight & BMI Cards */}
-        <section className="px-6 grid grid-cols-2 gap-4 mb-6">
+        <section className="px-6 grid grid-cols-2 gap-4">
           <WeightCard
             latestWeightKg={profile?.latestWeightKg || null}
             weightChange={weightChange}

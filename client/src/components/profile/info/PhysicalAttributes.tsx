@@ -1,4 +1,4 @@
-import { formatDateOfBirth, formatGender } from "../../utils/profile";
+import { formatDateOfBirth, formatGender } from "../../../utils/profile";
 
 interface PhysicalAttributesProps {
   heightCm: number | null;

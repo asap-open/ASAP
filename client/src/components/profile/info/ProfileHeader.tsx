@@ -1,4 +1,4 @@
-import { formatMemberSince } from "../../utils/profile";
+import { formatMemberSince } from "../../../utils/profile";
 
 interface ProfileHeaderProps {
   fullName: string | null;

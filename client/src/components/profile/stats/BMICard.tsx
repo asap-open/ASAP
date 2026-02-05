@@ -1,4 +1,4 @@
-import { getBMIStatus, getBMIPosition } from "../../utils/profile";
+import { getBMIStatus, getBMIPosition } from "../../../utils/profile";
 
 interface BMICardProps {
   bmi: string | null;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, User, Calendar, Ruler, Target } from "lucide-react";
-import { api } from "../../utils/api";
+import { api } from "../../../utils/api";
 
 interface EditProfileModalProps {
   isOpen: boolean;
