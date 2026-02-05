@@ -143,7 +143,7 @@ export const getRoutineById = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const routineId = parseInt(req.params.id);
+    const routineId = parseInt(req.params.id as string);
 
     if (!userId) {
       res.status(401).json({ error: "Unauthorized" });
@@ -182,7 +182,7 @@ export const updateRoutine = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const routineId = parseInt(req.params.id);
+    const routineId = parseInt(req.params.id as string);
 
     if (!userId) {
       res.status(401).json({ error: "Unauthorized" });
@@ -272,7 +272,7 @@ export const deleteRoutine = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
-    const routineId = parseInt(req.params.id);
+    const routineId = parseInt(req.params.id as string);
 
     if (!userId) {
       res.status(401).json({ error: "Unauthorized" });

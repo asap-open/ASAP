@@ -29,8 +29,20 @@ export interface Routine {
   exercises: RoutineExercise[];
 }
 
+export interface CreateRoutineExerciseInput {
+  exerciseId: string;
+  sets: RoutineSet[];
+}
+
+export interface CreateRoutineInput {
+  name: string;
+  description?: string;
+  labels: string[];
+  exercises: CreateRoutineExerciseInput[];
+}
+
 export const routineService = {
-  createRoutine: async (token: string | null, data: Partial<Routine>) => {
+  createRoutine: async (token: string | null, data: CreateRoutineInput) => {
     if (!token) throw new Error("No token provided");
     return await api.post("/routines", data, token);
   },
