@@ -1,4 +1,4 @@
-import { Bell, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 interface ActionButtonsProps {
   onLogout: () => void;
