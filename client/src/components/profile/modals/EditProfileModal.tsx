@@ -70,11 +70,7 @@ export default function EditProfileModal({
         gender: formData.gender || null,
       };
 
-      console.log("Sending profile update:", payload);
-
       const response = await api.put("/profile", payload, token);
-
-      console.log("Profile update response:", response);
 
       // Call onSuccess to refresh the profile data
       await onSuccess();

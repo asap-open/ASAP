@@ -3,6 +3,7 @@ import { api } from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import SearchBar from "../dashboard/exercises/SearchBar";
 import Modal from "../ui/Modal";
+import ExerciseFilters from "../dashboard/exercises/ExerciseFilters";
 
 interface Exercise {
   id: string;
@@ -27,46 +28,40 @@ export default function AddExerciseModal({
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [categories, setCategories] = useState<string[]>(["all"]);
 
-  // Fetch categories once when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      fetchCategories();
-    }
-  }, [isOpen]);
+  // New unified filters state
+  const [filters, setFilters] = useState({
+    muscle: "",
+    category: "",
+    equipment: "",
+  });
 
-  // Fetch exercises when modal opens or search/category changes
+  // Fetch exercises when modal opens or search/filters change
   useEffect(() => {
     if (isOpen) {
       fetchExercises();
     }
     // eslint-disable-next-line
-  }, [isOpen, searchQuery, selectedCategory]);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get("/exercises/categories", token);
-      setCategories(["all", ...(response.data || response)]);
-    } catch (error) {
-      setCategories(["all"]);
-    }
-  };
+  }, [isOpen, searchQuery, filters]);
 
   const fetchExercises = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
+
       if (searchQuery) params.append("q", searchQuery);
-      if (selectedCategory && selectedCategory !== "all")
-        params.append("category", selectedCategory);
+      if (filters.muscle) params.append("muscle", filters.muscle);
+      if (filters.category) params.append("category", filters.category);
+      if (filters.equipment) params.append("equipment", filters.equipment);
 
       const response = await api.get(
         `/exercises/search?${params.toString()}`,
         token,
       );
-      setExercises(response.data || response);
+
+      // Handle the API response
+      const results = response.data || response;
+      setExercises(Array.isArray(results) ? results : []);
     } catch (error) {
       setExercises([]);
     } finally {
@@ -78,7 +73,7 @@ export default function AddExerciseModal({
     onAddExercise(exercise);
     onClose();
     setSearchQuery("");
-    setSelectedCategory("all");
+    setFilters({ muscle: "", category: "", equipment: "" });
   };
 
   return (
@@ -90,53 +85,45 @@ export default function AddExerciseModal({
       initialHeight={600}
     >
       <div className="flex flex-col h-full">
-        {/* Search Bar */}
+        {/* Search Bar & Filters */}
         <div className="py-2 border-b border-slate-200">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          {/* Category Filter */}
-          <div className="flex gap-2 mt-3 overflow-x-auto pb-2 no-scrollbar">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${
-                  selectedCategory === category
-                    ? "bg-primary text-white"
-                    : "bg-slate-100 text-text-muted hover:bg-slate-200"
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
+          <div className="px-4 md:px-0 mb-2">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          </div>
+
+          {/* Replaces the old chips with the full filter component */}
+          <div className="-mx-4 md:mx-0">
+            <ExerciseFilters filters={filters} onChange={setFilters} />
           </div>
         </div>
 
         {/* Exercise List */}
-        <div className="flex-1 overflow-y-auto py-2">
+        <div className="flex-1 overflow-y-auto py-2 px-4 md:px-0">
           {loading ? (
-            <div className="text-center py-8 text-text-muted">
+            <div className="flex items-center justify-center py-8 text-text-muted gap-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
               Loading exercises...
             </div>
           ) : exercises.length === 0 ? (
-            <div className="text-center py-8 text-text-muted">
+            <div className="text-center py-8 text-text-muted bg-slate-50 rounded-lg mt-2 border border-dashed border-slate-200">
               No exercises found
             </div>
           ) : (
-            <div className="space-y-2 pb-4">
+            <div className="space-y-2 pb-4 pt-2">
               {exercises.map((exercise) => (
                 <button
                   key={exercise.id}
                   onClick={() => handleAddExercise(exercise)}
-                  className="w-full p-4 bg-white border border-slate-100 rounded-xl hover:border-primary hover:shadow-sm transition-all text-left"
+                  className="w-full p-4 bg-white border border-slate-100 rounded-xl hover:border-primary hover:shadow-sm transition-all text-left group"
                 >
-                  <div className="font-semibold text-text-main">
+                  <div className="font-semibold text-text-main group-hover:text-primary transition-colors">
                     {exercise.name}
                   </div>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-text-muted uppercase font-semibold">
+                    <span className="text-xs text-text-muted uppercase font-semibold bg-slate-100 px-2 py-0.5 rounded">
                       {exercise.category}
                     </span>
-                    <span className="text-xs text-text-muted">•</span>
+                    <span className="text-xs text-slate-300">•</span>
                     <span className="text-xs text-text-muted">
                       {exercise.equipment}
                     </span>

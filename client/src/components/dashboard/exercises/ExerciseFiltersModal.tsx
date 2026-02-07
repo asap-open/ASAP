@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { api } from "../../../utils/api";
 import { useAuth } from "../../../context/AuthContext";
+import { ChevronDown, Filter, X, RotateCcw } from "lucide-react";
+import { exerciseService } from "../../../utils/exercises";
 
 interface ExerciseFiltersModalProps {
   isOpen: boolean;
@@ -24,83 +25,134 @@ export default function ExerciseFiltersModal({
   const [categories, setCategories] = useState<string[]>([]);
   const [equipment, setEquipment] = useState<string[]>([]);
 
+  // Load data when modal opens
   useEffect(() => {
     if (!token || !isOpen) return;
-    api
-      .get("/exercises/muscles", token)
-      .then((res) =>
-        setMuscles(Array.isArray(res.data?.data) ? res.data.data : []),
-      )
-      .catch(() => setMuscles([]));
-    api
-      .get("/exercises/categories", token)
-      .then((res) =>
-        setCategories(Array.isArray(res.data?.data) ? res.data.data : []),
-      )
-      .catch(() => setCategories([]));
-    api
-      .get("/exercises/equipment", token)
-      .then((res) =>
-        setEquipment(Array.isArray(res.data?.data) ? res.data.data : []),
-      )
-      .catch(() => setEquipment([]));
+
+    const fetchFilters = async () => {
+      const data = await exerciseService.getAllFilters(token);
+      setMuscles(data.muscles);
+      setCategories(data.categories);
+      setEquipment(data.equipment);
+    };
+
+    fetchFilters();
   }, [token, isOpen]);
+
+  // Handle local state for the modal to allow applying all at once?
+  // For now, we update the parent directly as per original implementation,
+  // but we provide close/reset buttons.
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-xl p-6 w-full max-w-xs shadow-lg relative">
-        <button className="absolute top-2 right-2 text-xl" onClick={onClose}>
-          &times;
-        </button>
-        <h2 className="text-lg font-semibold mb-4">Filter Exercises</h2>
-        <div className="flex flex-col gap-4">
-          <select
-            className="rounded-lg border px-3 py-2 text-sm"
-            value={filters.muscle || ""}
-            onChange={(e) => onChange({ ...filters, muscle: e.target.value })}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
+        {/* Header */}
+        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <Filter className="w-5 h-5 text-primary" />
+            </div>
+            <h2 className="text-lg font-bold text-text-main">
+              Filter Exercises
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
           >
-            <option value="">All Muscles</option>
-            {muscles.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-          <select
-            className="rounded-lg border px-3 py-2 text-sm"
-            value={filters.category || ""}
-            onChange={(e) => onChange({ ...filters, category: e.target.value })}
-          >
-            <option value="">All Categories</option>
-            {categories.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-          <select
-            className="rounded-lg border px-3 py-2 text-sm"
-            value={filters.equipment || ""}
-            onChange={(e) =>
-              onChange({ ...filters, equipment: e.target.value })
-            }
-          >
-            <option value="">All Equipment</option>
-            {equipment.map((eq) => (
-              <option key={eq} value={eq}>
-                {eq}
-              </option>
-            ))}
-          </select>
+            <X className="w-5 h-5" />
+          </button>
         </div>
-        <button
-          className="mt-6 w-full bg-primary text-white py-2 rounded-lg"
-          onClick={onClose}
+
+        {/* content */}
+        <div className="p-6 flex flex-col gap-5 overflow-y-auto">
+          <FilterGroup
+            label="Target Muscle"
+            value={filters.muscle}
+            options={muscles}
+            onChange={(v) => onChange({ ...filters, muscle: v })}
+          />
+          <FilterGroup
+            label="Category"
+            value={filters.category}
+            options={categories}
+            onChange={(v) => onChange({ ...filters, category: v })}
+          />
+          <FilterGroup
+            label="Equipment"
+            value={filters.equipment}
+            options={equipment}
+            onChange={(v) => onChange({ ...filters, equipment: v })}
+          />
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl flex gap-3">
+          <button
+            className="flex-1 py-3 px-4 font-semibold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+            onClick={() => {
+              onChange({ muscle: "", category: "", equipment: "" });
+              // We don't close automatically on reset, letting user see it's cleared
+            }}
+          >
+            <RotateCcw className="w-4 h-4" />
+            Reset
+          </button>
+          <button
+            className="flex-[2] py-3 px-4 font-semibold text-white bg-primary rounded-xl shadow-sm hover:bg-primary-dark transition-colors"
+            onClick={onClose}
+          >
+            Show Results
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Helper component for uniform styling
+function FilterGroup({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string | undefined;
+  options: string[];
+  onChange: (val: string) => void;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <label className="text-xs font-semibold text-text-muted uppercase tracking-wider ml-1">
+        {label}
+      </label>
+      <div className="relative">
+        <select
+          className={`w-full appearance-none rounded-xl border px-4 py-3 text-sm pr-10 transition-colors
+                        ${
+                          value
+                            ? "border-primary bg-primary/5 text-primary font-medium"
+                            : "border-slate-200 bg-white text-text-main hover:border-slate-300"
+                        }
+                        focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
+                    `}
+          value={value || ""}
+          onChange={(e) => onChange(e.target.value)}
         >
-          Apply
-        </button>
+          <option value="">All {label}s</option>
+          {options.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt.charAt(0).toUpperCase() + opt.slice(1)}
+            </option>
+          ))}
+        </select>
+        <ChevronDown
+          className={`absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 pointer-events-none transition-colors 
+                        ${value ? "text-primary" : "text-slate-400"}`}
+        />
       </div>
     </div>
   );

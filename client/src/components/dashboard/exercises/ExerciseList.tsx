@@ -45,21 +45,31 @@ export default function ExerciseList({
   const fetchExercises = async () => {
     setIsLoading(true);
     try {
-      let endpoint = "/exercises/search?limit=50";
-      const params = [];
-      if (filters.muscle)
-        params.push(`muscle=${encodeURIComponent(filters.muscle)}`);
-      if (filters.category)
-        params.push(`category=${encodeURIComponent(filters.category)}`);
-      if (filters.equipment)
-        params.push(`equipment=${encodeURIComponent(filters.equipment)}`);
-      if (search) params.push(`q=${encodeURIComponent(search)}`);
-      if (params.length > 0) endpoint += `&${params.join("&")}`;
+      const params = new URLSearchParams();
+      params.append("limit", "50");
 
-      const response = await api.get(endpoint, token);
-      setExercises(response.data?.data || response.data || []);
+      if (filters.muscle) params.append("muscle", filters.muscle);
+      if (filters.category) params.append("category", filters.category);
+      if (filters.equipment) params.append("equipment", filters.equipment);
+      if (search) params.append("q", search);
+
+      const response = await api.get(
+        `/exercises/search?${params.toString()}`,
+        token,
+      );
+
+      // The search endpoint returns { data: Exercise[], meta: ... }
+      // api.get returns the parsed body, so response.data is the array
+      if (response && Array.isArray(response.data)) {
+        setExercises(response.data);
+      } else if (Array.isArray(response)) {
+        setExercises(response);
+      } else {
+        setExercises([]);
+      }
     } catch (error) {
       console.error("Failed to fetch exercises:", error);
+      setExercises([]);
     } finally {
       setIsLoading(false);
     }
