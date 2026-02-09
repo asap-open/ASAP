@@ -70,10 +70,29 @@ export default function DashboardLayout() {
         {/* Overlay when Quick Actions are open */}
         {isActionsOpen && (
           <div
-            className="fixed inset-0 bg-black/20 z-40 md:hidden"
+            className="fixed inset-0 bg-black/20 z-40"
             onClick={() => setIsActionsOpen(false)}
           />
         )}
+
+        {/* Desktop Add Session Button */}
+        <button
+          type="button"
+          aria-pressed={isActionsOpen}
+          onClick={() => setIsActionsOpen((prev) => !prev)}
+          className={`hidden md:flex items-center gap-2 px-5 py-3 rounded-full font-semibold shadow-xl transition-colors fixed bottom-10 right-10 z-50 ${
+            isActionsOpen
+              ? "bg-slate-900 text-white"
+              : "bg-primary text-slate-900 hover:bg-primary/90"
+          }`}
+        >
+          <Plus
+            size={22}
+            strokeWidth={2.5}
+            className={`transition-transform ${isActionsOpen ? "rotate-45" : ""}`}
+          />
+          <span>Add Session</span>
+        </button>
 
         {/* Quick Actions Menu (Mobile Only) */}
         <QuickActions

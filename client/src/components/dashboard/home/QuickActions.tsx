@@ -113,6 +113,44 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
         </div>
       </div>
 
+      <div className="hidden md:block fixed bottom-28 right-10 z-50 pointer-events-none">
+        <div className="bg-surface border border-slate-100 rounded-3xl shadow-2xl p-5 flex flex-col gap-3 w-80 pointer-events-auto animate-in slide-in-from-bottom-3 fade-in duration-200">
+          <p className="text-sm font-semibold text-text-muted tracking-wide uppercase">
+            Quick Session Actions
+          </p>
+
+          <button
+            onClick={handleSelectTemplate}
+            className="bg-surface/90 border border-slate-100 px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-slate-50 transition-colors"
+          >
+            <div className="bg-primary/10 text-primary-hover p-2 rounded-xl">
+              <LayoutTemplate size={22} />
+            </div>
+            <div className="text-left">
+              <p className="font-semibold text-sm text-text-main">
+                Use a routine template
+              </p>
+              <p className="text-xs text-text-muted">Load saved structure</p>
+            </div>
+          </button>
+
+          <button
+            onClick={handleStartFresh}
+            className="bg-surface/90 border border-slate-100 px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-slate-50 transition-colors"
+          >
+            <div className="bg-primary/10 text-primary-hover p-2 rounded-xl">
+              <Timer size={22} />
+            </div>
+            <div className="text-left">
+              <p className="font-semibold text-sm text-text-main">
+                Start fresh session
+              </p>
+              <p className="text-xs text-text-muted">Build from scratch</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
       <SessionNameModal
         isOpen={showNameModal}
         onClose={handleCancelSession}

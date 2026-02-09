@@ -93,9 +93,11 @@ export default function AddExerciseModal({
 
           {/* Replaces the old chips with the full filter component */}
           <div className="-mx-4 md:mx-0">
-            <ExerciseFilters 
-              filters={filters} 
-              onChange={(newFilters) => setFilters((prev) => ({ ...prev, ...newFilters }))} 
+            <ExerciseFilters
+              filters={filters}
+              onChange={(newFilters) =>
+                setFilters((prev) => ({ ...prev, ...newFilters }))
+              }
             />
           </div>
         </div>
