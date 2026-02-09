@@ -1,4 +1,6 @@
 import { api } from "./api";
+import { storageService } from "./storageService";
+import { cacheService, CacheTTL } from "./cacheService";
 
 // --- Types ---
 export interface UserData {
@@ -69,7 +71,7 @@ export const formatGender = (gender: string | null) => {
 
 /**
  * Fetches user profile, account data, and weight history to calculate previous weight.
- * Handles localStorage caching automatically.
+ * Handles localStorage caching automatically with TTL.
  */
 export const fetchFullUserProfile = async (
   token: string | null,
@@ -100,42 +102,98 @@ export const fetchFullUserProfile = async (
     // Non-critical, continue
   }
 
-  // 3. Update Local Storage
-  localStorage.setItem("user", JSON.stringify(userObj));
-  localStorage.setItem("profile", JSON.stringify(profileObj || {}));
-  if (previousWeight) {
-    localStorage.setItem("previousWeight", JSON.stringify(previousWeight));
-  } else {
-    localStorage.removeItem("previousWeight");
-  }
-
-  return {
+  const fullData: FullProfileData = {
     user: userObj,
     profile: profileObj,
     previousWeight,
   };
+
+  // 3. Update caches with TTL of 5 minutes
+  storageService.set("fullProfile", fullData, CacheTTL.FIVE_MINUTES);
+  cacheService.set("fullProfile", fullData, CacheTTL.FIVE_MINUTES);
+
+  return fullData;
 };
 
 /**
- * loads user data from local storage if available
+ * Loads user data from local storage if available (even if stale)
  */
 export const loadUserFromStorage = (): FullProfileData | null => {
-  try {
-    const localUser = localStorage.getItem("user");
-    const localProfile = localStorage.getItem("profile");
-    const localPreviousWeight = localStorage.getItem("previousWeight");
+  // Try memory cache first (faster)
+  const memoryCache = cacheService.get<FullProfileData>("fullProfile");
+  if (memoryCache) return memoryCache;
 
-    if (localUser && localProfile) {
-      return {
-        user: JSON.parse(localUser),
-        profile: JSON.parse(localProfile),
-        previousWeight: localPreviousWeight
-          ? JSON.parse(localPreviousWeight)
-          : null,
-      };
-    }
-  } catch (e) {
-    console.error("Error parsing local storage", e);
+  // Fallback to localStorage
+  const localCache = storageService.get<FullProfileData>("fullProfile");
+  if (localCache) {
+    // Repopulate memory cache
+    cacheService.set("fullProfile", localCache, CacheTTL.FIVE_MINUTES);
+    return localCache;
   }
+
   return null;
+};
+
+/**
+ * SWR Pattern: Stale-While-Revalidate
+ * Returns cached data immediately and revalidates in the background
+ *
+ * @param token - Auth token
+ * @param onUpdate - Callback when fresh data is available
+ * @returns Promise with initial data (may be stale)
+ */
+export const fetchProfileWithSWR = async (
+  token: string | null,
+  onUpdate?: (data: FullProfileData) => void,
+): Promise<FullProfileData> => {
+  if (!token) throw new Error("No auth token provided");
+
+  // Check for stale cache data
+  const staleMemory = cacheService.getStale<FullProfileData>("fullProfile");
+  const staleStorage = storageService.getStale<FullProfileData>("fullProfile");
+
+  const cachedData = staleMemory?.data || staleStorage?.data;
+  const isStale = staleMemory?.isStale ?? staleStorage?.isStale ?? true;
+
+  // If we have cached data, revalidate in background
+  if (cachedData) {
+    if (isStale) {
+      // Revalidate in background
+      fetchFullUserProfile(token)
+        .then((freshData) => {
+          if (onUpdate) {
+            onUpdate(freshData);
+          }
+        })
+        .catch((error) => {
+          console.error("Background revalidation failed:", error);
+        });
+    }
+
+    // Return cached data immediately
+    return cachedData;
+  }
+
+  // No cache available, fetch fresh data
+  return await fetchFullUserProfile(token);
+};
+
+/**
+ * Invalidates all profile caches
+ * Use this after updating profile data
+ */
+export const invalidateProfileCache = (): void => {
+  cacheService.remove("fullProfile");
+  storageService.remove("fullProfile");
+};
+
+/**
+ * Force refresh profile data
+ * Clears cache and fetches fresh data
+ */
+export const refreshProfile = async (
+  token: string | null,
+): Promise<FullProfileData> => {
+  invalidateProfileCache();
+  return await fetchFullUserProfile(token);
 };

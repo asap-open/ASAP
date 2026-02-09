@@ -8,7 +8,7 @@ import PhysicalAttributes from "../../components/profile/info/PhysicalAttributes
 import WeightCard from "../../components/profile/stats/WeightCard";
 import BMICard from "../../components/profile/stats/BMICard";
 import ActionButtons from "../../components/profile/actions/ActionButtons";
-import { fetchFullUserProfile, loadUserFromStorage } from "../../utils/profile";
+import { fetchProfileWithSWR } from "../../utils/profile";
 import type { UserData, UserProfile } from "../../utils/profile";
 import LoadingScreen from "../../components/ui/Loading";
 
@@ -24,7 +24,13 @@ export default function Profile() {
   const loadData = async () => {
     try {
       setIsLoading(true);
-      const data = await fetchFullUserProfile(token);
+      const data = await fetchProfileWithSWR(token, (freshData) => {
+        // Update UI when fresh data arrives from background revalidation
+        setUser(freshData.user);
+        setProfile(freshData.profile);
+        setPreviousWeight(freshData.previousWeight);
+      });
+      // Set initial data (may be cached)
       setUser(data.user);
       setProfile(data.profile);
       setPreviousWeight(data.previousWeight);
@@ -36,15 +42,10 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    const localData = loadUserFromStorage();
-    if (localData) {
-      setUser(localData.user);
-      setProfile(localData.profile);
-      setPreviousWeight(localData.previousWeight || null);
-      setIsLoading(false);
-    } else {
+    if (token) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const handleLogout = () => {

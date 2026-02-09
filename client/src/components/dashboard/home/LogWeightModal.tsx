@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Scale, Loader2 } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import { api } from "../../../utils/api";
+import { invalidateProfileCache } from "../../../utils/profile";
 import Modal from "../../ui/Modal";
 
 interface LogWeightModalProps {
@@ -28,6 +29,8 @@ export default function LogWeightModal({
     setError(null);
     try {
       await api.post("/weights", { weightKg: parseFloat(weight) }, token);
+      // Invalidate profile cache since weight data changed
+      invalidateProfileCache();
       setWeight("");
       onClose();
       if (onSuccess) onSuccess();

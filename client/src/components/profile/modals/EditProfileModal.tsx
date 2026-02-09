@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, User, Calendar, Ruler, Target } from "lucide-react";
 import { api } from "../../../utils/api";
+import { invalidateProfileCache } from "../../../utils/profile";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -71,6 +72,9 @@ export default function EditProfileModal({
       };
 
       const response = await api.put("/profile", payload, token);
+
+      // Invalidate cache so next fetch gets fresh data
+      invalidateProfileCache();
 
       // Call onSuccess to refresh the profile data
       await onSuccess();

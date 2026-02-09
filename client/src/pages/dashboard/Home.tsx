@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import RecentHistory from "../../components/dashboard/home/RecentHistory";
 import LogWeightModal from "../../components/dashboard/home/LogWeightModal";
 import { useAuth } from "../../context/AuthContext";
-import { fetchFullUserProfile, loadUserFromStorage } from "../../utils/profile";
+import { fetchProfileWithSWR } from "../../utils/profile";
 
 export default function Home() {
   const { token } = useAuth();
@@ -12,16 +12,14 @@ export default function Home() {
 
   useEffect(() => {
     const initUser = async () => {
-      // Try to load from local storage first
-      const localData = loadUserFromStorage();
-      if (localData) {
-        setFullName(localData.profile.fullName);
-        return;
-      }
       if (token) {
         try {
-          const data = await fetchFullUserProfile(token);
-          setFullName(data.profile.fullName);
+          const data = await fetchProfileWithSWR(token, (freshData) => {
+            // Update when fresh data arrives
+            setFullName(freshData.profile?.fullName || "");
+          });
+          // Set initial data (may be cached)
+          setFullName(data.profile?.fullName || "");
         } catch (error) {
           console.error("Error fetching user profile:", error);
         }

@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { cacheService } from "../utils/cacheService";
+import { storageService } from "../utils/storageService";
 
 interface AuthContextType {
   token: string | null;
@@ -39,7 +41,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setToken(null);
     deleteCookie("token");
-    localStorage.clear(); // Good to clear strictly local state too
+    cacheService.clear(); // Clear memory cache
+    storageService.clear(); // Clear localStorage with TTL data
   };
 
   // Sync state with cookie (in case it's mutated elsewhere, though Context usually drives this)
