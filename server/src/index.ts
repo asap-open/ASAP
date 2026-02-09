@@ -6,6 +6,7 @@ import weightRoutes from "./routes/weight.route.js";
 import profileRoutes from "./routes/profile.route.js";
 import progressRoutes from "./routes/progress.route.js";
 import routineRoutes from "./routes/routine.route.js";
+import { prisma } from "./utils/prisma.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -58,6 +59,44 @@ app.get("/", (req, res) => {
   res.send("ASAP API Server Running");
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// Graceful shutdown handler
+const gracefulShutdown = async (signal: string) => {
+  console.log(`\n${signal} received. Starting graceful shutdown...`);
+
+  // Stop accepting new connections
+  server.close(async (err) => {
+    if (err) {
+      console.error("Error during server shutdown:", err);
+      process.exit(1);
+    }
+
+    console.log("HTTP server closed");
+
+    try {
+      // Close database connections
+      await prisma.$disconnect();
+      console.log("Database connections closed");
+      console.log("Graceful shutdown completed");
+      process.exit(0);
+    } catch (error) {
+      console.error("Error during database disconnect:", error);
+      process.exit(1);
+    }
+  });
+
+  // Force shutdown after 30 seconds
+  setTimeout(() => {
+    console.error(
+      "Could not close connections in time, forcefully shutting down",
+    );
+    process.exit(1);
+  }, 30000);
+};
+
+// Handle shutdown signals
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
