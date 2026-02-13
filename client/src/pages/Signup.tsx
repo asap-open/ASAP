@@ -14,6 +14,7 @@ import {
 import HeroBackground from "../components/ui/HeroBackground";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../utils/api";
+import { navigateBack } from "../utils/navigation";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -88,7 +89,7 @@ export default function Signup() {
         <div className="relative flex-1 flex flex-col w-full h-full md:bg-white/90 md:backdrop-blur-xl bg-white/85 backdrop-blur-md overflow-y-auto">
           <div className="flex items-center p-6 pb-2 justify-start">
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => navigateBack(navigate)}
               className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-slate-900 shadow-sm hover:bg-slate-50 transition-colors cursor-pointer"
             >
               <ArrowLeft size={20} />

@@ -9,6 +9,7 @@ import {
 } from "../../utils/session";
 import ExerciseCard from "../../components/session/ExerciseCard";
 import AddExerciseModal from "../../components/session/AddExerciseModal";
+import { navigateAfterSessionEnd } from "../../utils/navigation";
 
 interface Set {
   weight: string;
@@ -56,12 +57,19 @@ export default function CreateSession() {
   const [selectedLabels, setSelectedLabels] = useState<string[]>(
     location.state?.labels || [],
   );
+  const [isSessionEnded, setIsSessionEnded] = useState(false);
   // If sessionId is not provided, create one (fallback, but should not happen in this flow)
   useEffect(() => {
     if (!sessionId) {
       createInitialSession();
     }
   }, [sessionId]);
+
+  useEffect(() => {
+    if (isSessionEnded) {
+      navigateAfterSessionEnd(navigate);
+    }
+  }, [isSessionEnded, navigate]);
 
   // Auto-save every 10 seconds if there are changes
   useEffect(() => {
@@ -219,7 +227,8 @@ export default function CreateSession() {
       };
 
       await updateSession(token, sessionId, payload);
-      navigate("/");
+      setIsSessionEnded(true);
+      navigateAfterSessionEnd(navigate);
     } catch (error) {
       console.error("Failed to save session:", error);
       alert("Failed to save session. Please try again.");
@@ -235,10 +244,12 @@ export default function CreateSession() {
     ) {
       try {
         await deleteSession(token, sessionId);
-        navigate("/");
+        setIsSessionEnded(true);
+        navigateAfterSessionEnd(navigate);
       } catch (error) {
         console.error("Failed to delete session:", error);
-        navigate("/");
+        setIsSessionEnded(true);
+        navigateAfterSessionEnd(navigate);
       }
     }
   };
