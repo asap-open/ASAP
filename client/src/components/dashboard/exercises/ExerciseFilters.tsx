@@ -98,7 +98,7 @@ function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
                     ${
                       value
                         ? "border-primary bg-primary/5 text-primary font-medium"
-                        : "border-slate-200 bg-white text-text-main hover:border-slate-300"
+                        : "border-border bg-surface text-text-main hover:border-text-muted/40"
                     }
                     focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
                 `}

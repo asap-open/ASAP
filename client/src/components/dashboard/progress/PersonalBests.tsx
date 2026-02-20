@@ -52,7 +52,7 @@ export default function PersonalBests() {
   }, [trackedExercises, token]);
 
   return (
-    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 h-full flex flex-col">
+    <section className="bg-surface rounded-xl p-5 shadow-sm border border-border h-full flex flex-col">
       <div className="flex items-center mb-4">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-text-muted flex items-center gap-2">
           Personal Bests
@@ -71,7 +71,7 @@ export default function PersonalBests() {
             return (
               <div
                 key={te.id}
-                className="flex justify-between items-center py-3 px-3 border-b border-slate-100 last:border-0"
+                className="flex justify-between items-center py-3 px-3 border-b border-border last:border-0"
               >
                 <div className="flex-1 min-w-0 pr-3">
                   <p className="font-semibold text-text-main text-sm truncate">
@@ -91,7 +91,7 @@ export default function PersonalBests() {
                 <div className="text-right">
                   <span
                     className={`font-bold text-lg ${
-                      pb ? "text-primary" : "text-slate-300"
+                      pb ? "text-primary" : "text-text-muted/30"
                     }`}
                   >
                     {pb ? pb.weight : "--"}

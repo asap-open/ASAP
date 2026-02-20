@@ -8,7 +8,7 @@ export default function BMICard({ bmi }: BMICardProps) {
   const bmiStatus = bmi ? getBMIStatus(parseFloat(bmi)) : null;
 
   return (
-    <div className="bg-surface rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between h-36">
+    <div className="bg-surface rounded-xl p-5 shadow-sm border border-border flex flex-col justify-between h-36">
       <div>
         <div className="flex items-center gap-2 mb-1">
           <svg
@@ -39,7 +39,7 @@ export default function BMICard({ bmi }: BMICardProps) {
           )}
         </div>
         {bmi && (
-          <div className="w-full h-1.5 rounded-full bg-slate-100 relative overflow-hidden">
+          <div className="w-full h-1.5 rounded-full bg-border relative overflow-hidden">
             <div
               className="absolute inset-0 opacity-30"
               style={{

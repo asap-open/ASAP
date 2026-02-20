@@ -79,7 +79,7 @@ export default function SessionCard({
     };
 
     const key = category?.toLowerCase() || "other";
-    return colors[key] || "bg-slate-100 text-slate-600";
+    return colors[key] || "bg-surface-hover text-text-muted";
   };
 
   const handleMenuClick = (e: React.MouseEvent) => {
@@ -99,7 +99,7 @@ export default function SessionCard({
   return (
     <div
       onClick={() => onSessionClick(session)}
-      className={`bg-surface p-4 rounded-[24px] shadow-sm border border-slate-50 flex items-center gap-4 cursor-pointer hover:bg-slate-50 transition-all active:scale-[0.98] ${
+      className={`bg-surface p-4 rounded-[24px] shadow-sm border border-border flex items-center gap-4 cursor-pointer hover:bg-surface-hover transition-all active:scale-[0.98] ${
         isDeleting ? "opacity-50 pointer-events-none" : ""
       }`}
     >
@@ -123,7 +123,7 @@ export default function SessionCard({
       >
         <button
           onClick={handleMenuClick}
-          className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors"
+          className="p-2 rounded-xl hover:bg-surface-hover text-text-muted transition-colors"
           title="More options"
           disabled={isDeleting}
         >
@@ -131,10 +131,10 @@ export default function SessionCard({
         </button>
 
         {showMenu && (
-          <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50 min-w-[160px]">
+          <div className="absolute right-0 top-full mt-2 bg-surface rounded-xl shadow-lg border border-border py-1 z-50 min-w-[160px]">
             <button
               onClick={handleDelete}
-              className="w-full px-4 py-2.5 text-left text-sm font-medium text-slate-700 flex items-center gap-3 transition-colors"
+              className="w-full px-4 py-2.5 text-left text-sm font-medium text-text-muted flex items-center gap-3 transition-colors"
             >
               <Trash2 size={16} color="red" />
               <span className="text-red-600">Delete</span>

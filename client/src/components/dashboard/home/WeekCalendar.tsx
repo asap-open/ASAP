@@ -89,8 +89,8 @@ export default function WeekCalendar() {
               relative flex flex-col items-center min-w-[54px] p-3 rounded-2xl border shadow-sm transition-all cursor-pointer 
               ${
                 isSelected
-                  ? "bg-primary text-slate-900 border-primary shadow-lg shadow-primary/30"
-                  : "bg-surface text-text-main border-slate-100 hover:border-slate-300"
+                  ? "bg-primary text-background border-primary shadow-lg shadow-primary/30"
+                  : "bg-surface text-text-main border-border hover:border-text-muted/40"
               }
             `}
           >
@@ -105,7 +105,7 @@ export default function WeekCalendar() {
             {item.hasWorkout && (
               <div
                 className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${
-                  isSelected ? "bg-slate-900" : "bg-primary"
+                  isSelected ? "bg-text-main" : "bg-primary"
                 }`}
               />
             )}

@@ -62,7 +62,7 @@ export default function ConsistencyHeatmap({ range }: ConsistencyHeatmapProps) {
   }
 
   return (
-    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
+    <section className="bg-surface rounded-xl p-5 shadow-sm border border-border">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-text-muted">
           Recent Activity

@@ -25,7 +25,7 @@ export default function DashboardLayout() {
   return (
     <div className="flex h-screen bg-background text-text-main font-display overflow-hidden">
       {/* DESKTOP SIDEBAR (Hidden on Mobile) */}
-      <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-slate-200 h-full p-6 justify-between">
+      <aside className="hidden md:flex flex-col w-64 bg-surface border-r border-border h-full p-6 justify-between">
         <div>
           <div className="flex items-center gap-3 mb-10 px-2 justify-center">
             <img
@@ -43,8 +43,8 @@ export default function DashboardLayout() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium ${
                     isActive
-                      ? "bg-primary text-slate-900 shadow-lg shadow-primary/20"
-                      : "text-text-muted hover:bg-slate-100 hover:text-slate-900"
+                      ? "bg-primary text-background shadow-lg shadow-primary/20"
+                      : "text-text-muted hover:bg-surface-hover hover:text-text-main"
                   }`
                 }
               >
@@ -83,8 +83,8 @@ export default function DashboardLayout() {
           onClick={() => setIsActionsOpen((prev) => !prev)}
           className={`hidden md:flex items-center gap-2 px-5 py-3 rounded-full font-semibold shadow-xl transition-colors fixed bottom-10 right-10 z-50 ${
             isActionsOpen
-              ? "bg-slate-900 text-white"
-              : "bg-primary text-slate-900 hover:bg-primary/90"
+              ? "bg-text-main text-surface"
+              : "bg-primary text-background hover:bg-primary/90"
           }`}
         >
           <Plus
@@ -103,7 +103,7 @@ export default function DashboardLayout() {
       </main>
 
       {/* MOBILE BOTTOM NAVIGATION (Hidden on Desktop) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl border-t border-slate-200 px-6 pb-8 pt-2">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl border-t border-border px-6 pb-8 pt-2">
         <div className="flex items-center justify-between relative">
           {/* Left Items */}
           <NavLink
@@ -130,12 +130,12 @@ export default function DashboardLayout() {
           <div className="absolute -top-12 left-1/2 -translate-x-1/2">
             <button
               onClick={() => setIsActionsOpen(!isActionsOpen)}
-              className={`flex items-center justify-center h-16 w-16 rounded-full shadow-xl ring-4 ring-background transition-transform active:scale-95 ${isActionsOpen ? "bg-slate-900 rotate-45" : "bg-primary"}`}
+              className={`flex items-center justify-center h-16 w-16 rounded-full shadow-xl ring-4 ring-background transition-transform active:scale-95 ${isActionsOpen ? "bg-text-main rotate-45" : "bg-primary"}`}
             >
               <Plus
                 size={32}
                 strokeWidth={3}
-                className={isActionsOpen ? "text-white" : "text-slate-900"}
+                className={isActionsOpen ? "text-surface" : "text-background"}
               />
             </button>
           </div>

@@ -114,10 +114,10 @@ export default function BodyWeightChart({ range }: BodyWeightChartProps) {
   const changeColor =
     weightChange && weightChange < 0
       ? "text-green-500 bg-green-50"
-      : "text-slate-500 bg-slate-50";
+      : "text-text-muted bg-surface-hover";
 
   return (
-    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
+    <section className="bg-surface rounded-xl p-5 shadow-sm border border-border">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-text-muted">

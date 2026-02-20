@@ -59,14 +59,14 @@ export default function LogWeightModal({
               step="0.1"
               min="0"
               autoFocus
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 pl-12 text-2xl font-bold text-text-main placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+              className="w-full bg-surface-hover border border-border rounded-xl px-4 py-4 pl-12 text-2xl font-bold text-text-main placeholder:text-text-muted/30 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
               placeholder="0.0"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               required
             />
-            <Scale className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-6 h-6" />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">
+            <Scale className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted w-6 h-6" />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted font-medium">
               kg
             </span>
           </div>
@@ -78,11 +78,11 @@ export default function LogWeightModal({
           </div>
         )}
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+        <div className="flex justify-end gap-3 pt-4 border-t border-border">
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl font-semibold text-text-muted hover:bg-slate-100 transition-colors"
+            className="px-5 py-2.5 rounded-xl font-semibold text-text-muted hover:bg-surface-hover transition-colors"
             disabled={loading}
           >
             Cancel

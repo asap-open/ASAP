@@ -92,7 +92,7 @@ export default function Profile() {
         <div className="w-10 h-10 flex items-center justify-start">
           <button
             onClick={() => navigate(-1)}
-            className="hover:bg-slate-100 rounded-lg transition-colors p-1"
+            className="hover:bg-surface-hover rounded-lg transition-colors p-1"
           >
             <ArrowLeft size={20} className="text-text-muted" />
           </button>
@@ -104,7 +104,7 @@ export default function Profile() {
           {/* Notification Bell */}
           <button
             onClick={() => alert("Notifications coming soon!")} // Placeholder
-            className="p-2 rounded-full hover:bg-slate-100 transition-colors text-text-muted"
+            className="p-2 rounded-full hover:bg-surface-hover transition-colors text-text-muted"
           >
             <Bell size={20} />
           </button>
@@ -112,7 +112,7 @@ export default function Profile() {
           {/* Settings Button */}
           <button
             onClick={() => navigate("/dashboard/settings")}
-            className="p-2 rounded-full hover:bg-slate-100 transition-colors text-text-muted"
+            className="p-2 rounded-full hover:bg-surface-hover transition-colors text-text-muted"
           >
             <Settings size={20} />
           </button>

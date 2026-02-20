@@ -79,28 +79,28 @@ export default function Signup() {
               className="w-28 h-28 md:w-34 md:h-34 mb-6"
             />
 
-            <p className="text-slate-700 text-lg font-medium">
+            <p className="text-text-muted text-lg font-medium">
               Start your transformation today. Track every rep, every set, and
               break your limits.
             </p>
           </div>
         </div>
 
-        <div className="relative flex-1 flex flex-col w-full h-full md:bg-white/90 md:backdrop-blur-xl bg-white/85 backdrop-blur-md overflow-y-auto">
+        <div className="relative flex-1 flex flex-col w-full h-full md:bg-surface/90 md:backdrop-blur-xl bg-surface/85 backdrop-blur-md overflow-y-auto">
           <div className="flex items-center p-6 pb-2 justify-start">
             <button
               onClick={() => navigateBack(navigate)}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white text-slate-900 shadow-sm hover:bg-slate-50 transition-colors cursor-pointer"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-surface text-text-main shadow-sm hover:bg-surface-hover transition-colors cursor-pointer"
             >
               <ArrowLeft size={20} />
             </button>
           </div>
 
           <div className="px-6 pt-2 pb-6 md:px-12 md:pt-4">
-            <h1 className="text-slate-900 text-[34px] font-bold leading-tight tracking-tight">
+            <h1 className="text-text-main text-[34px] font-bold leading-tight tracking-tight">
               Create Account
             </h1>
-            <p className="text-slate-600 text-base font-normal mt-2">
+            <p className="text-text-muted text-base font-normal mt-2">
               Join the community and start your journey.
             </p>
           </div>
@@ -117,16 +117,16 @@ export default function Signup() {
 
             <div>
               <label className="flex flex-col w-full">
-                <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
+                <p className="text-text-main text-sm font-semibold mb-2 ml-1">
                   Full Name
                 </p>
                 <div className="relative flex items-center">
-                  <User className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
+                  <User className="absolute left-4 text-text-muted w-5 h-5 pointer-events-none" />
                   <input
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
+                    className="w-full rounded-xl border-none bg-surface h-14 pl-12 pr-4 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="John Doe"
                     type="text"
                     required
@@ -137,16 +137,16 @@ export default function Signup() {
 
             <div>
               <label className="flex flex-col w-full">
-                <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
+                <p className="text-text-main text-sm font-semibold mb-2 ml-1">
                   Username
                 </p>
                 <div className="relative flex items-center">
-                  <User className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
+                  <User className="absolute left-4 text-text-muted w-5 h-5 pointer-events-none" />
                   <input
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
+                    className="w-full rounded-xl border-none bg-surface h-14 pl-12 pr-4 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="johndoe"
                     type="text"
                     required
@@ -157,16 +157,16 @@ export default function Signup() {
 
             <div>
               <label className="flex flex-col w-full">
-                <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
+                <p className="text-text-main text-sm font-semibold mb-2 ml-1">
                   Email Address
                 </p>
                 <div className="relative flex items-center">
-                  <Mail className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
+                  <Mail className="absolute left-4 text-text-muted w-5 h-5 pointer-events-none" />
                   <input
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
+                    className="w-full rounded-xl border-none bg-surface h-14 pl-12 pr-4 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="name@example.com"
                     type="email"
                     required
@@ -177,16 +177,16 @@ export default function Signup() {
 
             <div>
               <label className="flex flex-col w-full">
-                <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
+                <p className="text-text-main text-sm font-semibold mb-2 ml-1">
                   Password
                 </p>
                 <div className="relative flex items-center">
-                  <Lock className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
+                  <Lock className="absolute left-4 text-text-muted w-5 h-5 pointer-events-none" />
                   <input
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
+                    className="w-full rounded-xl border-none bg-surface h-14 pl-12 pr-12 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="••••••••"
                     type={showPassword ? "text" : "password"}
                     required
@@ -194,7 +194,7 @@ export default function Signup() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer type-button"
+                    className="absolute right-4 text-text-muted hover:text-text-main transition-colors cursor-pointer type-button"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -204,16 +204,16 @@ export default function Signup() {
 
             <div>
               <label className="flex flex-col w-full">
-                <p className="text-slate-800 text-sm font-semibold mb-2 ml-1">
+                <p className="text-text-main text-sm font-semibold mb-2 ml-1">
                   Confirm Password
                 </p>
                 <div className="relative flex items-center">
-                  <ShieldCheck className="absolute left-4 text-slate-500 w-5 h-5 pointer-events-none" />
+                  <ShieldCheck className="absolute left-4 text-text-muted w-5 h-5 pointer-events-none" />
                   <input
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="w-full rounded-xl border-none bg-white h-14 pl-12 pr-12 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
+                    className="w-full rounded-xl border-none bg-surface h-14 pl-12 pr-12 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50 text-base font-normal shadow-sm"
                     placeholder="••••••••"
                     type="password"
                     required
@@ -241,11 +241,11 @@ export default function Signup() {
           </form>
 
           <div className="mt-auto py-8 text-center pb-12">
-            <p className="text-slate-600 font-normal">
+            <p className="text-text-muted font-normal">
               Already have an account?
               <Link
                 to="/login"
-                className="text-slate-900 font-bold ml-1 hover:underline decoration-primary decoration-2 underline-offset-2"
+                className="text-text-main font-bold ml-1 hover:underline decoration-primary decoration-2 underline-offset-2"
               >
                 Log In
               </Link>

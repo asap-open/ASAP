@@ -67,7 +67,7 @@ export default function MobileConsistency({ range }: MobileConsistencyProps) {
   });
 
   return (
-    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
+    <section className="bg-surface rounded-xl p-5 shadow-sm border border-border">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-text-main text-sm font-semibold uppercase tracking-wider">
@@ -92,7 +92,7 @@ export default function MobileConsistency({ range }: MobileConsistencyProps) {
                 ${
                   day.isActive
                     ? `bg-primary shadow-[0_0_12px_rgba(43,238,205,0.3)]`
-                    : `bg-slate-100`
+                    : `bg-surface-hover`
                 }
                 ${day.isToday && day.isActive ? "ring-2 ring-primary ring-offset-2" : ""}
                 ${day.isToday && !day.isActive ? "ring-2 ring-slate-200 ring-offset-2" : ""}

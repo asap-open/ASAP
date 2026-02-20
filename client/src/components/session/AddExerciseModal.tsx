@@ -86,7 +86,7 @@ export default function AddExerciseModal({
     >
       <div className="flex flex-col h-full">
         {/* Search Bar & Filters */}
-        <div className="py-2 border-b border-slate-200">
+        <div className="py-2 border-b border-border">
           <div className="px-4 md:px-0 mb-2">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
@@ -110,7 +110,7 @@ export default function AddExerciseModal({
               Loading exercises...
             </div>
           ) : exercises.length === 0 ? (
-            <div className="text-center py-8 text-text-muted bg-slate-50 rounded-lg mt-2 border border-dashed border-slate-200">
+            <div className="text-center py-8 text-text-muted bg-surface-hover rounded-lg mt-2 border border-dashed border-border">
               No exercises found
             </div>
           ) : (
@@ -119,16 +119,16 @@ export default function AddExerciseModal({
                 <button
                   key={exercise.id}
                   onClick={() => handleAddExercise(exercise)}
-                  className="w-full p-4 bg-white border border-slate-100 rounded-xl hover:border-primary hover:shadow-sm transition-all text-left group"
+                  className="w-full p-4 bg-surface border border-border rounded-xl hover:border-primary hover:shadow-sm transition-all text-left group"
                 >
                   <div className="font-semibold text-text-main group-hover:text-primary transition-colors">
                     {exercise.name}
                   </div>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-text-muted uppercase font-semibold bg-slate-100 px-2 py-0.5 rounded">
+                    <span className="text-xs text-text-muted uppercase font-semibold bg-surface-hover px-2 py-0.5 rounded">
                       {exercise.category}
                     </span>
-                    <span className="text-xs text-slate-300">•</span>
+                    <span className="text-xs text-text-muted/40">•</span>
                     <span className="text-xs text-text-muted">
                       {exercise.equipment}
                     </span>

@@ -5,18 +5,18 @@
 
   --color-primary: #2beecd;
   --color-primary-hover: #25d6b8;
-  
+
   /* Backgrounds */
-  --color-background: #f9fafa;
+  --color-background: #f5f7f9;
   --color-surface: #ffffff;
   --color-surface-hover: #f8fafc;
 
   /* Text */
-  --color-text-main: #0f172a; /* slate-900 */
-  --color-text-muted: #475569; /* slate-600 */
+  --color-text-main: #2B2B2B;
+  --color-text-muted: #898B8C;
 
   /* Border */
-  --color-border: #f1f5f9; /* slate-100 */
+  --color-border: #f6f6f6; /* slate-100 */
 }
 
 /* Global Reset */
@@ -29,12 +29,12 @@
 /* Dark Theme Overrides */
 html.dark {
   color-scheme: dark;
-  --color-primary: #9BDF57;
-  --color-primary-hover: #7FC341;
+  --color-primary: #9bdf57;
+  --color-primary-hover: #7fc341;
   --color-background: #171413;
   --color-surface: #1c1918;
   --color-surface-hover: #242120;
-  --color-text-main: #E1DDDB;
+  --color-text-main: #e1dddb;
   --color-text-muted: #94a3b8;
   --color-border: #242120;
 }

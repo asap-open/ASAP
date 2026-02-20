@@ -77,7 +77,7 @@ export default function ManageRoutinesModal({
               {routines.map((routine) => (
                 <div
                   key={routine.id}
-                  className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm flex items-center justify-between group"
+                  className="bg-surface border border-border rounded-xl p-4 shadow-sm flex items-center justify-between group"
                 >
                   <div className="flex-1">
                     <h3 className="font-bold text-text-main">{routine.name}</h3>
@@ -87,7 +87,7 @@ export default function ManageRoutinesModal({
                         Exercises
                       </span>
                       {routine.labels.length > 0 && (
-                        <span className="bg-slate-100 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide">
+                        <span className="bg-surface-hover px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide">
                           {routine.labels[0]}
                         </span>
                       )}

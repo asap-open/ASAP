@@ -265,7 +265,7 @@ export default function CreateSession() {
   return (
     <div className="relative flex min-h-screen w-full flex-col font-display pb-40 bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
         <div className="flex items-center justify-between px-4 h-16">
           <button
             onClick={handleCancel}
@@ -298,7 +298,7 @@ export default function CreateSession() {
       {/* Main Content */}
       <main className="p-4 space-y-6 max-w-2xl mx-auto w-full">
         {/* Label Selector */}
-        <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm space-y-2">
+        <div className="bg-surface p-4 rounded-xl border border-border shadow-sm space-y-2">
           <label className="text-sm font-semibold text-text-muted uppercase tracking-wider block mb-2">
             Session Focus
           </label>
@@ -310,7 +310,7 @@ export default function CreateSession() {
                 className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
                   selectedLabels.includes(label)
                     ? "bg-primary text-white border-primary"
-                    : "bg-slate-50 text-text-muted border-slate-200 hover:border-primary/50"
+                    : "bg-surface-hover text-text-muted border-border hover:border-primary/50"
                 }`}
               >
                 {label === "FullBody" ? "Full Body" : label}
@@ -337,7 +337,7 @@ export default function CreateSession() {
           {/* Add Exercise Button */}
           <button
             onClick={() => setShowAddExercise(true)}
-            className="w-full py-5 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center gap-1 text-primary-hover hover:bg-white hover:border-primary transition-all"
+            className="w-full py-5 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center gap-1 text-primary-hover hover:bg-surface-hover hover:border-primary transition-all"
           >
             <Plus size={28} />
             <span className="font-bold">Add Exercise</span>
@@ -358,7 +358,7 @@ export default function CreateSession() {
         </div>
 
         {/* Bottom Safe Area */}
-        <div className="bg-white h-8 md:hidden"></div>
+        <div className="bg-background h-8 md:hidden"></div>
       </div>
 
       {/* Add Exercise Modal */}

@@ -69,10 +69,10 @@ export default function Login() {
 
         {/* Right Side: Login Form Panel */}
         {/* On Mobile: Bottom Sheet Card. On Desktop: Right Panel */}
-        <div className="flex-1 flex flex-col bg-background md:bg-white w-full h-full md:h-auto rounded-t-[40px] md:rounded-none px-6 pt-10 pb-8 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none mt-8 md:mt-0 overflow-y-auto md:justify-center">
+        <div className="flex-1 flex flex-col bg-background md:bg-surface w-full h-full md:h-auto rounded-t-[40px] md:rounded-none px-6 pt-10 pb-8 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] md:shadow-none mt-8 md:mt-0 overflow-y-auto md:justify-center">
           {/* Desktop Header */}
           <div className="hidden md:block mb-8 w-full max-w-md mx-auto">
-            <h1 className="text-slate-900 text-3xl font-bold">Log In</h1>
+            <h1 className="text-text-main text-3xl font-bold">Log In</h1>
             <p className="text-text-muted mt-2">
               Enter your details to continue
             </p>
@@ -94,7 +94,7 @@ export default function Login() {
                   Username or Email
                 </span>
                 <input
-                  className="w-full rounded-xl text-text-main focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 bg-white h-14 placeholder:text-text-muted/60 p-[15px] text-base font-normal transition-all"
+                  className="w-full rounded-xl text-text-main focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border bg-surface h-14 placeholder:text-text-muted/60 p-[15px] text-base font-normal transition-all"
                   placeholder="Enter your username or email"
                   type="identifier"
                   value={identifier}
@@ -112,7 +112,7 @@ export default function Login() {
                 </span>
                 <div className="relative">
                   <input
-                    className="w-full rounded-xl text-text-main focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 bg-white h-14 placeholder:text-text-muted/60 p-[15px] pr-12 text-base font-normal transition-all"
+                    className="w-full rounded-xl text-text-main focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border bg-surface h-14 placeholder:text-text-muted/60 p-[15px] pr-12 text-base font-normal transition-all"
                     placeholder="••••••••"
                     type={showPassword ? "text" : "password"}
                     value={password}

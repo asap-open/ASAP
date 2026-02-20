@@ -44,7 +44,7 @@ export default function VolumeStats({ range }: VolumeStatsProps) {
   return (
     <div className="grid grid-cols-2 gap-4">
       {/* Bar Chart Card */}
-      <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 flex flex-col">
+      <div className="bg-surface rounded-xl p-5 shadow-sm border border-border flex flex-col">
         <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-tight mb-4">
           Volume Trend
         </h3>
@@ -70,7 +70,7 @@ export default function VolumeStats({ range }: VolumeStatsProps) {
             })
           )}
         </div>
-        <div className="flex justify-between mt-2 pt-2 border-t border-slate-50">
+        <div className="flex justify-between mt-2 pt-2 border-t border-border">
           {/* Simple labels for start/mid/end if needed, or just leave blank for minimal look */}
           <span className="text-[8px] font-bold text-text-muted">Start</span>
           <span className="text-[8px] font-bold text-text-muted">End</span>
@@ -78,7 +78,7 @@ export default function VolumeStats({ range }: VolumeStatsProps) {
       </div>
 
       {/* Summary Card - Centered Content */}
-      <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center">
+      <div className="bg-surface rounded-xl p-5 shadow-sm border border-border flex flex-col items-center justify-center text-center">
         <div className="flex flex-col items-center gap-1">
           <p className="text-xs font-bold text-text-muted uppercase tracking-tight">
             Total Volume

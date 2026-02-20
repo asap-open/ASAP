@@ -47,9 +47,9 @@ export default function ExerciseFiltersModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl w-full max-w-sm shadow-xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
+      <div className="bg-surface rounded-2xl w-full max-w-sm shadow-xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-4 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 bg-primary/10 rounded-lg">
               <Filter className="w-5 h-5 text-primary" />
@@ -60,7 +60,7 @@ export default function ExerciseFiltersModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+            className="p-2 text-text-muted hover:text-text-main hover:bg-surface-hover rounded-full transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -89,9 +89,9 @@ export default function ExerciseFiltersModal({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50 rounded-b-2xl flex gap-3">
+        <div className="p-4 border-t border-border bg-surface-hover rounded-b-2xl flex gap-3">
           <button
-            className="flex-1 py-3 px-4 font-semibold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+            className="flex-1 py-3 px-4 font-semibold text-text-muted bg-surface border border-border rounded-xl hover:bg-surface-hover transition-colors flex items-center justify-center gap-2"
             onClick={() => {
               onChange({ muscle: "", category: "", equipment: "" });
               // We don't close automatically on reset, letting user see it's cleared
@@ -135,7 +135,7 @@ function FilterGroup({
                         ${
                           value
                             ? "border-primary bg-primary/5 text-primary font-medium"
-                            : "border-slate-200 bg-white text-text-main hover:border-slate-300"
+                            : "border-border bg-surface text-text-main hover:border-text-muted/40"
                         }
                         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
                     `}
@@ -151,7 +151,7 @@ function FilterGroup({
         </select>
         <ChevronDown
           className={`absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 pointer-events-none transition-colors 
-                        ${value ? "text-primary" : "text-slate-400"}`}
+                        ${value ? "text-primary" : "text-text-muted"}`}
         />
       </div>
     </div>

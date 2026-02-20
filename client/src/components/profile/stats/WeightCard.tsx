@@ -11,7 +11,7 @@ export default function WeightCard({
   weightChange,
 }: WeightCardProps) {
   return (
-    <div className="bg-surface rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between h-36">
+    <div className="bg-surface rounded-xl p-5 shadow-sm border border-border flex flex-col justify-between h-36">
       <div>
         <div className="flex items-center gap-2 mb-1">
           <svg
@@ -34,7 +34,7 @@ export default function WeightCard({
         <p className="text-2xl font-bold">
           {latestWeightKg?.toFixed(1) || "—"}{" "}
           {latestWeightKg && (
-            <span className="text-sm font-normal text-slate-400">kg</span>
+            <span className="text-sm font-normal text-text-muted">kg</span>
           )}
         </p>
         {weightChange && (

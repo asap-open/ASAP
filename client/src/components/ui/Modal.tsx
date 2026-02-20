@@ -100,7 +100,7 @@ export default function Modal({
       onClick={onClose}
     >
       <div
-        className={`fixed left-0 right-0 mx-auto bg-white rounded-t-xl shadow-lg transition-all ${className}`}
+        className={`fixed left-0 right-0 mx-auto bg-surface rounded-t-xl shadow-lg transition-all ${className}`}
         style={{
           bottom: 0,
           height: height,
@@ -118,10 +118,10 @@ export default function Modal({
           onTouchEnd={handleTouchEnd}
           onMouseDown={handleMouseDown}
         >
-          <div className="w-10 h-1.5 rounded-full bg-slate-300" />
+          <div className="w-10 h-1.5 rounded-full bg-border" />
         </div>
         {/* Header */}
-        <div className="flex items-center justify-center px-4 py-4 border-b border-slate-100">
+        <div className="flex items-center justify-center px-4 py-4 border-b border-border">
           <h2 className="text-text-main text-lg font-bold leading-tight text-center">
             {title}
           </h2>

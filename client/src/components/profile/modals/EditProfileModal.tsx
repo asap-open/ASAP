@@ -94,12 +94,12 @@ export default function EditProfileModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-surface rounded-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-surface border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-surface border-b border-border px-6 py-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">Edit Profile</h2>
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="p-1 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-50"
+            className="p-1 hover:bg-surface-hover rounded-lg transition-colors disabled:opacity-50"
           >
             <X size={24} />
           </button>
@@ -114,18 +114,18 @@ export default function EditProfileModal({
 
           <div>
             <label className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-800 mb-2 ml-1">
+              <span className="text-sm font-semibold text-text-main mb-2 ml-1">
                 Full Name
               </span>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted w-5 h-5" />
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className="w-full rounded-xl border border-slate-200 bg-white h-12 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full rounded-xl border border-border bg-surface h-12 pl-10 pr-4 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
             </label>
@@ -134,11 +134,11 @@ export default function EditProfileModal({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="flex flex-col">
-                <span className="text-sm font-semibold text-slate-800 mb-2 ml-1">
+                <span className="text-sm font-semibold text-text-main mb-2 ml-1">
                   Height (cm)
                 </span>
                 <div className="relative">
-                  <Ruler className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                  <Ruler className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted w-5 h-5" />
                   <input
                     type="number"
                     name="heightCm"
@@ -147,7 +147,7 @@ export default function EditProfileModal({
                     placeholder="180"
                     step="0.1"
                     min="0"
-                    className="w-full rounded-xl border border-slate-200 bg-white h-12 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full rounded-xl border border-border bg-surface h-12 pl-10 pr-4 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
               </label>
@@ -155,11 +155,11 @@ export default function EditProfileModal({
 
             <div>
               <label className="flex flex-col">
-                <span className="text-sm font-semibold text-slate-800 mb-2 ml-1">
+                <span className="text-sm font-semibold text-text-main mb-2 ml-1">
                   Target Weight (kg)
                 </span>
                 <div className="relative">
-                  <Target className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                  <Target className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted w-5 h-5" />
                   <input
                     type="number"
                     name="targetWeightKg"
@@ -168,7 +168,7 @@ export default function EditProfileModal({
                     placeholder="75"
                     step="0.1"
                     min="0"
-                    className="w-full rounded-xl border border-slate-200 bg-white h-12 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full rounded-xl border border-border bg-surface h-12 pl-10 pr-4 text-text-main placeholder:text-text-muted/60 focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
               </label>
@@ -177,17 +177,17 @@ export default function EditProfileModal({
 
           <div>
             <label className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-800 mb-2 ml-1">
+              <span className="text-sm font-semibold text-text-main mb-2 ml-1">
                 Date of Birth
               </span>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted w-5 h-5" />
                 <input
                   type="date"
                   name="dateOfBirth"
                   value={formData.dateOfBirth}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-200 bg-white h-12 pl-10 pr-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="w-full rounded-xl border border-border bg-surface h-12 pl-10 pr-4 text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
               </div>
             </label>
@@ -195,14 +195,14 @@ export default function EditProfileModal({
 
           <div>
             <label className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-800 mb-2 ml-1">
+              <span className="text-sm font-semibold text-text-main mb-2 ml-1">
                 Gender
               </span>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 bg-white h-12 px-4 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full rounded-xl border border-border bg-surface h-12 px-4 text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 <option value="">Select gender</option>
                 <option value="male">Male</option>

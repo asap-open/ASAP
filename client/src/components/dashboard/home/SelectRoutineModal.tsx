@@ -62,7 +62,7 @@ export default function SelectRoutineModal({
             placeholder="Search routines..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm font-medium"
+            className="w-full pl-10 pr-4 py-3 bg-surface-hover border border-border rounded-xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm font-medium text-text-main"
           />
         </div>
 
@@ -77,7 +77,7 @@ export default function SelectRoutineModal({
               <button
                 key={routine.id}
                 onClick={() => onSelectRoutine(routine)}
-                className="w-full text-left bg-white border border-slate-100 rounded-xl p-4 shadow-sm hover:border-primary hover:shadow-md transition-all group"
+                className="w-full text-left bg-surface border border-border rounded-xl p-4 shadow-sm hover:border-primary hover:shadow-md transition-all group"
               >
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-bold text-text-main group-hover:text-primary transition-colors">

@@ -39,7 +39,7 @@ export default function ExerciseCard({
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-white relative">
+    <div className="bg-surface rounded-2xl p-4 shadow-sm border border-border relative">
       {/* Exercise Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-col">
@@ -65,7 +65,7 @@ export default function ExerciseCard({
                 className="fixed inset-0 z-10"
                 onClick={() => setShowMenu(false)}
               />
-              <div className="absolute right-0 top-8 z-20 bg-white rounded-xl shadow-lg border border-slate-100 py-2 min-w-[160px]">
+              <div className="absolute right-0 top-8 z-20 bg-surface rounded-xl shadow-lg border border-border py-2 min-w-[160px]">
                 <button
                   onClick={() => {
                     onRemoveExercise(exerciseIndex);
@@ -95,14 +95,14 @@ export default function ExerciseCard({
         {exercise.sets.map((set, setIndex) => (
           <div
             key={setIndex}
-            className="grid grid-cols-12 gap-2 items-center bg-slate-100/60 rounded-lg p-2 group"
+            className="grid grid-cols-12 gap-2 items-center bg-surface-hover rounded-lg p-2 group"
           >
             <div className="col-span-1 text-center text-sm font-semibold">
               {setIndex + 1}
             </div>
             <div className="col-span-4">
               <input
-                className="w-full text-center bg-transparent border-none p-0 focus:ring-0 placeholder:text-slate-400"
+                className="w-full text-center bg-transparent border-none p-0 focus:ring-0 placeholder:text-text-muted/50 text-text-main"
                 placeholder="60"
                 type="number"
                 value={set.weight}
@@ -113,7 +113,7 @@ export default function ExerciseCard({
             </div>
             <div className="col-span-4">
               <input
-                className="w-full text-center bg-transparent border-none p-0 focus:ring-0 placeholder:text-slate-400"
+                className="w-full text-center bg-transparent border-none p-0 focus:ring-0 placeholder:text-text-muted/50 text-text-main"
                 placeholder="10"
                 type="number"
                 value={set.reps}
@@ -128,7 +128,7 @@ export default function ExerciseCard({
                 className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
                   set.done
                     ? "border-primary bg-primary"
-                    : "border-slate-300 hover:border-slate-400"
+                    : "border-border hover:border-text-muted/50"
                 }`}
               >
                 {set.done && (

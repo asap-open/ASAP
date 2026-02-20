@@ -32,7 +32,7 @@ export default function ExerciseDetailsModal({
       maxHeight={600}
     >
       <div className="space-y-6 overflow-y-auto pb-30">
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-3">
+        <div className="bg-surface-hover p-4 rounded-xl border border-border space-y-3">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
@@ -69,7 +69,7 @@ export default function ExerciseDetailsModal({
             {exercise.secondaryMuscles?.map((m) => (
               <span
                 key={m}
-                className="px-3 py-1 bg-slate-100 text-text-muted text-sm font-medium rounded-full"
+                className="px-3 py-1 bg-surface-hover text-text-muted text-sm font-medium rounded-full"
               >
                 {m.trim()}
               </span>

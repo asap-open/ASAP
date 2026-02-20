@@ -88,7 +88,7 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
           {/* Select Template */}
           <button
             onClick={handleSelectTemplate}
-            className="bg-surface shadow-lg border border-slate-100 px-5 py-3 rounded-2xl flex items-center gap-3 w-full animate-in slide-in-from-bottom-5 fade-in duration-200"
+            className="bg-surface shadow-lg border border-border px-5 py-3 rounded-2xl flex items-center gap-3 w-full animate-in slide-in-from-bottom-5 fade-in duration-200"
           >
             <div className="bg-primary/10 text-primary-hover p-2 rounded-xl">
               <LayoutTemplate size={24} />
@@ -101,7 +101,7 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
           {/* Start Fresh */}
           <button
             onClick={handleStartFresh}
-            className="bg-surface shadow-lg border border-slate-100 px-5 py-3 rounded-2xl flex items-center gap-3 w-full animate-in slide-in-from-bottom-2 fade-in duration-200"
+            className="bg-surface shadow-lg border border-border px-5 py-3 rounded-2xl flex items-center gap-3 w-full animate-in slide-in-from-bottom-2 fade-in duration-200"
           >
             <div className="bg-primary/10 text-primary-hover p-2 rounded-xl">
               <Timer size={24} />
@@ -114,14 +114,14 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
       </div>
 
       <div className="hidden md:block fixed bottom-28 right-10 z-50 pointer-events-none">
-        <div className="bg-surface border border-slate-100 rounded-3xl shadow-2xl p-5 flex flex-col gap-3 w-80 pointer-events-auto animate-in slide-in-from-bottom-3 fade-in duration-200">
+        <div className="bg-surface border border-border rounded-3xl shadow-2xl p-5 flex flex-col gap-3 w-80 pointer-events-auto animate-in slide-in-from-bottom-3 fade-in duration-200">
           <p className="text-sm font-semibold text-text-muted tracking-wide uppercase">
             Quick Session Actions
           </p>
 
           <button
             onClick={handleSelectTemplate}
-            className="bg-surface/90 border border-slate-100 px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-slate-50 transition-colors"
+            className="bg-surface/90 border border-border px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-surface-hover transition-colors"
           >
             <div className="bg-primary/10 text-primary-hover p-2 rounded-xl">
               <LayoutTemplate size={22} />
@@ -136,7 +136,7 @@ export default function QuickActions({ isOpen, onClose }: QuickActionsProps) {
 
           <button
             onClick={handleStartFresh}
-            className="bg-surface/90 border border-slate-100 px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-slate-50 transition-colors"
+            className="bg-surface/90 border border-border px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-surface-hover transition-colors"
           >
             <div className="bg-primary/10 text-primary-hover p-2 rounded-xl">
               <Timer size={22} />

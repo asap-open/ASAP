@@ -13,8 +13,8 @@ export default function PhysicalAttributes({
 }: PhysicalAttributesProps) {
   return (
     <section className="px-6 mb-4">
-      <div className="bg-surface rounded-xl p-5 shadow-sm border border-slate-200">
-        <p className="text-[10px] uppercase tracking-widest font-bold text-slate-400 mb-4">
+      <div className="bg-surface rounded-xl p-5 shadow-sm border border-border">
+        <p className="text-[10px] uppercase tracking-widest font-bold text-text-muted mb-4">
           Physical Attributes
         </p>
         <div className="grid grid-cols-3 divide-x divide-slate-200">
@@ -22,7 +22,7 @@ export default function PhysicalAttributes({
             <span className="text-lg font-bold">
               {heightCm || "—"}{" "}
               {heightCm && (
-                <span className="text-xs text-slate-400 font-normal">cm</span>
+                <span className="text-xs text-text-muted font-normal">cm</span>
               )}
             </span>
             <span className="text-[11px] text-text-muted mt-1">Height</span>

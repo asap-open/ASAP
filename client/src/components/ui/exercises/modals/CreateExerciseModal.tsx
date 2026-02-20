@@ -120,7 +120,7 @@ export default function CreateExerciseModal({
             <input
               required
               type="text"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 h-14 px-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main"
+              className="w-full rounded-xl border border-border bg-surface-hover h-14 px-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main"
               placeholder="e.g. Incline Bench Press"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -139,7 +139,7 @@ export default function CreateExerciseModal({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 h-14 px-4 pr-10 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-text-main"
+                className="w-full appearance-none rounded-xl border border-border bg-surface-hover h-14 px-4 pr-10 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-text-main"
               >
                 <option value="Strength">Strength</option>
                 <option value="Cardio">Cardio</option>
@@ -163,7 +163,7 @@ export default function CreateExerciseModal({
               <select
                 value={equipment}
                 onChange={(e) => setEquipment(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 h-14 px-4 pr-10 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-text-main"
+                className="w-full appearance-none rounded-xl border border-border bg-surface-hover h-14 px-4 pr-10 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-text-main"
               >
                 <option value="Bodyweight">Bodyweight</option>
                 <option value="Barbell">Barbell</option>
@@ -189,7 +189,7 @@ export default function CreateExerciseModal({
             <input
               required
               type="text"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 h-14 px-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main"
+              className="w-full rounded-xl border border-border bg-surface-hover h-14 px-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main"
               placeholder="e.g. Chest, Triceps (comma separated)"
               value={primaryMuscles}
               onChange={(e) => setPrimaryMuscles(e.target.value)}
@@ -206,7 +206,7 @@ export default function CreateExerciseModal({
             </span>
             <input
               type="text"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 h-14 px-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main"
+              className="w-full rounded-xl border border-border bg-surface-hover h-14 px-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main"
               placeholder="e.g. Shoulders"
               value={secondaryMuscles}
               onChange={(e) => setSecondaryMuscles(e.target.value)}
@@ -222,7 +222,7 @@ export default function CreateExerciseModal({
               <span className="text-text-muted font-normal">(Optional)</span>
             </span>
             <textarea
-              className="w-full min-h-[120px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main resize-none"
+              className="w-full min-h-[120px] rounded-xl border border-border bg-surface-hover p-4 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-text-main resize-none"
               placeholder="Describe proper form..."
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}

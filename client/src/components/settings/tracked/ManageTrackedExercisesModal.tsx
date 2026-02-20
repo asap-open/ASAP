@@ -75,7 +75,7 @@ export default function ManageTrackedExercisesModal({
               {trackedExercises.map((exercise, index) => (
                 <div
                   key={exercise.id}
-                  className="bg-white border border-slate-100 rounded-xl p-3 shadow-sm flex items-center justify-between"
+                  className="bg-surface border border-border rounded-xl p-3 shadow-sm flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-bold text-text-muted w-6">
@@ -87,7 +87,7 @@ export default function ManageTrackedExercisesModal({
                   </div>
                   <button
                     onClick={() => handleRemoveExercise(exercise.id)}
-                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-all"
+                    className="p-2 text-text-muted hover:text-red-500 hover:bg-red-50 rounded transition-all"
                   >
                     <Trash2 size={16} />
                   </button>

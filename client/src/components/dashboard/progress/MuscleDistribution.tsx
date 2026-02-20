@@ -48,7 +48,7 @@ export default function MuscleDistribution({ range }: MuscleDistributionProps) {
   let accumulatedPercent = 0;
 
   return (
-    <section className="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
+    <section className="bg-surface rounded-xl p-5 shadow-sm border border-border">
       <h3 className="text-sm font-semibold uppercase tracking-wider text-text-muted mb-6">
         Muscle Group Split
       </h3>

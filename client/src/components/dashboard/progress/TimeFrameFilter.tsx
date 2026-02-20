@@ -11,7 +11,7 @@ export default function TimeFrameFilter({
 }: TimeFrameFilterProps) {
   return (
     <section className="py-2">
-      <div className="flex items-center justify-between bg-white p-1.5 rounded-full shadow-sm border border-slate-100 overflow-x-auto">
+      <div className="flex items-center justify-between bg-surface p-1.5 rounded-full shadow-sm border border-border overflow-x-auto">
         {timeframes.map((tf) => (
           <button
             key={tf}
@@ -21,7 +21,7 @@ export default function TimeFrameFilter({
                     ${
                       selected === tf
                         ? "bg-primary text-white shadow-sm"
-                        : "text-text-muted hover:bg-slate-50"
+                        : "text-text-muted hover:bg-surface-hover"
                     }
                 `}
           >

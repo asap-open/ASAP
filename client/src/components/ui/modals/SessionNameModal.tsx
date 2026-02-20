@@ -38,7 +38,7 @@ export default function SessionNameModal({
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-surface rounded-2xl shadow-xl max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-200">
         {/* Close Button */}
         <button
           onClick={handleClose}
@@ -62,7 +62,7 @@ export default function SessionNameModal({
             placeholder="e.g., Push Day, Leg Day, Full Body"
             value={sessionName}
             onChange={(e) => setSessionName(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-3 border border-border bg-surface-hover text-text-main rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
             autoFocus
           />
 
@@ -71,7 +71,7 @@ export default function SessionNameModal({
             <button
               type="button"
               onClick={handleClose}
-              className="flex-1 px-4 py-3 bg-slate-100 text-text-main font-semibold rounded-xl hover:bg-slate-200 transition-colors"
+              className="flex-1 px-4 py-3 bg-surface-hover text-text-main font-semibold rounded-xl hover:bg-border transition-colors"
             >
               Cancel
             </button>

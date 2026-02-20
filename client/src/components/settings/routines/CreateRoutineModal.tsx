@@ -130,7 +130,7 @@ export default function CreateRoutineModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Heavy Leg Day"
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary font-bold text-lg"
+              className="w-full p-3 bg-surface-hover border border-border rounded-xl focus:outline-none focus:border-primary font-bold text-lg text-text-main"
             />
           </div>
 
@@ -147,7 +147,7 @@ export default function CreateRoutineModal({
                   className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
                     selectedLabels.includes(label)
                       ? "bg-primary text-white border-primary"
-                      : "bg-white text-text-muted border-slate-200 hover:border-primary/50"
+                      : "bg-surface text-text-muted border-border hover:border-primary/50"
                   }`}
                 >
                   {label}
@@ -173,9 +173,9 @@ export default function CreateRoutineModal({
             {exercises.map((ex, exIndex) => (
               <div
                 key={exIndex}
-                className="bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm"
+                className="bg-surface border border-border rounded-xl overflow-hidden shadow-sm"
               >
-                <div className="bg-slate-50 px-4 py-3 border-b border-slate-100 flex justify-between items-center">
+                <div className="bg-surface-hover px-4 py-3 border-b border-border flex justify-between items-center">
                   <span className="font-bold text-sm">{ex.exercise?.name}</span>
                   <button
                     onClick={() => removeExercise(exIndex)}
@@ -200,7 +200,7 @@ export default function CreateRoutineModal({
                         onChange={(e) =>
                           updateSet(exIndex, setIndex, "reps", e.target.value)
                         }
-                        className="w-20 p-2 bg-slate-50 rounded border border-slate-200 text-center"
+                        className="w-20 p-2 bg-surface-hover rounded border border-border text-center text-text-main"
                       />
                       <span className="text-text-muted text-xs">
                         reps target
@@ -229,7 +229,7 @@ export default function CreateRoutineModal({
             {exercises.length === 0 && (
               <button
                 onClick={() => setIsAddExerciseOpen(true)}
-                className="w-full py-8 border-2 border-dashed border-slate-200 rounded-xl text-text-muted flex flex-col items-center justify-center hover:bg-slate-50 hover:border-primary/30 transition-all"
+                className="w-full py-8 border-2 border-dashed border-border rounded-xl text-text-muted flex flex-col items-center justify-center hover:bg-surface-hover hover:border-primary/30 transition-all"
               >
                 <Dumbbell size={24} className="mb-2 opacity-50" />
                 <span className="text-sm font-medium">

@@ -13,7 +13,7 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
           <Search size={20} />
         </div>
         <input
-          className="block w-full pl-11 pr-4 py-3 bg-white border-none rounded-xl text-sm placeholder:text-text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all shadow-sm text-text-main"
+          className="block w-full pl-11 pr-4 py-3 bg-surface border-none rounded-xl text-sm placeholder:text-text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all shadow-sm text-text-main"
           placeholder="Search exercises..."
           type="text"
           value={value}

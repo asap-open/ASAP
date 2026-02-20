@@ -25,7 +25,7 @@ function ExerciseItem({
   onRemove,
 }: ExerciseItemProps) {
   return (
-    <div className="relative bg-white p-4 rounded-xl shadow-sm border border-slate-50 flex items-center justify-between group hover:shadow-md transition-all cursor-pointer">
+    <div className="relative bg-surface p-4 rounded-xl shadow-sm border border-border flex items-center justify-between group hover:shadow-md transition-all cursor-pointer">
       <div className="flex items-center gap-4">
         <div>
           <h3 className="text-base font-semibold text-text-main">
@@ -43,7 +43,7 @@ function ExerciseItem({
           className={`p-2 rounded-full transition-colors ${
             isOpen
               ? "bg-primary/20 text-text-main"
-              : "text-slate-400 hover:text-text-main hover:bg-slate-100"
+              : "text-text-muted hover:text-text-main hover:bg-surface-hover"
           }`}
         >
           <MoreVertical size={20} />

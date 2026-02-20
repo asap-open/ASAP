@@ -15,7 +15,7 @@ export default function ProfileHeader({
 }: ProfileHeaderProps) {
   return (
     <section className="px-6 pt-10 pb-8 flex flex-col items-center text-center">
-      <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+      <h2 className="text-3xl font-bold tracking-tight text-text-main">
         {fullName || username}
       </h2>
       <p className="text-text-muted text-sm mt-2 font-medium">

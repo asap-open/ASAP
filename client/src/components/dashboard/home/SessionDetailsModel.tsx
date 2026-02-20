@@ -59,12 +59,12 @@ export default function SessionDetailsModal({
         )}
 
         {/* Header Stats */}
-        <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
+        <div className="bg-surface-hover rounded-xl p-4 mb-6 border border-border">
           <div className="text-text-muted text-sm flex items-center gap-2 mb-4">
             <Calendar className="w-4 h-4" />
             {formatDate(session.startTime)}
           </div>
-          <div className="grid grid-cols-3 gap-4 border-t border-slate-200 pt-4">
+          <div className="grid grid-cols-3 gap-4 border-t border-border pt-4">
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 text-text-muted text-xs mb-1 uppercase font-semibold">
                 <Clock className="w-3 h-3" /> Duration
@@ -73,7 +73,7 @@ export default function SessionDetailsModal({
                 {formatDuration(session.stats.duration)}
               </div>
             </div>
-            <div className="text-center border-l border-slate-200">
+            <div className="text-center border-l border-border">
               <div className="flex items-center justify-center gap-1 text-text-muted text-xs mb-1 uppercase font-semibold">
                 <Layers className="w-3 h-3" /> Volume
               </div>
@@ -81,7 +81,7 @@ export default function SessionDetailsModal({
                 {session.stats.totalVolume}kg
               </div>
             </div>
-            <div className="text-center border-l border-slate-200">
+            <div className="text-center border-l border-border">
               <div className="flex items-center justify-center gap-1 text-text-muted text-xs mb-1 uppercase font-semibold">
                 <Dumbbell className="w-3 h-3" /> Exercises
               </div>
@@ -96,7 +96,7 @@ export default function SessionDetailsModal({
           {session.exercises.map((item, index) => (
             <div
               key={index}
-              className="border-b border-slate-100 pb-4 last:border-0 last:pb-0"
+              className="border-b border-border pb-4 last:border-0 last:pb-0"
             >
               <h3 className="font-bold text-text-main mb-3 flex items-center gap-2">
                 <span className="bg-primary/10 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs">
@@ -104,9 +104,9 @@ export default function SessionDetailsModal({
                 </span>
                 {item.exercise.name}
               </h3>
-              <div className="bg-slate-50 rounded-lg overflow-hidden border border-slate-100">
+              <div className="bg-surface-hover rounded-lg overflow-hidden border border-border">
                 <table className="w-full text-sm">
-                  <thead className="bg-slate-100 text-text-muted text-xs uppercase font-semibold">
+                  <thead className="bg-surface-hover text-text-muted text-xs uppercase font-semibold">
                     <tr>
                       <th className="py-2 px-3 text-left w-12">Set</th>
                       <th className="py-2 px-3 text-center">kg</th>
@@ -117,7 +117,7 @@ export default function SessionDetailsModal({
                     {item.sets.map((set, setIndex) => (
                       <tr
                         key={setIndex}
-                        className="border-t border-slate-100 last:border-0"
+                        className="border-t border-border last:border-0"
                       >
                         <td className="py-2 px-3 text-text-muted font-medium">
                           {setIndex + 1}
