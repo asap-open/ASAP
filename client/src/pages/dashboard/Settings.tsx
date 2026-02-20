@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import RoutinesSection from "../../components/settings/RoutinesSection";
 import TrackedExercisesSection from "../../components/settings/TrackedExercisesSection";
+import AppearanceSection from "../../components/settings/AppearanceSection";
 import { navigateBack } from "../../utils/navigation";
 
 export default function Settings() {
@@ -14,7 +15,7 @@ export default function Settings() {
         <div className="w-10 h-10 flex items-center justify-start">
           <button
             onClick={() => navigateBack(navigate)}
-            className="hover:bg-slate-100 rounded-lg transition-colors p-1"
+            className="hover:bg-surface-hover rounded-lg transition-colors p-1"
           >
             <ArrowLeft size={20} className="text-text-muted" />
           </button>
@@ -24,6 +25,7 @@ export default function Settings() {
       </header>
 
       <main className="max-w-md mx-auto px-6 pb-32 space-y-6">
+        <AppearanceSection />
         <RoutinesSection />
         <TrackedExercisesSection />
       </main>

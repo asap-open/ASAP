@@ -7,10 +7,10 @@ export default function TrackedExercisesSection() {
 
   return (
     <>
-      <section className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+      <section className="bg-surface rounded-xl shadow-sm border border-border overflow-hidden">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors"
+          className="w-full flex items-center justify-between p-4 hover:bg-surface-hover transition-colors"
         >
           <div className="flex items-center gap-3">
             <div className="bg-primary/10 text-primary p-2 rounded-lg">

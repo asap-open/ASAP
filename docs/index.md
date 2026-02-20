@@ -67,7 +67,7 @@ git clone https://github.com/ASAP/workout-tool.git
 cd workout-tool
 
 # Start with Docker Compose
-docker-compose up -d
+docker compose up -d
 
 # Access the application
 open http://localhost:5173

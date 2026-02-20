@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-*cache*
+.vitepress/
 *cache/*
 
 node_modules

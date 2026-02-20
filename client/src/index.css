@@ -5,21 +5,38 @@
 
   --color-primary: #2beecd;
   --color-primary-hover: #25d6b8;
-
+  
   /* Backgrounds */
   --color-background: #f9fafa;
   --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
 
   /* Text */
   --color-text-main: #0f172a; /* slate-900 */
   --color-text-muted: #475569; /* slate-600 */
+
+  /* Border */
+  --color-border: #f1f5f9; /* slate-100 */
 }
 
-/* Global Reset - Enforcing Light Mode */
+/* Global Reset */
 :root {
   color-scheme: light;
   background-color: var(--color-background);
   color: var(--color-text-main);
+}
+
+/* Dark Theme Overrides */
+html.dark {
+  color-scheme: dark;
+  --color-primary: #9BDF57;
+  --color-primary-hover: #7FC341;
+  --color-background: #171413;
+  --color-surface: #1c1918;
+  --color-surface-hover: #242120;
+  --color-text-main: #E1DDDB;
+  --color-text-muted: #94a3b8;
+  --color-border: #242120;
 }
 
 body {
