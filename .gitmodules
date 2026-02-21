@@ -1,0 +1,9 @@
+[submodule "docs"]
+	path = docs
+	url = https://github.com/asap-open/asap-docs.git
+[submodule "client"]
+	path = client
+	url = https://github.com/asap-open/asap-client.git
+[submodule "server"]
+	path = server
+	url = https://github.com/asap-open/asap-server.git
