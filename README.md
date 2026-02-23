@@ -1,8 +1,18 @@
-# ASAP - Applied Strength & Advancement Platform
+<p align="center">
+  <img src="public/logo-2.webp" alt="ASAP" width="96" />
+</p>
 
-A data-driven workout management and analytics system for serious lifters who want to track, analyze, and optimize their training.
+<h1 align="center">ASAP — Applied Strength & Advancement Platform</h1>
 
-![ASAP Platform](docs/public/logo-2.webp)
+<p align="center">
+  A self-hosted, data-driven workout management and analytics platform for serious lifters who want to track, analyze, and optimize their training.
+</p>
+
+<p align="center">
+  <a href="https://asap-open.github.io/asap-docs/">Documentation</a> ·
+  <a href="https://asap-open.github.io/asap-docs/installation">Installation</a> ·
+  <a href="https://asap-open.github.io/asap-docs/api/authentication">API Reference</a>
+</p>
 
 ## Features
 
@@ -42,9 +52,36 @@ A data-driven workout management and analytics system for serious lifters who wa
 ### Prerequisites
 
 - Docker & Docker Compose
-- Git
 
-### Installation
+### Self-Hosted Deployment
+
+All deployment files are in the [`deploy/`](deploy/) directory. See the [Installation Guide](https://asap-open.github.io/asap-docs/installation) for the full walkthrough.
+
+**1. Create a directory and download the files**
+
+```bash
+mkdir asap && cd asap
+
+# With bundled database:
+curl -O https://raw.githubusercontent.com/asap-open/ASAP/main/deploy/compose.with-db.yaml
+curl -O https://raw.githubusercontent.com/asap-open/ASAP/main/deploy/.env.with-db
+
+# Or with your own external database:
+curl -O https://raw.githubusercontent.com/asap-open/ASAP/main/deploy/compose.external-db.yaml
+curl -O https://raw.githubusercontent.com/asap-open/ASAP/main/deploy/.env.external-db
+```
+
+**2. Copy the env file, fill in your values, and start**
+
+```bash
+cp .env.with-db .env          # or .env.external-db
+# edit .env — set JWT_SECRET, DOMAIN_NAME, etc.
+docker compose -f compose.with-db.yaml up -d
+```
+
+The app will be available at `http://<your-host>` (port 80).
+
+### Development Setup
 
 1. **Clone the repository**
 
@@ -91,30 +128,30 @@ docker-compose up -d
 
 ```bash
 cd server
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 **Frontend**
 
 ```bash
 cd client
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 ### Database Migrations
 
 ```bash
 cd server
-npx prisma migrate dev
+yarn prisma migrate dev
 ```
 
 ### Seed Database
 
 ```bash
 cd server
-npm run seed
+yarn seed
 ```
 
 ## Project Structure
@@ -146,23 +183,26 @@ Full documentation is available at the `/docs` directory. Build and serve locall
 
 ```bash
 cd docs
-npm install
-npm run docs:dev
+yarn install
+yarn docs:dev
 ```
 
 Visit http://localhost:5174 to view the documentation.
 
-## API Endpoints
+## API Reference
 
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/exercises` - List exercises
-- `POST /api/sessions` - Create workout session
-- `GET /api/sessions/:id` - Get session details
-- `POST /api/weights` - Log body weight
-- `GET /api/weights/history` - Get weight history
+Full API documentation is available at [asap-open.github.io/asap-docs/api/authentication](https://asap-open.github.io/asap-docs/api/authentication).
 
-See [API Documentation](docs/api/) for complete details.
+Key endpoints:
+
+| Method | Endpoint                | Description                 |
+| ------ | ----------------------- | --------------------------- |
+| `POST` | `/api/auth/signup`      | Register a new user         |
+| `POST` | `/api/auth/signin`      | Sign in (email or username) |
+| `GET`  | `/api/exercises/search` | Search exercise library     |
+| `POST` | `/api/sessions`         | Log a workout session       |
+| `GET`  | `/api/progress/pbs`     | Get personal bests          |
+| `POST` | `/api/weights`          | Log body weight             |
 
 ## Contributing
 
@@ -174,12 +214,8 @@ See [API Documentation](docs/api/) for complete details.
 
 ## License
 
-This project is licensed under the MIT License.
-
-## Contact
-
-For questions or support, please open an issue on GitHub.
+This project is licensed under the **GPLv3 License** — see [LICENSE](LICENSE) for details.
 
 ---
 
-Built with precision for measurable improvement.
+<p align="center">Built with precision for measurable improvement.</p>
