@@ -27,17 +27,17 @@
 
 ### Frontend
 
-- React 18 with TypeScript
+- React 19 with TypeScript
 - Vite for fast development
-- Recharts for data visualization
+- Framer Motion for smooth UI transitions
 - TailwindCSS for styling
-- React Router for navigation
+- React Router v7 for navigation
 
 ### Backend
 
-- Node.js with Express
+- Node.js with Express 5
 - TypeScript
-- Prisma ORM
+- Prisma ORM (v7)
 - PostgreSQL database
 - JWT authentication
 
@@ -86,8 +86,8 @@ The app will be available at `http://<your-host>` (port 80).
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/ASAP/workout-tool.git
-cd workout-tool
+git clone https://github.com/asap-open/ASAP.git
+cd ASAP
 ```
 
 2. **Set up environment variables**
@@ -106,7 +106,8 @@ NODE_ENV=development
 **client/.env**
 
 ```env
-VITE_API_URL=http://localhost:3000
+BACKEND_SERVER_URL=http://localhost:3000
+DOMAIN_NAME=localhost
 ```
 
 3. **Start the application**
@@ -199,9 +200,10 @@ Key endpoints:
 | ------ | ----------------------- | --------------------------- |
 | `POST` | `/api/auth/signup`      | Register a new user         |
 | `POST` | `/api/auth/signin`      | Sign in (email or username) |
-| `GET`  | `/api/exercises/search` | Search exercise library     |
-| `POST` | `/api/sessions`         | Log a workout session       |
-| `GET`  | `/api/progress/pbs`     | Get personal bests          |
+| `GET`  | `/api/exercises/search` | Search/filter exercises     |
+| `POST` | `/api/sessions`         | Create workout session      |
+| `GET`  | `/api/progress/summary` | Get progress dashboard data |
+| `GET`  | `/api/pbs`              | Get personal bests          |
 | `POST` | `/api/weights`          | Log body weight             |
 
 ## Contributing
