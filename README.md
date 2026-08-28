@@ -202,7 +202,7 @@ Key endpoints:
 | `POST` | `/api/auth/signin`      | Sign in (email or username) |
 | `GET`  | `/api/exercises/search` | Search/filter exercises     |
 | `POST` | `/api/sessions`         | Create workout session      |
-| `GET`  | `/api/progress/summary` | Get progress dashboard data |
+| `GET`  | `/api/progress/overview` | Get progress dashboard data (KPIs, heatmap, charts) |
 | `GET`  | `/api/pbs`              | Get personal bests          |
 | `POST` | `/api/weights`          | Log body weight             |
 
