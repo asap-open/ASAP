@@ -89,3 +89,6 @@ Add `-v` to also remove the database volume (Option A only) – **this will dele
 | `FRONTEND_DOMAIN` | A, B | URL the server will accept CORS requests from |
 | `CLIENT_PORT` | A, B | Host port mapped to the web client (default `80`) |
 | `DOMAIN_NAME` | A, B | Public domain or IP for the web client |
+| `VITE_BACKEND_SERVER_URL` | A, B | Internal backend URL where Nginx inside the client proxies `/api` requests (e.g. `http://server:3000`) |
+
+> **How API routing works:** The compiled JavaScript always calls `/api/...` (a relative path). Nginx inside the client container intercepts those requests and forwards them to `VITE_BACKEND_SERVER_URL` at runtime — this URL is **never baked into the JS bundle**. Use an **internal Docker/Kubernetes service name** here, not a public hostname.

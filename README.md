@@ -110,6 +110,8 @@ VITE_BACKEND_SERVER_URL=http://localhost:3000
 DOMAIN_NAME=localhost
 ```
 
+> **How API routing works:** The compiled JS always uses a relative `/api` path. Nginx inside the client container proxies those requests to `VITE_BACKEND_SERVER_URL` at runtime. Set this to the **internal Docker/Kubernetes service name** (e.g. `http://server:3000`), not a public hostname — the same image works across all environments without rebuilding.
+
 3. **Start the application**
 
 ```bash
