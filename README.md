@@ -106,7 +106,7 @@ NODE_ENV=development
 **client/.env**
 
 ```env
-BACKEND_SERVER_URL=http://localhost:3000
+VITE_BACKEND_SERVER_URL=http://localhost:3000
 DOMAIN_NAME=localhost
 ```
 

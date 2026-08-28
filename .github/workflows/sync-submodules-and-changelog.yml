@@ -1,0 +1,78 @@
+name: Sync Submodules and Update Changelog
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # Daily at midnight UTC
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  sync-and-changelog:
+    name: Sync Submodules & Combine Changelogs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repository with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Pull latest submodules
+        run: |
+          git submodule update --remote --merge
+
+      - name: Combine Changelogs
+        run: |
+          node -e '
+            const fs = require("fs");
+            
+            function cleanEmojis(text) {
+              return text
+                .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{2300}-\u{23FF}]/gu, "")
+                .trim();
+            }
+
+            let clientChangelog = "";
+            let serverChangelog = "";
+
+            if (fs.existsSync("client/CHANGELOG.md")) {
+              clientChangelog = cleanEmojis(fs.readFileSync("client/CHANGELOG.md", "utf8"));
+            }
+            if (fs.existsSync("server/CHANGELOG.md")) {
+              serverChangelog = cleanEmojis(fs.readFileSync("server/CHANGELOG.md", "utf8"));
+            }
+
+            let content = "# ASAP Project Changelog\n\nAll notable changes across the ASAP client and server services.\n\n";
+
+            if (clientChangelog) {
+              content += "## Client Changelog\n\n" + clientChangelog + "\n\n---\n\n";
+            }
+
+            if (serverChangelog) {
+              content += "## Server Changelog\n\n" + serverChangelog + "\n\n";
+            }
+
+            if (!clientChangelog && !serverChangelog) {
+              content += "No releases have been recorded yet.\n";
+            }
+
+            fs.writeFileSync("CHANGELOG.md", content);
+          '
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(changelog): sync submodules and update CHANGELOG.md" && git push)
