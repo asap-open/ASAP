@@ -2,14 +2,50 @@
 
 All notable changes across the ASAP client and server services.
 
----
-
 ## Client Changelog
 
-See detailed client releases in the [client repository](https://github.com/asap-open/asap-client).
+# Changelog
+
+## [1.5.1](https://github.com/asap-open/asap-client/compare/v1.5.0...v1.5.1) (2026-08-28)
+
+
+### Bug Fixes
+
+* route API calls through Nginx proxy, not hardcoded URL ([a8092a4](https://github.com/asap-open/asap-client/commit/a8092a40507ad11689903aad596537696d6faf69))
+
+## [1.5.0](https://github.com/asap-open/asap-client/compare/v1.4.3...v1.5.0) (2026-08-28)
+
+
+### Features
+
+* **client:** redesign progress page with heatmap and recharts ([9f7cc48](https://github.com/asap-open/asap-client/commit/9f7cc48878bd6da79f3b6875cbfb17013ee31c7f))
+* overhauled the ui of the help page with design and structure ([38ac148](https://github.com/asap-open/asap-client/commit/38ac148f4943df3cb100d485458b8991fc28cd8a))
+
+
+### Bug Fixes
+
+* color switch in progress page on theme change ([73b5e13](https://github.com/asap-open/asap-client/commit/73b5e130fbfe915d48e48ffe24e795a94b2c26da))
+* cros origin request routed directly to backend instead of vite proxy ([73d6935](https://github.com/asap-open/asap-client/commit/73d69359091bdb49e28eab049dccb67626c75058))
+* fixed the back arrow navigate in the help header ([0c9f804](https://github.com/asap-open/asap-client/commit/0c9f804442f11fd6d3352bfd4af3992ebee19ab6))
+* update the docs in dashboard ([6975fb6](https://github.com/asap-open/asap-client/commit/6975fb64a656b2a1d3f0eafff5be94421a65d84f))
 
 ---
 
 ## Server Changelog
 
-See detailed server releases in the [server repository](https://github.com/asap-open/asap-server).
+# Changelog
+
+## [1.5.0](https://github.com/asap-open/asap-server/compare/v1.4.3...v1.5.0) (2026-08-28)
+
+
+### Features
+
+* **server:** simplify progress endpoint and add faker seed script ([26ac321](https://github.com/asap-open/asap-server/commit/26ac321e53e79b63a32e9ece9b1a14c091cea2d6))
+
+## [1.4.3](https://github.com/asap-open/asap-server/compare/v1.4.2...v1.4.3) (2026-08-28)
+
+
+### Bug Fixes
+
+* unauthorized requests are rejected ([c0a8ff5](https://github.com/asap-open/asap-server/commit/c0a8ff5fe19c6ffcc412f207d2fc2b4534c04b29))
+
