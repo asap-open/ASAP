@@ -6,6 +6,13 @@ All notable changes across the ASAP client and server services.
 
 # Changelog
 
+## [1.5.3](https://github.com/asap-open/asap-client/compare/v1.5.2...v1.5.3) (2026-09-03)
+
+
+### Bug Fixes
+
+* refactor the api call ([84ae8be](https://github.com/asap-open/asap-client/commit/84ae8be58c13b0d3b1a4a8a51602f83822f61ba7))
+
 ## [1.5.2](https://github.com/asap-open/asap-client/compare/v1.5.1...v1.5.2) (2026-08-29)
 
 
@@ -41,6 +48,13 @@ All notable changes across the ASAP client and server services.
 ## Server Changelog
 
 # Changelog
+
+## [1.5.1](https://github.com/asap-open/asap-server/compare/v1.5.0...v1.5.1) (2026-09-04)
+
+
+### Bug Fixes
+
+* refactor generic api into specific api for progress ([4810ac3](https://github.com/asap-open/asap-server/commit/4810ac33ac6ac6ef65573375a1831ed5459f9b1f))
 
 ## [1.5.0](https://github.com/asap-open/asap-server/compare/v1.4.3...v1.5.0) (2026-08-28)
 
